@@ -28,9 +28,9 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(
-    builder = GetSubmissionResponseSubmittersItem.Builder.class
+    builder = GetSubmissionResponseSubmitter.Builder.class
 )
-public final class GetSubmissionResponseSubmittersItem {
+public final class GetSubmissionResponseSubmitter {
   private final int id;
 
   private final int submissionId;
@@ -59,7 +59,7 @@ public final class GetSubmissionResponseSubmittersItem {
 
   private final Optional<String> externalId;
 
-  private final GetSubmissionResponseSubmittersItemStatus status;
+  private final GetSubmissionResponseSubmitterStatus status;
 
   private final List<SubmitterValue> values;
 
@@ -69,11 +69,11 @@ public final class GetSubmissionResponseSubmittersItem {
 
   private final Map<String, Object> additionalProperties;
 
-  private GetSubmissionResponseSubmittersItem(int id, int submissionId, String uuid,
+  private GetSubmissionResponseSubmitter(int id, int submissionId, String uuid,
       Optional<String> email, String slug, Optional<String> sentAt, Optional<String> openedAt,
       Optional<String> completedAt, Optional<String> declinedAt, String createdAt, String updatedAt,
       Optional<String> name, Optional<String> phone, Optional<String> externalId,
-      GetSubmissionResponseSubmittersItemStatus status, List<SubmitterValue> values,
+      GetSubmissionResponseSubmitterStatus status, List<SubmitterValue> values,
       List<CompletedDocument> documents, String role, Map<String, Object> additionalProperties) {
     this.id = id;
     this.submissionId = submissionId;
@@ -236,7 +236,7 @@ public final class GetSubmissionResponseSubmittersItem {
    * @return The status of signing request for the submitter.
    */
   @JsonProperty("status")
-  public GetSubmissionResponseSubmittersItemStatus getStatus() {
+  public GetSubmissionResponseSubmitterStatus getStatus() {
     return status;
   }
 
@@ -339,7 +339,7 @@ public final class GetSubmissionResponseSubmittersItem {
   @java.lang.Override
   public boolean equals(Object other) {
     if (this == other) return true;
-    return other instanceof GetSubmissionResponseSubmittersItem && equalTo((GetSubmissionResponseSubmittersItem) other);
+    return other instanceof GetSubmissionResponseSubmitter && equalTo((GetSubmissionResponseSubmitter) other);
   }
 
   @JsonAnyGetter
@@ -347,7 +347,7 @@ public final class GetSubmissionResponseSubmittersItem {
     return this.additionalProperties;
   }
 
-  private boolean equalTo(GetSubmissionResponseSubmittersItem other) {
+  private boolean equalTo(GetSubmissionResponseSubmitter other) {
     return id == other.id && submissionId == other.submissionId && uuid.equals(other.uuid) && email.equals(other.email) && slug.equals(other.slug) && sentAt.equals(other.sentAt) && openedAt.equals(other.openedAt) && completedAt.equals(other.completedAt) && declinedAt.equals(other.declinedAt) && createdAt.equals(other.createdAt) && updatedAt.equals(other.updatedAt) && name.equals(other.name) && phone.equals(other.phone) && externalId.equals(other.externalId) && status.equals(other.status) && values.equals(other.values) && documents.equals(other.documents) && role.equals(other.role);
   }
 
@@ -371,7 +371,7 @@ public final class GetSubmissionResponseSubmittersItem {
      */
     SubmissionIdStage id(int id);
 
-    Builder from(GetSubmissionResponseSubmittersItem other);
+    Builder from(GetSubmissionResponseSubmitter other);
   }
 
   public interface SubmissionIdStage {
@@ -413,7 +413,7 @@ public final class GetSubmissionResponseSubmittersItem {
     /**
      * <p>The status of signing request for the submitter.</p>
      */
-    RoleStage status(@NotNull GetSubmissionResponseSubmittersItemStatus status);
+    RoleStage status(@NotNull GetSubmissionResponseSubmitterStatus status);
   }
 
   public interface RoleStage {
@@ -424,7 +424,7 @@ public final class GetSubmissionResponseSubmittersItem {
   }
 
   public interface _FinalStage {
-    GetSubmissionResponseSubmittersItem build();
+    GetSubmissionResponseSubmitter build();
 
     /**
      * <p>The email address of the submitter.</p>
@@ -533,7 +533,7 @@ public final class GetSubmissionResponseSubmittersItem {
 
     private String updatedAt;
 
-    private GetSubmissionResponseSubmittersItemStatus status;
+    private GetSubmissionResponseSubmitterStatus status;
 
     private String role;
 
@@ -564,7 +564,7 @@ public final class GetSubmissionResponseSubmittersItem {
     }
 
     @java.lang.Override
-    public Builder from(GetSubmissionResponseSubmittersItem other) {
+    public Builder from(GetSubmissionResponseSubmitter other) {
       id(other.getId());
       submissionId(other.getSubmissionId());
       uuid(other.getUuid());
@@ -665,7 +665,7 @@ public final class GetSubmissionResponseSubmittersItem {
      */
     @java.lang.Override
     @JsonSetter("status")
-    public RoleStage status(@NotNull GetSubmissionResponseSubmittersItemStatus status) {
+    public RoleStage status(@NotNull GetSubmissionResponseSubmitterStatus status) {
       this.status = Objects.requireNonNull(status, "status must not be null");
       return this;
     }
@@ -1079,8 +1079,8 @@ public final class GetSubmissionResponseSubmittersItem {
     }
 
     @java.lang.Override
-    public GetSubmissionResponseSubmittersItem build() {
-      return new GetSubmissionResponseSubmittersItem(id, submissionId, uuid, email, slug, sentAt, openedAt, completedAt, declinedAt, createdAt, updatedAt, name, phone, externalId, status, values, documents, role, additionalProperties);
+    public GetSubmissionResponseSubmitter build() {
+      return new GetSubmissionResponseSubmitter(id, submissionId, uuid, email, slug, sentAt, openedAt, completedAt, declinedAt, createdAt, updatedAt, name, phone, externalId, status, values, documents, role, additionalProperties);
     }
   }
 }

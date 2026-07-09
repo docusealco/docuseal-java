@@ -27,14 +27,14 @@ import org.jetbrains.annotations.NotNull;
     builder = GetTemplatesResponse.Builder.class
 )
 public final class GetTemplatesResponse {
-  private final List<GetTemplatesResponseDataItem> data;
+  private final List<GetTemplateResponse> data;
 
   private final TemplatePagination pagination;
 
   private final Map<String, Object> additionalProperties;
 
-  private GetTemplatesResponse(List<GetTemplatesResponseDataItem> data,
-      TemplatePagination pagination, Map<String, Object> additionalProperties) {
+  private GetTemplatesResponse(List<GetTemplateResponse> data, TemplatePagination pagination,
+      Map<String, Object> additionalProperties) {
     this.data = data;
     this.pagination = pagination;
     this.additionalProperties = additionalProperties;
@@ -44,7 +44,7 @@ public final class GetTemplatesResponse {
    * @return List of templates.
    */
   @JsonProperty("data")
-  public List<GetTemplatesResponseDataItem> getData() {
+  public List<GetTemplateResponse> getData() {
     return data;
   }
 
@@ -94,11 +94,11 @@ public final class GetTemplatesResponse {
     /**
      * <p>List of templates.</p>
      */
-    _FinalStage data(List<GetTemplatesResponseDataItem> data);
+    _FinalStage data(List<GetTemplateResponse> data);
 
-    _FinalStage addData(GetTemplatesResponseDataItem data);
+    _FinalStage addData(GetTemplateResponse data);
 
-    _FinalStage addAllData(List<GetTemplatesResponseDataItem> data);
+    _FinalStage addAllData(List<GetTemplateResponse> data);
   }
 
   @JsonIgnoreProperties(
@@ -107,7 +107,7 @@ public final class GetTemplatesResponse {
   public static final class Builder implements PaginationStage, _FinalStage {
     private TemplatePagination pagination;
 
-    private List<GetTemplatesResponseDataItem> data = new ArrayList<>();
+    private List<GetTemplateResponse> data = new ArrayList<>();
 
     @JsonAnySetter
     private Map<String, Object> additionalProperties = new HashMap<>();
@@ -134,7 +134,7 @@ public final class GetTemplatesResponse {
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage addAllData(List<GetTemplatesResponseDataItem> data) {
+    public _FinalStage addAllData(List<GetTemplateResponse> data) {
       this.data.addAll(data);
       return this;
     }
@@ -144,7 +144,7 @@ public final class GetTemplatesResponse {
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage addData(GetTemplatesResponseDataItem data) {
+    public _FinalStage addData(GetTemplateResponse data) {
       this.data.add(data);
       return this;
     }
@@ -157,7 +157,7 @@ public final class GetTemplatesResponse {
         value = "data",
         nulls = Nulls.SKIP
     )
-    public _FinalStage data(List<GetTemplatesResponseDataItem> data) {
+    public _FinalStage data(List<GetTemplateResponse> data) {
       this.data.clear();
       this.data.addAll(data);
       return this;

@@ -22,16 +22,16 @@ import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(
-    builder = CreateSubmissionFromPdfResponseSchemaItem.Builder.class
+    builder = CreateSubmissionFromPdfResponseSchemaDocument.Builder.class
 )
-public final class CreateSubmissionFromPdfResponseSchemaItem {
+public final class CreateSubmissionFromPdfResponseSchemaDocument {
   private final Optional<String> attachmentUuid;
 
   private final Optional<String> name;
 
   private final Map<String, Object> additionalProperties;
 
-  private CreateSubmissionFromPdfResponseSchemaItem(Optional<String> attachmentUuid,
+  private CreateSubmissionFromPdfResponseSchemaDocument(Optional<String> attachmentUuid,
       Optional<String> name, Map<String, Object> additionalProperties) {
     this.attachmentUuid = attachmentUuid;
     this.name = name;
@@ -57,7 +57,7 @@ public final class CreateSubmissionFromPdfResponseSchemaItem {
   @java.lang.Override
   public boolean equals(Object other) {
     if (this == other) return true;
-    return other instanceof CreateSubmissionFromPdfResponseSchemaItem && equalTo((CreateSubmissionFromPdfResponseSchemaItem) other);
+    return other instanceof CreateSubmissionFromPdfResponseSchemaDocument && equalTo((CreateSubmissionFromPdfResponseSchemaDocument) other);
   }
 
   @JsonAnyGetter
@@ -65,7 +65,7 @@ public final class CreateSubmissionFromPdfResponseSchemaItem {
     return this.additionalProperties;
   }
 
-  private boolean equalTo(CreateSubmissionFromPdfResponseSchemaItem other) {
+  private boolean equalTo(CreateSubmissionFromPdfResponseSchemaDocument other) {
     return attachmentUuid.equals(other.attachmentUuid) && name.equals(other.name);
   }
 
@@ -97,7 +97,7 @@ public final class CreateSubmissionFromPdfResponseSchemaItem {
     private Builder() {
     }
 
-    public Builder from(CreateSubmissionFromPdfResponseSchemaItem other) {
+    public Builder from(CreateSubmissionFromPdfResponseSchemaDocument other) {
       attachmentUuid(other.getAttachmentUuid());
       name(other.getName());
       return this;
@@ -137,8 +137,8 @@ public final class CreateSubmissionFromPdfResponseSchemaItem {
       return this;
     }
 
-    public CreateSubmissionFromPdfResponseSchemaItem build() {
-      return new CreateSubmissionFromPdfResponseSchemaItem(attachmentUuid, name, additionalProperties);
+    public CreateSubmissionFromPdfResponseSchemaDocument build() {
+      return new CreateSubmissionFromPdfResponseSchemaDocument(attachmentUuid, name, additionalProperties);
     }
   }
 }

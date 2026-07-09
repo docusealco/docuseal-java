@@ -27,13 +27,13 @@ import org.jetbrains.annotations.NotNull;
     builder = GetSubmissionsResponse.Builder.class
 )
 public final class GetSubmissionsResponse {
-  private final List<GetSubmissionsResponseDataItem> data;
+  private final List<GetSubmissionsResponseSubmission> data;
 
   private final SubmissionPagination pagination;
 
   private final Map<String, Object> additionalProperties;
 
-  private GetSubmissionsResponse(List<GetSubmissionsResponseDataItem> data,
+  private GetSubmissionsResponse(List<GetSubmissionsResponseSubmission> data,
       SubmissionPagination pagination, Map<String, Object> additionalProperties) {
     this.data = data;
     this.pagination = pagination;
@@ -41,7 +41,7 @@ public final class GetSubmissionsResponse {
   }
 
   @JsonProperty("data")
-  public List<GetSubmissionsResponseDataItem> getData() {
+  public List<GetSubmissionsResponseSubmission> getData() {
     return data;
   }
 
@@ -88,11 +88,11 @@ public final class GetSubmissionsResponse {
   public interface _FinalStage {
     GetSubmissionsResponse build();
 
-    _FinalStage data(List<GetSubmissionsResponseDataItem> data);
+    _FinalStage data(List<GetSubmissionsResponseSubmission> data);
 
-    _FinalStage addData(GetSubmissionsResponseDataItem data);
+    _FinalStage addData(GetSubmissionsResponseSubmission data);
 
-    _FinalStage addAllData(List<GetSubmissionsResponseDataItem> data);
+    _FinalStage addAllData(List<GetSubmissionsResponseSubmission> data);
   }
 
   @JsonIgnoreProperties(
@@ -101,7 +101,7 @@ public final class GetSubmissionsResponse {
   public static final class Builder implements PaginationStage, _FinalStage {
     private SubmissionPagination pagination;
 
-    private List<GetSubmissionsResponseDataItem> data = new ArrayList<>();
+    private List<GetSubmissionsResponseSubmission> data = new ArrayList<>();
 
     @JsonAnySetter
     private Map<String, Object> additionalProperties = new HashMap<>();
@@ -124,13 +124,13 @@ public final class GetSubmissionsResponse {
     }
 
     @java.lang.Override
-    public _FinalStage addAllData(List<GetSubmissionsResponseDataItem> data) {
+    public _FinalStage addAllData(List<GetSubmissionsResponseSubmission> data) {
       this.data.addAll(data);
       return this;
     }
 
     @java.lang.Override
-    public _FinalStage addData(GetSubmissionsResponseDataItem data) {
+    public _FinalStage addData(GetSubmissionsResponseSubmission data) {
       this.data.add(data);
       return this;
     }
@@ -140,7 +140,7 @@ public final class GetSubmissionsResponse {
         value = "data",
         nulls = Nulls.SKIP
     )
-    public _FinalStage data(List<GetSubmissionsResponseDataItem> data) {
+    public _FinalStage data(List<GetSubmissionsResponseSubmission> data) {
       this.data.clear();
       this.data.addAll(data);
       return this;

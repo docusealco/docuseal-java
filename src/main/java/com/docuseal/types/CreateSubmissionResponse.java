@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateSubmissionResponse {
   private final int id;
 
-  private final List<CreateSubmissionsFromEmailsResponseItem> submitters;
+  private final List<CreateSubmissionsFromEmailsResponseSubmitter> submitters;
 
   private final Optional<String> expiredAt;
 
@@ -41,8 +41,9 @@ public final class CreateSubmissionResponse {
 
   private final Map<String, Object> additionalProperties;
 
-  private CreateSubmissionResponse(int id, List<CreateSubmissionsFromEmailsResponseItem> submitters,
-      Optional<String> expiredAt, String createdAt, Map<String, Object> additionalProperties) {
+  private CreateSubmissionResponse(int id,
+      List<CreateSubmissionsFromEmailsResponseSubmitter> submitters, Optional<String> expiredAt,
+      String createdAt, Map<String, Object> additionalProperties) {
     this.id = id;
     this.submitters = submitters;
     this.expiredAt = expiredAt;
@@ -59,7 +60,7 @@ public final class CreateSubmissionResponse {
   }
 
   @JsonProperty("submitters")
-  public List<CreateSubmissionsFromEmailsResponseItem> getSubmitters() {
+  public List<CreateSubmissionsFromEmailsResponseSubmitter> getSubmitters() {
     return submitters;
   }
 
@@ -139,11 +140,11 @@ public final class CreateSubmissionResponse {
   public interface _FinalStage {
     CreateSubmissionResponse build();
 
-    _FinalStage submitters(List<CreateSubmissionsFromEmailsResponseItem> submitters);
+    _FinalStage submitters(List<CreateSubmissionsFromEmailsResponseSubmitter> submitters);
 
-    _FinalStage addSubmitters(CreateSubmissionsFromEmailsResponseItem submitters);
+    _FinalStage addSubmitters(CreateSubmissionsFromEmailsResponseSubmitter submitters);
 
-    _FinalStage addAllSubmitters(List<CreateSubmissionsFromEmailsResponseItem> submitters);
+    _FinalStage addAllSubmitters(List<CreateSubmissionsFromEmailsResponseSubmitter> submitters);
 
     /**
      * <p>The date and time when the submission expires.</p>
@@ -165,7 +166,7 @@ public final class CreateSubmissionResponse {
 
     private Optional<String> expiredAt = Optional.empty();
 
-    private List<CreateSubmissionsFromEmailsResponseItem> submitters = new ArrayList<>();
+    private List<CreateSubmissionsFromEmailsResponseSubmitter> submitters = new ArrayList<>();
 
     @JsonAnySetter
     private Map<String, Object> additionalProperties = new HashMap<>();
@@ -248,13 +249,14 @@ public final class CreateSubmissionResponse {
     }
 
     @java.lang.Override
-    public _FinalStage addAllSubmitters(List<CreateSubmissionsFromEmailsResponseItem> submitters) {
+    public _FinalStage addAllSubmitters(
+        List<CreateSubmissionsFromEmailsResponseSubmitter> submitters) {
       this.submitters.addAll(submitters);
       return this;
     }
 
     @java.lang.Override
-    public _FinalStage addSubmitters(CreateSubmissionsFromEmailsResponseItem submitters) {
+    public _FinalStage addSubmitters(CreateSubmissionsFromEmailsResponseSubmitter submitters) {
       this.submitters.add(submitters);
       return this;
     }
@@ -264,7 +266,7 @@ public final class CreateSubmissionResponse {
         value = "submitters",
         nulls = Nulls.SKIP
     )
-    public _FinalStage submitters(List<CreateSubmissionsFromEmailsResponseItem> submitters) {
+    public _FinalStage submitters(List<CreateSubmissionsFromEmailsResponseSubmitter> submitters) {
       this.submitters.clear();
       this.submitters.addAll(submitters);
       return this;

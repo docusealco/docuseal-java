@@ -28,20 +28,20 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(
-    builder = GetSubmissionsResponseDataItem.Builder.class
+    builder = GetSubmissionsResponseSubmission.Builder.class
 )
-public final class GetSubmissionsResponseDataItem {
+public final class GetSubmissionsResponseSubmission {
   private final int id;
 
   private final Optional<String> name;
 
-  private final GetSubmissionsResponseDataItemSource source;
+  private final GetSubmissionsResponseSubmissionSource source;
 
   private final String slug;
 
-  private final GetSubmissionsResponseDataItemStatus status;
+  private final GetSubmissionsResponseSubmissionStatus status;
 
-  private final GetSubmissionsResponseDataItemSubmittersOrder submittersOrder;
+  private final GetSubmissionsResponseSubmissionSubmittersOrder submittersOrder;
 
   private final Optional<String> auditLogUrl;
 
@@ -55,7 +55,7 @@ public final class GetSubmissionsResponseDataItem {
 
   private final Optional<String> archivedAt;
 
-  private final List<GetSubmissionsResponseDataItemSubmittersItem> submitters;
+  private final List<GetSubmissionsResponseSubmissionSubmitter> submitters;
 
   private final Optional<SubmissionTemplate> template;
 
@@ -63,13 +63,13 @@ public final class GetSubmissionsResponseDataItem {
 
   private final Map<String, Object> additionalProperties;
 
-  private GetSubmissionsResponseDataItem(int id, Optional<String> name,
-      GetSubmissionsResponseDataItemSource source, String slug,
-      GetSubmissionsResponseDataItemStatus status,
-      GetSubmissionsResponseDataItemSubmittersOrder submittersOrder, Optional<String> auditLogUrl,
+  private GetSubmissionsResponseSubmission(int id, Optional<String> name,
+      GetSubmissionsResponseSubmissionSource source, String slug,
+      GetSubmissionsResponseSubmissionStatus status,
+      GetSubmissionsResponseSubmissionSubmittersOrder submittersOrder, Optional<String> auditLogUrl,
       Optional<String> combinedDocumentUrl, Optional<String> completedAt, String createdAt,
       String updatedAt, Optional<String> archivedAt,
-      List<GetSubmissionsResponseDataItemSubmittersItem> submitters,
+      List<GetSubmissionsResponseSubmissionSubmitter> submitters,
       Optional<SubmissionTemplate> template, Optional<SubmissionCreatedByUser> createdByUser,
       Map<String, Object> additionalProperties) {
     this.id = id;
@@ -110,7 +110,7 @@ public final class GetSubmissionsResponseDataItem {
    * @return The source of the submission.
    */
   @JsonProperty("source")
-  public GetSubmissionsResponseDataItemSource getSource() {
+  public GetSubmissionsResponseSubmissionSource getSource() {
     return source;
   }
 
@@ -126,7 +126,7 @@ public final class GetSubmissionsResponseDataItem {
    * @return The status of the submission.
    */
   @JsonProperty("status")
-  public GetSubmissionsResponseDataItemStatus getStatus() {
+  public GetSubmissionsResponseSubmissionStatus getStatus() {
     return status;
   }
 
@@ -134,7 +134,7 @@ public final class GetSubmissionsResponseDataItem {
    * @return The order of submitters.
    */
   @JsonProperty("submitters_order")
-  public GetSubmissionsResponseDataItemSubmittersOrder getSubmittersOrder() {
+  public GetSubmissionsResponseSubmissionSubmittersOrder getSubmittersOrder() {
     return submittersOrder;
   }
 
@@ -202,7 +202,7 @@ public final class GetSubmissionsResponseDataItem {
    * @return The list of submitters.
    */
   @JsonProperty("submitters")
-  public List<GetSubmissionsResponseDataItemSubmittersItem> getSubmitters() {
+  public List<GetSubmissionsResponseSubmissionSubmitter> getSubmitters() {
     return submitters;
   }
 
@@ -267,7 +267,7 @@ public final class GetSubmissionsResponseDataItem {
   @java.lang.Override
   public boolean equals(Object other) {
     if (this == other) return true;
-    return other instanceof GetSubmissionsResponseDataItem && equalTo((GetSubmissionsResponseDataItem) other);
+    return other instanceof GetSubmissionsResponseSubmission && equalTo((GetSubmissionsResponseSubmission) other);
   }
 
   @JsonAnyGetter
@@ -275,7 +275,7 @@ public final class GetSubmissionsResponseDataItem {
     return this.additionalProperties;
   }
 
-  private boolean equalTo(GetSubmissionsResponseDataItem other) {
+  private boolean equalTo(GetSubmissionsResponseSubmission other) {
     return id == other.id && name.equals(other.name) && source.equals(other.source) && slug.equals(other.slug) && status.equals(other.status) && submittersOrder.equals(other.submittersOrder) && auditLogUrl.equals(other.auditLogUrl) && combinedDocumentUrl.equals(other.combinedDocumentUrl) && completedAt.equals(other.completedAt) && createdAt.equals(other.createdAt) && updatedAt.equals(other.updatedAt) && archivedAt.equals(other.archivedAt) && submitters.equals(other.submitters) && template.equals(other.template) && createdByUser.equals(other.createdByUser);
   }
 
@@ -299,14 +299,14 @@ public final class GetSubmissionsResponseDataItem {
      */
     SourceStage id(int id);
 
-    Builder from(GetSubmissionsResponseDataItem other);
+    Builder from(GetSubmissionsResponseSubmission other);
   }
 
   public interface SourceStage {
     /**
      * <p>The source of the submission.</p>
      */
-    SlugStage source(@NotNull GetSubmissionsResponseDataItemSource source);
+    SlugStage source(@NotNull GetSubmissionsResponseSubmissionSource source);
   }
 
   public interface SlugStage {
@@ -320,7 +320,7 @@ public final class GetSubmissionsResponseDataItem {
     /**
      * <p>The status of the submission.</p>
      */
-    SubmittersOrderStage status(@NotNull GetSubmissionsResponseDataItemStatus status);
+    SubmittersOrderStage status(@NotNull GetSubmissionsResponseSubmissionStatus status);
   }
 
   public interface SubmittersOrderStage {
@@ -328,7 +328,7 @@ public final class GetSubmissionsResponseDataItem {
      * <p>The order of submitters.</p>
      */
     CreatedAtStage submittersOrder(
-        @NotNull GetSubmissionsResponseDataItemSubmittersOrder submittersOrder);
+        @NotNull GetSubmissionsResponseSubmissionSubmittersOrder submittersOrder);
   }
 
   public interface CreatedAtStage {
@@ -346,7 +346,7 @@ public final class GetSubmissionsResponseDataItem {
   }
 
   public interface _FinalStage {
-    GetSubmissionsResponseDataItem build();
+    GetSubmissionsResponseSubmission build();
 
     /**
      * <p>Name of the document submission.</p>
@@ -394,11 +394,11 @@ public final class GetSubmissionsResponseDataItem {
     /**
      * <p>The list of submitters.</p>
      */
-    _FinalStage submitters(List<GetSubmissionsResponseDataItemSubmittersItem> submitters);
+    _FinalStage submitters(List<GetSubmissionsResponseSubmissionSubmitter> submitters);
 
-    _FinalStage addSubmitters(GetSubmissionsResponseDataItemSubmittersItem submitters);
+    _FinalStage addSubmitters(GetSubmissionsResponseSubmissionSubmitter submitters);
 
-    _FinalStage addAllSubmitters(List<GetSubmissionsResponseDataItemSubmittersItem> submitters);
+    _FinalStage addAllSubmitters(List<GetSubmissionsResponseSubmissionSubmitter> submitters);
 
     _FinalStage template(Optional<SubmissionTemplate> template);
 
@@ -417,13 +417,13 @@ public final class GetSubmissionsResponseDataItem {
   public static final class Builder implements IdStage, SourceStage, SlugStage, StatusStage, SubmittersOrderStage, CreatedAtStage, UpdatedAtStage, _FinalStage {
     private int id;
 
-    private GetSubmissionsResponseDataItemSource source;
+    private GetSubmissionsResponseSubmissionSource source;
 
     private String slug;
 
-    private GetSubmissionsResponseDataItemStatus status;
+    private GetSubmissionsResponseSubmissionStatus status;
 
-    private GetSubmissionsResponseDataItemSubmittersOrder submittersOrder;
+    private GetSubmissionsResponseSubmissionSubmittersOrder submittersOrder;
 
     private String createdAt;
 
@@ -433,7 +433,7 @@ public final class GetSubmissionsResponseDataItem {
 
     private Optional<SubmissionTemplate> template = Optional.empty();
 
-    private List<GetSubmissionsResponseDataItemSubmittersItem> submitters = new ArrayList<>();
+    private List<GetSubmissionsResponseSubmissionSubmitter> submitters = new ArrayList<>();
 
     private Optional<String> archivedAt = Optional.empty();
 
@@ -452,7 +452,7 @@ public final class GetSubmissionsResponseDataItem {
     }
 
     @java.lang.Override
-    public Builder from(GetSubmissionsResponseDataItem other) {
+    public Builder from(GetSubmissionsResponseSubmission other) {
       id(other.getId());
       name(other.getName());
       source(other.getSource());
@@ -490,7 +490,7 @@ public final class GetSubmissionsResponseDataItem {
      */
     @java.lang.Override
     @JsonSetter("source")
-    public SlugStage source(@NotNull GetSubmissionsResponseDataItemSource source) {
+    public SlugStage source(@NotNull GetSubmissionsResponseSubmissionSource source) {
       this.source = Objects.requireNonNull(source, "source must not be null");
       return this;
     }
@@ -514,7 +514,7 @@ public final class GetSubmissionsResponseDataItem {
      */
     @java.lang.Override
     @JsonSetter("status")
-    public SubmittersOrderStage status(@NotNull GetSubmissionsResponseDataItemStatus status) {
+    public SubmittersOrderStage status(@NotNull GetSubmissionsResponseSubmissionStatus status) {
       this.status = Objects.requireNonNull(status, "status must not be null");
       return this;
     }
@@ -527,7 +527,7 @@ public final class GetSubmissionsResponseDataItem {
     @java.lang.Override
     @JsonSetter("submitters_order")
     public CreatedAtStage submittersOrder(
-        @NotNull GetSubmissionsResponseDataItemSubmittersOrder submittersOrder) {
+        @NotNull GetSubmissionsResponseSubmissionSubmittersOrder submittersOrder) {
       this.submittersOrder = Objects.requireNonNull(submittersOrder, "submittersOrder must not be null");
       return this;
     }
@@ -608,7 +608,7 @@ public final class GetSubmissionsResponseDataItem {
      */
     @java.lang.Override
     public _FinalStage addAllSubmitters(
-        List<GetSubmissionsResponseDataItemSubmittersItem> submitters) {
+        List<GetSubmissionsResponseSubmissionSubmitter> submitters) {
       this.submitters.addAll(submitters);
       return this;
     }
@@ -618,7 +618,7 @@ public final class GetSubmissionsResponseDataItem {
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage addSubmitters(GetSubmissionsResponseDataItemSubmittersItem submitters) {
+    public _FinalStage addSubmitters(GetSubmissionsResponseSubmissionSubmitter submitters) {
       this.submitters.add(submitters);
       return this;
     }
@@ -631,7 +631,7 @@ public final class GetSubmissionsResponseDataItem {
         value = "submitters",
         nulls = Nulls.SKIP
     )
-    public _FinalStage submitters(List<GetSubmissionsResponseDataItemSubmittersItem> submitters) {
+    public _FinalStage submitters(List<GetSubmissionsResponseSubmissionSubmitter> submitters) {
       this.submitters.clear();
       this.submitters.addAll(submitters);
       return this;
@@ -825,8 +825,8 @@ public final class GetSubmissionsResponseDataItem {
     }
 
     @java.lang.Override
-    public GetSubmissionsResponseDataItem build() {
-      return new GetSubmissionsResponseDataItem(id, name, source, slug, status, submittersOrder, auditLogUrl, combinedDocumentUrl, completedAt, createdAt, updatedAt, archivedAt, submitters, template, createdByUser, additionalProperties);
+    public GetSubmissionsResponseSubmission build() {
+      return new GetSubmissionsResponseSubmission(id, name, source, slug, status, submittersOrder, auditLogUrl, combinedDocumentUrl, completedAt, createdAt, updatedAt, archivedAt, submitters, template, createdByUser, additionalProperties);
     }
   }
 }

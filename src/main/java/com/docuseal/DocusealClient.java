@@ -32,7 +32,7 @@ import com.docuseal.types.ArchiveSubmissionResponse;
 import com.docuseal.types.ArchiveTemplateResponse;
 import com.docuseal.types.CreateSubmissionFromPdfResponse;
 import com.docuseal.types.CreateSubmissionResponse;
-import com.docuseal.types.CreateSubmissionsFromEmailsResponseItem;
+import com.docuseal.types.CreateSubmissionsFromEmailsResponseSubmitter;
 import com.docuseal.types.GetSubmissionDocumentsResponse;
 import com.docuseal.types.GetSubmissionResponse;
 import com.docuseal.types.GetSubmissionsResponse;
@@ -241,7 +241,7 @@ public class DocusealClient {
   /**
    * This API endpoint allows you to create submissions for a document template and send them to the specified email addresses. This is a simplified version of the POST /submissions API to be used with Zapier or other automation tools.
    */
-  public List<CreateSubmissionsFromEmailsResponseItem> createSubmissionsFromEmails(
+  public List<CreateSubmissionsFromEmailsResponseSubmitter> createSubmissionsFromEmails(
       CreateSubmissionsFromEmailsParams request) {
     return this.rawClient.createSubmissionsFromEmails(request).body();
   }
@@ -249,7 +249,7 @@ public class DocusealClient {
   /**
    * This API endpoint allows you to create submissions for a document template and send them to the specified email addresses. This is a simplified version of the POST /submissions API to be used with Zapier or other automation tools.
    */
-  public List<CreateSubmissionsFromEmailsResponseItem> createSubmissionsFromEmails(
+  public List<CreateSubmissionsFromEmailsResponseSubmitter> createSubmissionsFromEmails(
       CreateSubmissionsFromEmailsParams request, RequestOptions requestOptions) {
     return this.rawClient.createSubmissionsFromEmails(request, requestOptions).body();
   }

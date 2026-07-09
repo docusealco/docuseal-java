@@ -38,7 +38,7 @@ import com.docuseal.types.ArchiveSubmissionResponse;
 import com.docuseal.types.ArchiveTemplateResponse;
 import com.docuseal.types.CreateSubmissionFromPdfResponse;
 import com.docuseal.types.CreateSubmissionResponse;
-import com.docuseal.types.CreateSubmissionsFromEmailsResponseItem;
+import com.docuseal.types.CreateSubmissionsFromEmailsResponseSubmitter;
 import com.docuseal.types.GetSubmissionDocumentsResponse;
 import com.docuseal.types.GetSubmissionResponse;
 import com.docuseal.types.GetSubmissionsResponse;
@@ -629,7 +629,7 @@ public class AsyncRawDocusealClient {
         /**
          * This API endpoint allows you to create submissions for a document template and send them to the specified email addresses. This is a simplified version of the POST /submissions API to be used with Zapier or other automation tools.
          */
-        public CompletableFuture<DocusealClientHttpResponse<List<CreateSubmissionsFromEmailsResponseItem>>> createSubmissionsFromEmails(
+        public CompletableFuture<DocusealClientHttpResponse<List<CreateSubmissionsFromEmailsResponseSubmitter>>> createSubmissionsFromEmails(
             CreateSubmissionsFromEmailsParams request) {
           return createSubmissionsFromEmails(request,null);
         }
@@ -637,7 +637,7 @@ public class AsyncRawDocusealClient {
         /**
          * This API endpoint allows you to create submissions for a document template and send them to the specified email addresses. This is a simplified version of the POST /submissions API to be used with Zapier or other automation tools.
          */
-        public CompletableFuture<DocusealClientHttpResponse<List<CreateSubmissionsFromEmailsResponseItem>>> createSubmissionsFromEmails(
+        public CompletableFuture<DocusealClientHttpResponse<List<CreateSubmissionsFromEmailsResponseSubmitter>>> createSubmissionsFromEmails(
             CreateSubmissionsFromEmailsParams request, RequestOptions requestOptions) {
           HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -661,13 +661,13 @@ public class AsyncRawDocusealClient {
           if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
           }
-          CompletableFuture<DocusealClientHttpResponse<List<CreateSubmissionsFromEmailsResponseItem>>> future = new CompletableFuture<>();
+          CompletableFuture<DocusealClientHttpResponse<List<CreateSubmissionsFromEmailsResponseSubmitter>>> future = new CompletableFuture<>();
           client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
               try (ResponseBody responseBody = response.body()) {
                 if (response.isSuccessful()) {
-                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), new TypeReference<List<CreateSubmissionsFromEmailsResponseItem>>() {}), response));
+                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), new TypeReference<List<CreateSubmissionsFromEmailsResponseSubmitter>>() {}), response));
                   return;
                 }
                 String responseBodyString = responseBody != null ? responseBody.string() : "{}";

@@ -18,8 +18,10 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.lang.Object;
 import java.lang.String;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,16 +29,16 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(
-    builder = GetSubmissionsResponseDataItemSubmittersItem.Builder.class
+    builder = GetSubmittersResponseSubmitter.Builder.class
 )
-public final class GetSubmissionsResponseDataItemSubmittersItem {
+public final class GetSubmittersResponseSubmitter {
   private final int id;
 
   private final int submissionId;
 
   private final String uuid;
 
-  private final Optional<String> email;
+  private final String email;
 
   private final String slug;
 
@@ -56,25 +58,31 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
 
   private final Optional<String> phone;
 
+  private final GetSubmittersResponseSubmitterStatus status;
+
   private final Optional<String> externalId;
-
-  private final GetSubmissionsResponseDataItemSubmittersItemStatus status;
-
-  private final String role;
-
-  private final Map<String, Object> metadata;
 
   private final Map<String, Object> preferences;
 
+  private final Map<String, Object> metadata;
+
+  private final List<SubmissionEvent> submissionEvents;
+
+  private final List<SubmitterValue> values;
+
+  private final List<CompletedDocument> documents;
+
+  private final String role;
+
   private final Map<String, Object> additionalProperties;
 
-  private GetSubmissionsResponseDataItemSubmittersItem(int id, int submissionId, String uuid,
-      Optional<String> email, String slug, Optional<String> sentAt, Optional<String> openedAt,
-      Optional<String> completedAt, Optional<String> declinedAt, String createdAt, String updatedAt,
-      Optional<String> name, Optional<String> phone, Optional<String> externalId,
-      GetSubmissionsResponseDataItemSubmittersItemStatus status, String role,
-      Map<String, Object> metadata, Map<String, Object> preferences,
-      Map<String, Object> additionalProperties) {
+  private GetSubmittersResponseSubmitter(int id, int submissionId, String uuid, String email,
+      String slug, Optional<String> sentAt, Optional<String> openedAt, Optional<String> completedAt,
+      Optional<String> declinedAt, String createdAt, String updatedAt, Optional<String> name,
+      Optional<String> phone, GetSubmittersResponseSubmitterStatus status,
+      Optional<String> externalId, Map<String, Object> preferences, Map<String, Object> metadata,
+      List<SubmissionEvent> submissionEvents, List<SubmitterValue> values,
+      List<CompletedDocument> documents, String role, Map<String, Object> additionalProperties) {
     this.id = id;
     this.submissionId = submissionId;
     this.uuid = uuid;
@@ -88,11 +96,14 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
     this.updatedAt = updatedAt;
     this.name = name;
     this.phone = phone;
-    this.externalId = externalId;
     this.status = status;
-    this.role = role;
-    this.metadata = metadata;
+    this.externalId = externalId;
     this.preferences = preferences;
+    this.metadata = metadata;
+    this.submissionEvents = submissionEvents;
+    this.values = values;
+    this.documents = documents;
+    this.role = role;
     this.additionalProperties = additionalProperties;
   }
 
@@ -123,11 +134,8 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
   /**
    * @return The email address of the submitter.
    */
-  @JsonIgnore
-  public Optional<String> getEmail() {
-    if (email == null) {
-      return Optional.empty();
-    }
+  @JsonProperty("email")
+  public String getEmail() {
     return email;
   }
 
@@ -222,6 +230,14 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
   }
 
   /**
+   * @return The status of signing request for the submitter.
+   */
+  @JsonProperty("status")
+  public GetSubmittersResponseSubmitterStatus getStatus() {
+    return status;
+  }
+
+  /**
    * @return Your application-specific unique string key to identify this submitter within your app.
    */
   @JsonIgnore
@@ -233,19 +249,11 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
   }
 
   /**
-   * @return The status of signing request for the submitter.
+   * @return Submitter preferences.
    */
-  @JsonProperty("status")
-  public GetSubmissionsResponseDataItemSubmittersItemStatus getStatus() {
-    return status;
-  }
-
-  /**
-   * @return The role of the submitter in the signing process.
-   */
-  @JsonProperty("role")
-  public String getRole() {
-    return role;
+  @JsonProperty("preferences")
+  public Map<String, Object> getPreferences() {
+    return preferences;
   }
 
   /**
@@ -257,20 +265,35 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
   }
 
   /**
-   * @return Submitter preferences.
+   * @return An array of events related to the submission.
    */
-  @JsonProperty("preferences")
-  public Map<String, Object> getPreferences() {
-    return preferences;
+  @JsonProperty("submission_events")
+  public List<SubmissionEvent> getSubmissionEvents() {
+    return submissionEvents;
   }
 
-  @JsonInclude(
-      value = JsonInclude.Include.CUSTOM,
-      valueFilter = NullableNonemptyFilter.class
-  )
-  @JsonProperty("email")
-  private Optional<String> _getEmail() {
-    return email;
+  /**
+   * @return An array of pre-filled values for the submitter.
+   */
+  @JsonProperty("values")
+  public List<SubmitterValue> getValues() {
+    return values;
+  }
+
+  /**
+   * @return An array of completed or signed documents by the submitter.
+   */
+  @JsonProperty("documents")
+  public List<CompletedDocument> getDocuments() {
+    return documents;
+  }
+
+  /**
+   * @return The role of the submitter in the signing process.
+   */
+  @JsonProperty("role")
+  public String getRole() {
+    return role;
   }
 
   @JsonInclude(
@@ -339,7 +362,7 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
   @java.lang.Override
   public boolean equals(Object other) {
     if (this == other) return true;
-    return other instanceof GetSubmissionsResponseDataItemSubmittersItem && equalTo((GetSubmissionsResponseDataItemSubmittersItem) other);
+    return other instanceof GetSubmittersResponseSubmitter && equalTo((GetSubmittersResponseSubmitter) other);
   }
 
   @JsonAnyGetter
@@ -347,13 +370,13 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
     return this.additionalProperties;
   }
 
-  private boolean equalTo(GetSubmissionsResponseDataItemSubmittersItem other) {
-    return id == other.id && submissionId == other.submissionId && uuid.equals(other.uuid) && email.equals(other.email) && slug.equals(other.slug) && sentAt.equals(other.sentAt) && openedAt.equals(other.openedAt) && completedAt.equals(other.completedAt) && declinedAt.equals(other.declinedAt) && createdAt.equals(other.createdAt) && updatedAt.equals(other.updatedAt) && name.equals(other.name) && phone.equals(other.phone) && externalId.equals(other.externalId) && status.equals(other.status) && role.equals(other.role) && metadata.equals(other.metadata) && preferences.equals(other.preferences);
+  private boolean equalTo(GetSubmittersResponseSubmitter other) {
+    return id == other.id && submissionId == other.submissionId && uuid.equals(other.uuid) && email.equals(other.email) && slug.equals(other.slug) && sentAt.equals(other.sentAt) && openedAt.equals(other.openedAt) && completedAt.equals(other.completedAt) && declinedAt.equals(other.declinedAt) && createdAt.equals(other.createdAt) && updatedAt.equals(other.updatedAt) && name.equals(other.name) && phone.equals(other.phone) && status.equals(other.status) && externalId.equals(other.externalId) && preferences.equals(other.preferences) && metadata.equals(other.metadata) && submissionEvents.equals(other.submissionEvents) && values.equals(other.values) && documents.equals(other.documents) && role.equals(other.role);
   }
 
   @java.lang.Override
   public int hashCode() {
-    return Objects.hash(this.id, this.submissionId, this.uuid, this.email, this.slug, this.sentAt, this.openedAt, this.completedAt, this.declinedAt, this.createdAt, this.updatedAt, this.name, this.phone, this.externalId, this.status, this.role, this.metadata, this.preferences);
+    return Objects.hash(this.id, this.submissionId, this.uuid, this.email, this.slug, this.sentAt, this.openedAt, this.completedAt, this.declinedAt, this.createdAt, this.updatedAt, this.name, this.phone, this.status, this.externalId, this.preferences, this.metadata, this.submissionEvents, this.values, this.documents, this.role);
   }
 
   @java.lang.Override
@@ -371,7 +394,7 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
      */
     SubmissionIdStage id(int id);
 
-    Builder from(GetSubmissionsResponseDataItemSubmittersItem other);
+    Builder from(GetSubmittersResponseSubmitter other);
   }
 
   public interface SubmissionIdStage {
@@ -385,7 +408,14 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
     /**
      * <p>Submitter UUID.</p>
      */
-    SlugStage uuid(@NotNull String uuid);
+    EmailStage uuid(@NotNull String uuid);
+  }
+
+  public interface EmailStage {
+    /**
+     * <p>The email address of the submitter.</p>
+     */
+    SlugStage email(@NotNull String email);
   }
 
   public interface SlugStage {
@@ -413,7 +443,7 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
     /**
      * <p>The status of signing request for the submitter.</p>
      */
-    RoleStage status(@NotNull GetSubmissionsResponseDataItemSubmittersItemStatus status);
+    RoleStage status(@NotNull GetSubmittersResponseSubmitterStatus status);
   }
 
   public interface RoleStage {
@@ -424,16 +454,7 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
   }
 
   public interface _FinalStage {
-    GetSubmissionsResponseDataItemSubmittersItem build();
-
-    /**
-     * <p>The email address of the submitter.</p>
-     */
-    _FinalStage email(Optional<String> email);
-
-    _FinalStage email(String email);
-
-    _FinalStage email(Nullable<String> email);
+    GetSubmittersResponseSubmitter build();
 
     /**
      * <p>The date and time when the signing request was sent to the submitter.</p>
@@ -499,6 +520,15 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
     _FinalStage externalId(Nullable<String> externalId);
 
     /**
+     * <p>Submitter preferences.</p>
+     */
+    _FinalStage preferences(Map<String, Object> preferences);
+
+    _FinalStage putAllPreferences(Map<String, Object> preferences);
+
+    _FinalStage preferences(String key, Object value);
+
+    /**
      * <p>Metadata object with additional submitter information.</p>
      */
     _FinalStage metadata(Map<String, Object> metadata);
@@ -508,24 +538,44 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
     _FinalStage metadata(String key, Object value);
 
     /**
-     * <p>Submitter preferences.</p>
+     * <p>An array of events related to the submission.</p>
      */
-    _FinalStage preferences(Map<String, Object> preferences);
+    _FinalStage submissionEvents(List<SubmissionEvent> submissionEvents);
 
-    _FinalStage putAllPreferences(Map<String, Object> preferences);
+    _FinalStage addSubmissionEvents(SubmissionEvent submissionEvents);
 
-    _FinalStage preferences(String key, Object value);
+    _FinalStage addAllSubmissionEvents(List<SubmissionEvent> submissionEvents);
+
+    /**
+     * <p>An array of pre-filled values for the submitter.</p>
+     */
+    _FinalStage values(List<SubmitterValue> values);
+
+    _FinalStage addValues(SubmitterValue values);
+
+    _FinalStage addAllValues(List<SubmitterValue> values);
+
+    /**
+     * <p>An array of completed or signed documents by the submitter.</p>
+     */
+    _FinalStage documents(List<CompletedDocument> documents);
+
+    _FinalStage addDocuments(CompletedDocument documents);
+
+    _FinalStage addAllDocuments(List<CompletedDocument> documents);
   }
 
   @JsonIgnoreProperties(
       ignoreUnknown = true
   )
-  public static final class Builder implements IdStage, SubmissionIdStage, UuidStage, SlugStage, CreatedAtStage, UpdatedAtStage, StatusStage, RoleStage, _FinalStage {
+  public static final class Builder implements IdStage, SubmissionIdStage, UuidStage, EmailStage, SlugStage, CreatedAtStage, UpdatedAtStage, StatusStage, RoleStage, _FinalStage {
     private int id;
 
     private int submissionId;
 
     private String uuid;
+
+    private String email;
 
     private String slug;
 
@@ -533,13 +583,19 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
 
     private String updatedAt;
 
-    private GetSubmissionsResponseDataItemSubmittersItemStatus status;
+    private GetSubmittersResponseSubmitterStatus status;
 
     private String role;
 
-    private Map<String, Object> preferences = new LinkedHashMap<>();
+    private List<CompletedDocument> documents = new ArrayList<>();
+
+    private List<SubmitterValue> values = new ArrayList<>();
+
+    private List<SubmissionEvent> submissionEvents = new ArrayList<>();
 
     private Map<String, Object> metadata = new LinkedHashMap<>();
+
+    private Map<String, Object> preferences = new LinkedHashMap<>();
 
     private Optional<String> externalId = Optional.empty();
 
@@ -555,8 +611,6 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
 
     private Optional<String> sentAt = Optional.empty();
 
-    private Optional<String> email = Optional.empty();
-
     @JsonAnySetter
     private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -564,7 +618,7 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
     }
 
     @java.lang.Override
-    public Builder from(GetSubmissionsResponseDataItemSubmittersItem other) {
+    public Builder from(GetSubmittersResponseSubmitter other) {
       id(other.getId());
       submissionId(other.getSubmissionId());
       uuid(other.getUuid());
@@ -578,11 +632,14 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
       updatedAt(other.getUpdatedAt());
       name(other.getName());
       phone(other.getPhone());
-      externalId(other.getExternalId());
       status(other.getStatus());
-      role(other.getRole());
-      metadata(other.getMetadata());
+      externalId(other.getExternalId());
       preferences(other.getPreferences());
+      metadata(other.getMetadata());
+      submissionEvents(other.getSubmissionEvents());
+      values(other.getValues());
+      documents(other.getDocuments());
+      role(other.getRole());
       return this;
     }
 
@@ -617,8 +674,20 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
      */
     @java.lang.Override
     @JsonSetter("uuid")
-    public SlugStage uuid(@NotNull String uuid) {
+    public EmailStage uuid(@NotNull String uuid) {
       this.uuid = Objects.requireNonNull(uuid, "uuid must not be null");
+      return this;
+    }
+
+    /**
+     * <p>The email address of the submitter.</p>
+     * <p>The email address of the submitter.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    @JsonSetter("email")
+    public SlugStage email(@NotNull String email) {
+      this.email = Objects.requireNonNull(email, "email must not be null");
       return this;
     }
 
@@ -665,7 +734,7 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
      */
     @java.lang.Override
     @JsonSetter("status")
-    public RoleStage status(@NotNull GetSubmissionsResponseDataItemSubmittersItemStatus status) {
+    public RoleStage status(@NotNull GetSubmittersResponseSubmitterStatus status) {
       this.status = Objects.requireNonNull(status, "status must not be null");
       return this;
     }
@@ -683,36 +752,104 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
     }
 
     /**
-     * <p>Submitter preferences.</p>
+     * <p>An array of completed or signed documents by the submitter.</p>
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage preferences(String key, Object value) {
-      this.preferences.put(key, value);
+    public _FinalStage addAllDocuments(List<CompletedDocument> documents) {
+      this.documents.addAll(documents);
       return this;
     }
 
     /**
-     * <p>Submitter preferences.</p>
+     * <p>An array of completed or signed documents by the submitter.</p>
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage putAllPreferences(Map<String, Object> preferences) {
-      this.preferences.putAll(preferences);
+    public _FinalStage addDocuments(CompletedDocument documents) {
+      this.documents.add(documents);
       return this;
     }
 
     /**
-     * <p>Submitter preferences.</p>
+     * <p>An array of completed or signed documents by the submitter.</p>
      */
     @java.lang.Override
     @JsonSetter(
-        value = "preferences",
+        value = "documents",
         nulls = Nulls.SKIP
     )
-    public _FinalStage preferences(Map<String, Object> preferences) {
-      this.preferences.clear();
-      this.preferences.putAll(preferences);
+    public _FinalStage documents(List<CompletedDocument> documents) {
+      this.documents.clear();
+      this.documents.addAll(documents);
+      return this;
+    }
+
+    /**
+     * <p>An array of pre-filled values for the submitter.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    public _FinalStage addAllValues(List<SubmitterValue> values) {
+      this.values.addAll(values);
+      return this;
+    }
+
+    /**
+     * <p>An array of pre-filled values for the submitter.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    public _FinalStage addValues(SubmitterValue values) {
+      this.values.add(values);
+      return this;
+    }
+
+    /**
+     * <p>An array of pre-filled values for the submitter.</p>
+     */
+    @java.lang.Override
+    @JsonSetter(
+        value = "values",
+        nulls = Nulls.SKIP
+    )
+    public _FinalStage values(List<SubmitterValue> values) {
+      this.values.clear();
+      this.values.addAll(values);
+      return this;
+    }
+
+    /**
+     * <p>An array of events related to the submission.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    public _FinalStage addAllSubmissionEvents(List<SubmissionEvent> submissionEvents) {
+      this.submissionEvents.addAll(submissionEvents);
+      return this;
+    }
+
+    /**
+     * <p>An array of events related to the submission.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    public _FinalStage addSubmissionEvents(SubmissionEvent submissionEvents) {
+      this.submissionEvents.add(submissionEvents);
+      return this;
+    }
+
+    /**
+     * <p>An array of events related to the submission.</p>
+     */
+    @java.lang.Override
+    @JsonSetter(
+        value = "submission_events",
+        nulls = Nulls.SKIP
+    )
+    public _FinalStage submissionEvents(List<SubmissionEvent> submissionEvents) {
+      this.submissionEvents.clear();
+      this.submissionEvents.addAll(submissionEvents);
       return this;
     }
 
@@ -747,6 +884,40 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
     public _FinalStage metadata(Map<String, Object> metadata) {
       this.metadata.clear();
       this.metadata.putAll(metadata);
+      return this;
+    }
+
+    /**
+     * <p>Submitter preferences.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    public _FinalStage preferences(String key, Object value) {
+      this.preferences.put(key, value);
+      return this;
+    }
+
+    /**
+     * <p>Submitter preferences.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    public _FinalStage putAllPreferences(Map<String, Object> preferences) {
+      this.preferences.putAll(preferences);
+      return this;
+    }
+
+    /**
+     * <p>Submitter preferences.</p>
+     */
+    @java.lang.Override
+    @JsonSetter(
+        value = "preferences",
+        nulls = Nulls.SKIP
+    )
+    public _FinalStage preferences(Map<String, Object> preferences) {
+      this.preferences.clear();
+      this.preferences.putAll(preferences);
       return this;
     }
 
@@ -1037,50 +1208,9 @@ public final class GetSubmissionsResponseDataItemSubmittersItem {
       return this;
     }
 
-    /**
-     * <p>The email address of the submitter.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
     @java.lang.Override
-    public _FinalStage email(Nullable<String> email) {
-      if (email.isNull()) {
-        this.email = null;
-      }
-      else if (email.isEmpty()) {
-        this.email = Optional.empty();
-      }
-      else {
-        this.email = Optional.of(email.get());
-      }
-      return this;
-    }
-
-    /**
-     * <p>The email address of the submitter.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    public _FinalStage email(String email) {
-      this.email = Optional.ofNullable(email);
-      return this;
-    }
-
-    /**
-     * <p>The email address of the submitter.</p>
-     */
-    @java.lang.Override
-    @JsonSetter(
-        value = "email",
-        nulls = Nulls.SKIP
-    )
-    public _FinalStage email(Optional<String> email) {
-      this.email = email;
-      return this;
-    }
-
-    @java.lang.Override
-    public GetSubmissionsResponseDataItemSubmittersItem build() {
-      return new GetSubmissionsResponseDataItemSubmittersItem(id, submissionId, uuid, email, slug, sentAt, openedAt, completedAt, declinedAt, createdAt, updatedAt, name, phone, externalId, status, role, metadata, preferences, additionalProperties);
+    public GetSubmittersResponseSubmitter build() {
+      return new GetSubmittersResponseSubmitter(id, submissionId, uuid, email, slug, sentAt, openedAt, completedAt, declinedAt, createdAt, updatedAt, name, phone, status, externalId, preferences, metadata, submissionEvents, values, documents, role, additionalProperties);
     }
   }
 }

@@ -29,9 +29,9 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(
-    builder = CreateSubmissionsFromEmailsResponseItem.Builder.class
+    builder = CreateSubmissionsFromEmailsResponseSubmitter.Builder.class
 )
-public final class CreateSubmissionsFromEmailsResponseItem {
+public final class CreateSubmissionsFromEmailsResponseSubmitter {
   private final int id;
 
   private final int submissionId;
@@ -42,7 +42,7 @@ public final class CreateSubmissionsFromEmailsResponseItem {
 
   private final String slug;
 
-  private final CreateSubmissionsFromEmailsResponseItemStatus status;
+  private final CreateSubmissionsFromEmailsResponseSubmitterStatus status;
 
   private final List<SubmitterValue> values;
 
@@ -66,7 +66,7 @@ public final class CreateSubmissionsFromEmailsResponseItem {
 
   private final Optional<String> externalId;
 
-  private final CreateSubmissionsFromEmailsResponseItemPreferences preferences;
+  private final CreateSubmissionsFromEmailsResponseSubmitterPreferences preferences;
 
   private final String role;
 
@@ -74,13 +74,14 @@ public final class CreateSubmissionsFromEmailsResponseItem {
 
   private final Map<String, Object> additionalProperties;
 
-  private CreateSubmissionsFromEmailsResponseItem(int id, int submissionId, String uuid,
-      Optional<String> email, String slug, CreateSubmissionsFromEmailsResponseItemStatus status,
-      List<SubmitterValue> values, Map<String, Object> metadata, Optional<String> sentAt,
-      Optional<String> openedAt, Optional<String> completedAt, Optional<String> declinedAt,
-      String createdAt, String updatedAt, Optional<String> name, Optional<String> phone,
-      Optional<String> externalId, CreateSubmissionsFromEmailsResponseItemPreferences preferences,
-      String role, String embedSrc, Map<String, Object> additionalProperties) {
+  private CreateSubmissionsFromEmailsResponseSubmitter(int id, int submissionId, String uuid,
+      Optional<String> email, String slug,
+      CreateSubmissionsFromEmailsResponseSubmitterStatus status, List<SubmitterValue> values,
+      Map<String, Object> metadata, Optional<String> sentAt, Optional<String> openedAt,
+      Optional<String> completedAt, Optional<String> declinedAt, String createdAt, String updatedAt,
+      Optional<String> name, Optional<String> phone, Optional<String> externalId,
+      CreateSubmissionsFromEmailsResponseSubmitterPreferences preferences, String role,
+      String embedSrc, Map<String, Object> additionalProperties) {
     this.id = id;
     this.submissionId = submissionId;
     this.uuid = uuid;
@@ -151,7 +152,7 @@ public final class CreateSubmissionsFromEmailsResponseItem {
    * @return The status of signing request for the submitter.
    */
   @JsonProperty("status")
-  public CreateSubmissionsFromEmailsResponseItemStatus getStatus() {
+  public CreateSubmissionsFromEmailsResponseSubmitterStatus getStatus() {
     return status;
   }
 
@@ -264,11 +265,8 @@ public final class CreateSubmissionsFromEmailsResponseItem {
     return externalId;
   }
 
-  /**
-   * @return Submitter preferences.
-   */
   @JsonProperty("preferences")
-  public CreateSubmissionsFromEmailsResponseItemPreferences getPreferences() {
+  public CreateSubmissionsFromEmailsResponseSubmitterPreferences getPreferences() {
     return preferences;
   }
 
@@ -363,7 +361,7 @@ public final class CreateSubmissionsFromEmailsResponseItem {
   @java.lang.Override
   public boolean equals(Object other) {
     if (this == other) return true;
-    return other instanceof CreateSubmissionsFromEmailsResponseItem && equalTo((CreateSubmissionsFromEmailsResponseItem) other);
+    return other instanceof CreateSubmissionsFromEmailsResponseSubmitter && equalTo((CreateSubmissionsFromEmailsResponseSubmitter) other);
   }
 
   @JsonAnyGetter
@@ -371,7 +369,7 @@ public final class CreateSubmissionsFromEmailsResponseItem {
     return this.additionalProperties;
   }
 
-  private boolean equalTo(CreateSubmissionsFromEmailsResponseItem other) {
+  private boolean equalTo(CreateSubmissionsFromEmailsResponseSubmitter other) {
     return id == other.id && submissionId == other.submissionId && uuid.equals(other.uuid) && email.equals(other.email) && slug.equals(other.slug) && status.equals(other.status) && values.equals(other.values) && metadata.equals(other.metadata) && sentAt.equals(other.sentAt) && openedAt.equals(other.openedAt) && completedAt.equals(other.completedAt) && declinedAt.equals(other.declinedAt) && createdAt.equals(other.createdAt) && updatedAt.equals(other.updatedAt) && name.equals(other.name) && phone.equals(other.phone) && externalId.equals(other.externalId) && preferences.equals(other.preferences) && role.equals(other.role) && embedSrc.equals(other.embedSrc);
   }
 
@@ -395,7 +393,7 @@ public final class CreateSubmissionsFromEmailsResponseItem {
      */
     SubmissionIdStage id(int id);
 
-    Builder from(CreateSubmissionsFromEmailsResponseItem other);
+    Builder from(CreateSubmissionsFromEmailsResponseSubmitter other);
   }
 
   public interface SubmissionIdStage {
@@ -423,7 +421,7 @@ public final class CreateSubmissionsFromEmailsResponseItem {
     /**
      * <p>The status of signing request for the submitter.</p>
      */
-    CreatedAtStage status(@NotNull CreateSubmissionsFromEmailsResponseItemStatus status);
+    CreatedAtStage status(@NotNull CreateSubmissionsFromEmailsResponseSubmitterStatus status);
   }
 
   public interface CreatedAtStage {
@@ -441,10 +439,8 @@ public final class CreateSubmissionsFromEmailsResponseItem {
   }
 
   public interface PreferencesStage {
-    /**
-     * <p>Submitter preferences.</p>
-     */
-    RoleStage preferences(@NotNull CreateSubmissionsFromEmailsResponseItemPreferences preferences);
+    RoleStage preferences(
+        @NotNull CreateSubmissionsFromEmailsResponseSubmitterPreferences preferences);
   }
 
   public interface RoleStage {
@@ -462,7 +458,7 @@ public final class CreateSubmissionsFromEmailsResponseItem {
   }
 
   public interface _FinalStage {
-    CreateSubmissionsFromEmailsResponseItem build();
+    CreateSubmissionsFromEmailsResponseSubmitter build();
 
     /**
      * <p>The email address of the submitter.</p>
@@ -567,13 +563,13 @@ public final class CreateSubmissionsFromEmailsResponseItem {
 
     private String slug;
 
-    private CreateSubmissionsFromEmailsResponseItemStatus status;
+    private CreateSubmissionsFromEmailsResponseSubmitterStatus status;
 
     private String createdAt;
 
     private String updatedAt;
 
-    private CreateSubmissionsFromEmailsResponseItemPreferences preferences;
+    private CreateSubmissionsFromEmailsResponseSubmitterPreferences preferences;
 
     private String role;
 
@@ -606,7 +602,7 @@ public final class CreateSubmissionsFromEmailsResponseItem {
     }
 
     @java.lang.Override
-    public Builder from(CreateSubmissionsFromEmailsResponseItem other) {
+    public Builder from(CreateSubmissionsFromEmailsResponseSubmitter other) {
       id(other.getId());
       submissionId(other.getSubmissionId());
       uuid(other.getUuid());
@@ -685,7 +681,8 @@ public final class CreateSubmissionsFromEmailsResponseItem {
      */
     @java.lang.Override
     @JsonSetter("status")
-    public CreatedAtStage status(@NotNull CreateSubmissionsFromEmailsResponseItemStatus status) {
+    public CreatedAtStage status(
+        @NotNull CreateSubmissionsFromEmailsResponseSubmitterStatus status) {
       this.status = Objects.requireNonNull(status, "status must not be null");
       return this;
     }
@@ -714,15 +711,10 @@ public final class CreateSubmissionsFromEmailsResponseItem {
       return this;
     }
 
-    /**
-     * <p>Submitter preferences.</p>
-     * <p>Submitter preferences.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
     @java.lang.Override
     @JsonSetter("preferences")
     public RoleStage preferences(
-        @NotNull CreateSubmissionsFromEmailsResponseItemPreferences preferences) {
+        @NotNull CreateSubmissionsFromEmailsResponseSubmitterPreferences preferences) {
       this.preferences = Objects.requireNonNull(preferences, "preferences must not be null");
       return this;
     }
@@ -1148,8 +1140,8 @@ public final class CreateSubmissionsFromEmailsResponseItem {
     }
 
     @java.lang.Override
-    public CreateSubmissionsFromEmailsResponseItem build() {
-      return new CreateSubmissionsFromEmailsResponseItem(id, submissionId, uuid, email, slug, status, values, metadata, sentAt, openedAt, completedAt, declinedAt, createdAt, updatedAt, name, phone, externalId, preferences, role, embedSrc, additionalProperties);
+    public CreateSubmissionsFromEmailsResponseSubmitter build() {
+      return new CreateSubmissionsFromEmailsResponseSubmitter(id, submissionId, uuid, email, slug, status, values, metadata, sentAt, openedAt, completedAt, declinedAt, createdAt, updatedAt, name, phone, externalId, preferences, role, embedSrc, additionalProperties);
     }
   }
 }

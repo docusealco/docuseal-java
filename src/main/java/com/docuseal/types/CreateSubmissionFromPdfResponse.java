@@ -32,7 +32,7 @@ public final class CreateSubmissionFromPdfResponse {
 
   private final Optional<String> name;
 
-  private final List<CreateSubmissionFromPdfResponseSubmittersItem> submitters;
+  private final List<CreateSubmissionFromPdfResponseSubmitter> submitters;
 
   private final CreateSubmissionFromPdfResponseSource source;
 
@@ -40,7 +40,7 @@ public final class CreateSubmissionFromPdfResponse {
 
   private final CreateSubmissionFromPdfResponseStatus status;
 
-  private final Optional<List<CreateSubmissionFromPdfResponseSchemaItem>> schema;
+  private final Optional<List<CreateSubmissionFromPdfResponseSchemaDocument>> schema;
 
   private final Optional<List<TemplateField>> fields;
 
@@ -51,11 +51,11 @@ public final class CreateSubmissionFromPdfResponse {
   private final Map<String, Object> additionalProperties;
 
   private CreateSubmissionFromPdfResponse(int id, Optional<String> name,
-      List<CreateSubmissionFromPdfResponseSubmittersItem> submitters,
+      List<CreateSubmissionFromPdfResponseSubmitter> submitters,
       CreateSubmissionFromPdfResponseSource source,
       CreateSubmissionFromPdfResponseSubmittersOrder submittersOrder,
       CreateSubmissionFromPdfResponseStatus status,
-      Optional<List<CreateSubmissionFromPdfResponseSchemaItem>> schema,
+      Optional<List<CreateSubmissionFromPdfResponseSchemaDocument>> schema,
       Optional<List<TemplateField>> fields, String expireAt, String createdAt,
       Map<String, Object> additionalProperties) {
     this.id = id;
@@ -91,7 +91,7 @@ public final class CreateSubmissionFromPdfResponse {
    * @return The list of submitters.
    */
   @JsonProperty("submitters")
-  public List<CreateSubmissionFromPdfResponseSubmittersItem> getSubmitters() {
+  public List<CreateSubmissionFromPdfResponseSubmitter> getSubmitters() {
     return submitters;
   }
 
@@ -123,7 +123,7 @@ public final class CreateSubmissionFromPdfResponse {
    * @return The one-off submission document files.
    */
   @JsonProperty("schema")
-  public Optional<List<CreateSubmissionFromPdfResponseSchemaItem>> getSchema() {
+  public Optional<List<CreateSubmissionFromPdfResponseSchemaDocument>> getSchema() {
     return schema;
   }
 
@@ -238,18 +238,18 @@ public final class CreateSubmissionFromPdfResponse {
     /**
      * <p>The list of submitters.</p>
      */
-    _FinalStage submitters(List<CreateSubmissionFromPdfResponseSubmittersItem> submitters);
+    _FinalStage submitters(List<CreateSubmissionFromPdfResponseSubmitter> submitters);
 
-    _FinalStage addSubmitters(CreateSubmissionFromPdfResponseSubmittersItem submitters);
+    _FinalStage addSubmitters(CreateSubmissionFromPdfResponseSubmitter submitters);
 
-    _FinalStage addAllSubmitters(List<CreateSubmissionFromPdfResponseSubmittersItem> submitters);
+    _FinalStage addAllSubmitters(List<CreateSubmissionFromPdfResponseSubmitter> submitters);
 
     /**
      * <p>The one-off submission document files.</p>
      */
-    _FinalStage schema(Optional<List<CreateSubmissionFromPdfResponseSchemaItem>> schema);
+    _FinalStage schema(Optional<List<CreateSubmissionFromPdfResponseSchemaDocument>> schema);
 
-    _FinalStage schema(List<CreateSubmissionFromPdfResponseSchemaItem> schema);
+    _FinalStage schema(List<CreateSubmissionFromPdfResponseSchemaDocument> schema);
 
     /**
      * <p>List of fields to be filled in the one-off submission.</p>
@@ -277,9 +277,9 @@ public final class CreateSubmissionFromPdfResponse {
 
     private Optional<List<TemplateField>> fields = Optional.empty();
 
-    private Optional<List<CreateSubmissionFromPdfResponseSchemaItem>> schema = Optional.empty();
+    private Optional<List<CreateSubmissionFromPdfResponseSchemaDocument>> schema = Optional.empty();
 
-    private List<CreateSubmissionFromPdfResponseSubmittersItem> submitters = new ArrayList<>();
+    private List<CreateSubmissionFromPdfResponseSubmitter> submitters = new ArrayList<>();
 
     private Optional<String> name = Optional.empty();
 
@@ -405,7 +405,7 @@ public final class CreateSubmissionFromPdfResponse {
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage schema(List<CreateSubmissionFromPdfResponseSchemaItem> schema) {
+    public _FinalStage schema(List<CreateSubmissionFromPdfResponseSchemaDocument> schema) {
       this.schema = Optional.ofNullable(schema);
       return this;
     }
@@ -418,7 +418,8 @@ public final class CreateSubmissionFromPdfResponse {
         value = "schema",
         nulls = Nulls.SKIP
     )
-    public _FinalStage schema(Optional<List<CreateSubmissionFromPdfResponseSchemaItem>> schema) {
+    public _FinalStage schema(
+        Optional<List<CreateSubmissionFromPdfResponseSchemaDocument>> schema) {
       this.schema = schema;
       return this;
     }
@@ -428,8 +429,7 @@ public final class CreateSubmissionFromPdfResponse {
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage addAllSubmitters(
-        List<CreateSubmissionFromPdfResponseSubmittersItem> submitters) {
+    public _FinalStage addAllSubmitters(List<CreateSubmissionFromPdfResponseSubmitter> submitters) {
       this.submitters.addAll(submitters);
       return this;
     }
@@ -439,7 +439,7 @@ public final class CreateSubmissionFromPdfResponse {
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage addSubmitters(CreateSubmissionFromPdfResponseSubmittersItem submitters) {
+    public _FinalStage addSubmitters(CreateSubmissionFromPdfResponseSubmitter submitters) {
       this.submitters.add(submitters);
       return this;
     }
@@ -452,7 +452,7 @@ public final class CreateSubmissionFromPdfResponse {
         value = "submitters",
         nulls = Nulls.SKIP
     )
-    public _FinalStage submitters(List<CreateSubmissionFromPdfResponseSubmittersItem> submitters) {
+    public _FinalStage submitters(List<CreateSubmissionFromPdfResponseSubmitter> submitters) {
       this.submitters.clear();
       this.submitters.addAll(submitters);
       return this;

@@ -23,16 +23,16 @@ import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(
-    builder = CreateSubmissionsFromEmailsResponseItemPreferences.Builder.class
+    builder = CreateSubmissionsFromEmailsResponseSubmitterPreferences.Builder.class
 )
-public final class CreateSubmissionsFromEmailsResponseItemPreferences {
+public final class CreateSubmissionsFromEmailsResponseSubmitterPreferences {
   private final Optional<Boolean> sendEmail;
 
   private final Optional<Boolean> sendSms;
 
   private final Map<String, Object> additionalProperties;
 
-  private CreateSubmissionsFromEmailsResponseItemPreferences(Optional<Boolean> sendEmail,
+  private CreateSubmissionsFromEmailsResponseSubmitterPreferences(Optional<Boolean> sendEmail,
       Optional<Boolean> sendSms, Map<String, Object> additionalProperties) {
     this.sendEmail = sendEmail;
     this.sendSms = sendSms;
@@ -58,7 +58,7 @@ public final class CreateSubmissionsFromEmailsResponseItemPreferences {
   @java.lang.Override
   public boolean equals(Object other) {
     if (this == other) return true;
-    return other instanceof CreateSubmissionsFromEmailsResponseItemPreferences && equalTo((CreateSubmissionsFromEmailsResponseItemPreferences) other);
+    return other instanceof CreateSubmissionsFromEmailsResponseSubmitterPreferences && equalTo((CreateSubmissionsFromEmailsResponseSubmitterPreferences) other);
   }
 
   @JsonAnyGetter
@@ -66,7 +66,7 @@ public final class CreateSubmissionsFromEmailsResponseItemPreferences {
     return this.additionalProperties;
   }
 
-  private boolean equalTo(CreateSubmissionsFromEmailsResponseItemPreferences other) {
+  private boolean equalTo(CreateSubmissionsFromEmailsResponseSubmitterPreferences other) {
     return sendEmail.equals(other.sendEmail) && sendSms.equals(other.sendSms);
   }
 
@@ -98,7 +98,7 @@ public final class CreateSubmissionsFromEmailsResponseItemPreferences {
     private Builder() {
     }
 
-    public Builder from(CreateSubmissionsFromEmailsResponseItemPreferences other) {
+    public Builder from(CreateSubmissionsFromEmailsResponseSubmitterPreferences other) {
       sendEmail(other.getSendEmail());
       sendSms(other.getSendSms());
       return this;
@@ -138,8 +138,8 @@ public final class CreateSubmissionsFromEmailsResponseItemPreferences {
       return this;
     }
 
-    public CreateSubmissionsFromEmailsResponseItemPreferences build() {
-      return new CreateSubmissionsFromEmailsResponseItemPreferences(sendEmail, sendSms, additionalProperties);
+    public CreateSubmissionsFromEmailsResponseSubmitterPreferences build() {
+      return new CreateSubmissionsFromEmailsResponseSubmitterPreferences(sendEmail, sendSms, additionalProperties);
     }
   }
 }

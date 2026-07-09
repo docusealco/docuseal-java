@@ -26,13 +26,13 @@ import java.util.Optional;
     builder = GetSubmittersResponse.Builder.class
 )
 public final class GetSubmittersResponse {
-  private final Optional<List<GetSubmittersResponseDataItem>> data;
+  private final Optional<List<GetSubmittersResponseSubmitter>> data;
 
   private final Optional<SubmitterPagination> pagination;
 
   private final Map<String, Object> additionalProperties;
 
-  private GetSubmittersResponse(Optional<List<GetSubmittersResponseDataItem>> data,
+  private GetSubmittersResponse(Optional<List<GetSubmittersResponseSubmitter>> data,
       Optional<SubmitterPagination> pagination, Map<String, Object> additionalProperties) {
     this.data = data;
     this.pagination = pagination;
@@ -40,7 +40,7 @@ public final class GetSubmittersResponse {
   }
 
   @JsonProperty("data")
-  public Optional<List<GetSubmittersResponseDataItem>> getData() {
+  public Optional<List<GetSubmittersResponseSubmitter>> getData() {
     return data;
   }
 
@@ -82,7 +82,7 @@ public final class GetSubmittersResponse {
       ignoreUnknown = true
   )
   public static final class Builder {
-    private Optional<List<GetSubmittersResponseDataItem>> data = Optional.empty();
+    private Optional<List<GetSubmittersResponseSubmitter>> data = Optional.empty();
 
     private Optional<SubmitterPagination> pagination = Optional.empty();
 
@@ -102,12 +102,12 @@ public final class GetSubmittersResponse {
         value = "data",
         nulls = Nulls.SKIP
     )
-    public Builder data(Optional<List<GetSubmittersResponseDataItem>> data) {
+    public Builder data(Optional<List<GetSubmittersResponseSubmitter>> data) {
       this.data = data;
       return this;
     }
 
-    public Builder data(List<GetSubmittersResponseDataItem> data) {
+    public Builder data(List<GetSubmittersResponseSubmitter> data) {
       this.data = Optional.ofNullable(data);
       return this;
     }

@@ -52,7 +52,7 @@ public final class GetSubmissionResponse {
 
   private final Optional<String> archivedAt;
 
-  private final List<GetSubmissionResponseSubmittersItem> submitters;
+  private final List<GetSubmissionResponseSubmitter> submitters;
 
   private final Optional<SubmissionTemplate> template;
 
@@ -74,7 +74,7 @@ public final class GetSubmissionResponse {
       GetSubmissionResponseSource source, GetSubmissionResponseSubmittersOrder submittersOrder,
       Optional<String> auditLogUrl, Optional<String> combinedDocumentUrl, String createdAt,
       String updatedAt, Optional<String> archivedAt,
-      List<GetSubmissionResponseSubmittersItem> submitters, Optional<SubmissionTemplate> template,
+      List<GetSubmissionResponseSubmitter> submitters, Optional<SubmissionTemplate> template,
       Optional<SubmissionCreatedByUser> createdByUser, List<SubmissionEvent> submissionEvents,
       List<CompletedDocument> documents, GetSubmissionResponseStatus status,
       Map<String, Object> metadata, Optional<String> completedAt,
@@ -193,7 +193,7 @@ public final class GetSubmissionResponse {
    * @return The list of submitters.
    */
   @JsonProperty("submitters")
-  public List<GetSubmissionResponseSubmittersItem> getSubmitters() {
+  public List<GetSubmissionResponseSubmitter> getSubmitters() {
     return submitters;
   }
 
@@ -418,11 +418,11 @@ public final class GetSubmissionResponse {
     /**
      * <p>The list of submitters.</p>
      */
-    _FinalStage submitters(List<GetSubmissionResponseSubmittersItem> submitters);
+    _FinalStage submitters(List<GetSubmissionResponseSubmitter> submitters);
 
-    _FinalStage addSubmitters(GetSubmissionResponseSubmittersItem submitters);
+    _FinalStage addSubmitters(GetSubmissionResponseSubmitter submitters);
 
-    _FinalStage addAllSubmitters(List<GetSubmissionResponseSubmittersItem> submitters);
+    _FinalStage addAllSubmitters(List<GetSubmissionResponseSubmitter> submitters);
 
     _FinalStage template(Optional<SubmissionTemplate> template);
 
@@ -501,7 +501,7 @@ public final class GetSubmissionResponse {
 
     private Optional<SubmissionTemplate> template = Optional.empty();
 
-    private List<GetSubmissionResponseSubmittersItem> submitters = new ArrayList<>();
+    private List<GetSubmissionResponseSubmitter> submitters = new ArrayList<>();
 
     private Optional<String> archivedAt = Optional.empty();
 
@@ -819,7 +819,7 @@ public final class GetSubmissionResponse {
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage addAllSubmitters(List<GetSubmissionResponseSubmittersItem> submitters) {
+    public _FinalStage addAllSubmitters(List<GetSubmissionResponseSubmitter> submitters) {
       this.submitters.addAll(submitters);
       return this;
     }
@@ -829,7 +829,7 @@ public final class GetSubmissionResponse {
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage addSubmitters(GetSubmissionResponseSubmittersItem submitters) {
+    public _FinalStage addSubmitters(GetSubmissionResponseSubmitter submitters) {
       this.submitters.add(submitters);
       return this;
     }
@@ -842,7 +842,7 @@ public final class GetSubmissionResponse {
         value = "submitters",
         nulls = Nulls.SKIP
     )
-    public _FinalStage submitters(List<GetSubmissionResponseSubmittersItem> submitters) {
+    public _FinalStage submitters(List<GetSubmissionResponseSubmitter> submitters) {
       this.submitters.clear();
       this.submitters.addAll(submitters);
       return this;

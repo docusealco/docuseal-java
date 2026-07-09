@@ -7,7 +7,7 @@ package com.docuseal.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.lang.String;
 
-public enum GetSubmissionsResponseDataItemSubmittersItemStatus {
+public enum GetSubmissionsResponseSubmissionSubmitterStatus {
   COMPLETED("completed"),
 
   DECLINED("declined"),
@@ -20,7 +20,7 @@ public enum GetSubmissionsResponseDataItemSubmittersItemStatus {
 
   private final String value;
 
-  GetSubmissionsResponseDataItemSubmittersItemStatus(String value) {
+  GetSubmissionsResponseSubmissionSubmitterStatus(String value) {
     this.value = value;
   }
 

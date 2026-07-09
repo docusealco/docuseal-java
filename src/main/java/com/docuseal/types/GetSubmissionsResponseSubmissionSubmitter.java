@@ -20,7 +20,6 @@ import java.lang.Object;
 import java.lang.String;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,10 +27,12 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(
-    builder = CreateSubmissionFromPdfResponseSubmittersItem.Builder.class
+    builder = GetSubmissionsResponseSubmissionSubmitter.Builder.class
 )
-public final class CreateSubmissionFromPdfResponseSubmittersItem {
+public final class GetSubmissionsResponseSubmissionSubmitter {
   private final int id;
+
+  private final int submissionId;
 
   private final String uuid;
 
@@ -57,9 +58,7 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
 
   private final Optional<String> externalId;
 
-  private final CreateSubmissionFromPdfResponseSubmittersItemStatus status;
-
-  private final Optional<List<SubmitterValue>> values;
+  private final GetSubmissionsResponseSubmissionSubmitterStatus status;
 
   private final String role;
 
@@ -67,19 +66,17 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
 
   private final Map<String, Object> preferences;
 
-  private final Optional<String> embedSrc;
-
   private final Map<String, Object> additionalProperties;
 
-  private CreateSubmissionFromPdfResponseSubmittersItem(int id, String uuid, Optional<String> email,
-      String slug, Optional<String> sentAt, Optional<String> openedAt, Optional<String> completedAt,
-      Optional<String> declinedAt, String createdAt, String updatedAt, Optional<String> name,
-      Optional<String> phone, Optional<String> externalId,
-      CreateSubmissionFromPdfResponseSubmittersItemStatus status,
-      Optional<List<SubmitterValue>> values, String role, Map<String, Object> metadata,
-      Map<String, Object> preferences, Optional<String> embedSrc,
+  private GetSubmissionsResponseSubmissionSubmitter(int id, int submissionId, String uuid,
+      Optional<String> email, String slug, Optional<String> sentAt, Optional<String> openedAt,
+      Optional<String> completedAt, Optional<String> declinedAt, String createdAt, String updatedAt,
+      Optional<String> name, Optional<String> phone, Optional<String> externalId,
+      GetSubmissionsResponseSubmissionSubmitterStatus status, String role,
+      Map<String, Object> metadata, Map<String, Object> preferences,
       Map<String, Object> additionalProperties) {
     this.id = id;
+    this.submissionId = submissionId;
     this.uuid = uuid;
     this.email = email;
     this.slug = slug;
@@ -93,11 +90,9 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
     this.phone = phone;
     this.externalId = externalId;
     this.status = status;
-    this.values = values;
     this.role = role;
     this.metadata = metadata;
     this.preferences = preferences;
-    this.embedSrc = embedSrc;
     this.additionalProperties = additionalProperties;
   }
 
@@ -107,6 +102,14 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
   @JsonProperty("id")
   public int getId() {
     return id;
+  }
+
+  /**
+   * @return Submission unique ID number.
+   */
+  @JsonProperty("submission_id")
+  public int getSubmissionId() {
+    return submissionId;
   }
 
   /**
@@ -233,16 +236,8 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
    * @return The status of signing request for the submitter.
    */
   @JsonProperty("status")
-  public CreateSubmissionFromPdfResponseSubmittersItemStatus getStatus() {
+  public GetSubmissionsResponseSubmissionSubmitterStatus getStatus() {
     return status;
-  }
-
-  /**
-   * @return An array of pre-filled values for the submitter.
-   */
-  @JsonProperty("values")
-  public Optional<List<SubmitterValue>> getValues() {
-    return values;
   }
 
   /**
@@ -267,14 +262,6 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
   @JsonProperty("preferences")
   public Map<String, Object> getPreferences() {
     return preferences;
-  }
-
-  /**
-   * @return The <code>src</code> URL value to embed the signing form or sign via a link.
-   */
-  @JsonProperty("embed_src")
-  public Optional<String> getEmbedSrc() {
-    return embedSrc;
   }
 
   @JsonInclude(
@@ -352,7 +339,7 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
   @java.lang.Override
   public boolean equals(Object other) {
     if (this == other) return true;
-    return other instanceof CreateSubmissionFromPdfResponseSubmittersItem && equalTo((CreateSubmissionFromPdfResponseSubmittersItem) other);
+    return other instanceof GetSubmissionsResponseSubmissionSubmitter && equalTo((GetSubmissionsResponseSubmissionSubmitter) other);
   }
 
   @JsonAnyGetter
@@ -360,13 +347,13 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
     return this.additionalProperties;
   }
 
-  private boolean equalTo(CreateSubmissionFromPdfResponseSubmittersItem other) {
-    return id == other.id && uuid.equals(other.uuid) && email.equals(other.email) && slug.equals(other.slug) && sentAt.equals(other.sentAt) && openedAt.equals(other.openedAt) && completedAt.equals(other.completedAt) && declinedAt.equals(other.declinedAt) && createdAt.equals(other.createdAt) && updatedAt.equals(other.updatedAt) && name.equals(other.name) && phone.equals(other.phone) && externalId.equals(other.externalId) && status.equals(other.status) && values.equals(other.values) && role.equals(other.role) && metadata.equals(other.metadata) && preferences.equals(other.preferences) && embedSrc.equals(other.embedSrc);
+  private boolean equalTo(GetSubmissionsResponseSubmissionSubmitter other) {
+    return id == other.id && submissionId == other.submissionId && uuid.equals(other.uuid) && email.equals(other.email) && slug.equals(other.slug) && sentAt.equals(other.sentAt) && openedAt.equals(other.openedAt) && completedAt.equals(other.completedAt) && declinedAt.equals(other.declinedAt) && createdAt.equals(other.createdAt) && updatedAt.equals(other.updatedAt) && name.equals(other.name) && phone.equals(other.phone) && externalId.equals(other.externalId) && status.equals(other.status) && role.equals(other.role) && metadata.equals(other.metadata) && preferences.equals(other.preferences);
   }
 
   @java.lang.Override
   public int hashCode() {
-    return Objects.hash(this.id, this.uuid, this.email, this.slug, this.sentAt, this.openedAt, this.completedAt, this.declinedAt, this.createdAt, this.updatedAt, this.name, this.phone, this.externalId, this.status, this.values, this.role, this.metadata, this.preferences, this.embedSrc);
+    return Objects.hash(this.id, this.submissionId, this.uuid, this.email, this.slug, this.sentAt, this.openedAt, this.completedAt, this.declinedAt, this.createdAt, this.updatedAt, this.name, this.phone, this.externalId, this.status, this.role, this.metadata, this.preferences);
   }
 
   @java.lang.Override
@@ -382,9 +369,16 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
     /**
      * <p>Submitter unique ID number.</p>
      */
-    UuidStage id(int id);
+    SubmissionIdStage id(int id);
 
-    Builder from(CreateSubmissionFromPdfResponseSubmittersItem other);
+    Builder from(GetSubmissionsResponseSubmissionSubmitter other);
+  }
+
+  public interface SubmissionIdStage {
+    /**
+     * <p>Submission unique ID number.</p>
+     */
+    UuidStage submissionId(int submissionId);
   }
 
   public interface UuidStage {
@@ -419,7 +413,7 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
     /**
      * <p>The status of signing request for the submitter.</p>
      */
-    RoleStage status(@NotNull CreateSubmissionFromPdfResponseSubmittersItemStatus status);
+    RoleStage status(@NotNull GetSubmissionsResponseSubmissionSubmitterStatus status);
   }
 
   public interface RoleStage {
@@ -430,7 +424,7 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
   }
 
   public interface _FinalStage {
-    CreateSubmissionFromPdfResponseSubmittersItem build();
+    GetSubmissionsResponseSubmissionSubmitter build();
 
     /**
      * <p>The email address of the submitter.</p>
@@ -505,13 +499,6 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
     _FinalStage externalId(Nullable<String> externalId);
 
     /**
-     * <p>An array of pre-filled values for the submitter.</p>
-     */
-    _FinalStage values(Optional<List<SubmitterValue>> values);
-
-    _FinalStage values(List<SubmitterValue> values);
-
-    /**
      * <p>Metadata object with additional submitter information.</p>
      */
     _FinalStage metadata(Map<String, Object> metadata);
@@ -528,20 +515,15 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
     _FinalStage putAllPreferences(Map<String, Object> preferences);
 
     _FinalStage preferences(String key, Object value);
-
-    /**
-     * <p>The <code>src</code> URL value to embed the signing form or sign via a link.</p>
-     */
-    _FinalStage embedSrc(Optional<String> embedSrc);
-
-    _FinalStage embedSrc(String embedSrc);
   }
 
   @JsonIgnoreProperties(
       ignoreUnknown = true
   )
-  public static final class Builder implements IdStage, UuidStage, SlugStage, CreatedAtStage, UpdatedAtStage, StatusStage, RoleStage, _FinalStage {
+  public static final class Builder implements IdStage, SubmissionIdStage, UuidStage, SlugStage, CreatedAtStage, UpdatedAtStage, StatusStage, RoleStage, _FinalStage {
     private int id;
+
+    private int submissionId;
 
     private String uuid;
 
@@ -551,17 +533,13 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
 
     private String updatedAt;
 
-    private CreateSubmissionFromPdfResponseSubmittersItemStatus status;
+    private GetSubmissionsResponseSubmissionSubmitterStatus status;
 
     private String role;
-
-    private Optional<String> embedSrc = Optional.empty();
 
     private Map<String, Object> preferences = new LinkedHashMap<>();
 
     private Map<String, Object> metadata = new LinkedHashMap<>();
-
-    private Optional<List<SubmitterValue>> values = Optional.empty();
 
     private Optional<String> externalId = Optional.empty();
 
@@ -586,8 +564,9 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
     }
 
     @java.lang.Override
-    public Builder from(CreateSubmissionFromPdfResponseSubmittersItem other) {
+    public Builder from(GetSubmissionsResponseSubmissionSubmitter other) {
       id(other.getId());
+      submissionId(other.getSubmissionId());
       uuid(other.getUuid());
       email(other.getEmail());
       slug(other.getSlug());
@@ -601,11 +580,9 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
       phone(other.getPhone());
       externalId(other.getExternalId());
       status(other.getStatus());
-      values(other.getValues());
       role(other.getRole());
       metadata(other.getMetadata());
       preferences(other.getPreferences());
-      embedSrc(other.getEmbedSrc());
       return this;
     }
 
@@ -616,8 +593,20 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
      */
     @java.lang.Override
     @JsonSetter("id")
-    public UuidStage id(int id) {
+    public SubmissionIdStage id(int id) {
       this.id = id;
+      return this;
+    }
+
+    /**
+     * <p>Submission unique ID number.</p>
+     * <p>Submission unique ID number.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    @JsonSetter("submission_id")
+    public UuidStage submissionId(int submissionId) {
+      this.submissionId = submissionId;
       return this;
     }
 
@@ -676,7 +665,7 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
      */
     @java.lang.Override
     @JsonSetter("status")
-    public RoleStage status(@NotNull CreateSubmissionFromPdfResponseSubmittersItemStatus status) {
+    public RoleStage status(@NotNull GetSubmissionsResponseSubmissionSubmitterStatus status) {
       this.status = Objects.requireNonNull(status, "status must not be null");
       return this;
     }
@@ -690,29 +679,6 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
     @JsonSetter("role")
     public _FinalStage role(@NotNull String role) {
       this.role = Objects.requireNonNull(role, "role must not be null");
-      return this;
-    }
-
-    /**
-     * <p>The <code>src</code> URL value to embed the signing form or sign via a link.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    public _FinalStage embedSrc(String embedSrc) {
-      this.embedSrc = Optional.ofNullable(embedSrc);
-      return this;
-    }
-
-    /**
-     * <p>The <code>src</code> URL value to embed the signing form or sign via a link.</p>
-     */
-    @java.lang.Override
-    @JsonSetter(
-        value = "embed_src",
-        nulls = Nulls.SKIP
-    )
-    public _FinalStage embedSrc(Optional<String> embedSrc) {
-      this.embedSrc = embedSrc;
       return this;
     }
 
@@ -781,29 +747,6 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
     public _FinalStage metadata(Map<String, Object> metadata) {
       this.metadata.clear();
       this.metadata.putAll(metadata);
-      return this;
-    }
-
-    /**
-     * <p>An array of pre-filled values for the submitter.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    public _FinalStage values(List<SubmitterValue> values) {
-      this.values = Optional.ofNullable(values);
-      return this;
-    }
-
-    /**
-     * <p>An array of pre-filled values for the submitter.</p>
-     */
-    @java.lang.Override
-    @JsonSetter(
-        value = "values",
-        nulls = Nulls.SKIP
-    )
-    public _FinalStage values(Optional<List<SubmitterValue>> values) {
-      this.values = values;
       return this;
     }
 
@@ -1136,8 +1079,8 @@ public final class CreateSubmissionFromPdfResponseSubmittersItem {
     }
 
     @java.lang.Override
-    public CreateSubmissionFromPdfResponseSubmittersItem build() {
-      return new CreateSubmissionFromPdfResponseSubmittersItem(id, uuid, email, slug, sentAt, openedAt, completedAt, declinedAt, createdAt, updatedAt, name, phone, externalId, status, values, role, metadata, preferences, embedSrc, additionalProperties);
+    public GetSubmissionsResponseSubmissionSubmitter build() {
+      return new GetSubmissionsResponseSubmissionSubmitter(id, submissionId, uuid, email, slug, sentAt, openedAt, completedAt, declinedAt, createdAt, updatedAt, name, phone, externalId, status, role, metadata, preferences, additionalProperties);
     }
   }
 }

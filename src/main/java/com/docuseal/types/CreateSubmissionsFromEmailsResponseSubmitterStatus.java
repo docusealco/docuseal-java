@@ -7,16 +7,20 @@ package com.docuseal.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.lang.String;
 
-public enum GetTemplatesResponseDataItemSource {
-  NATIVE("native"),
+public enum CreateSubmissionsFromEmailsResponseSubmitterStatus {
+  COMPLETED("completed"),
 
-  API("api"),
+  DECLINED("declined"),
 
-  EMBED("embed");
+  OPENED("opened"),
+
+  SENT("sent"),
+
+  AWAITING("awaiting");
 
   private final String value;
 
-  GetTemplatesResponseDataItemSource(String value) {
+  CreateSubmissionsFromEmailsResponseSubmitterStatus(String value) {
     this.value = value;
   }
 
