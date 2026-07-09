@@ -21,6 +21,23 @@ ruby -rjson -e '
   spec = JSON.parse(File.read(path))
   spec.delete("webhooks")
 
+  # No tags -> Fern puts every method directly on the root client
+  # (client.getTemplate(id)) instead of resource groups (client.templates()).
+  spec.delete("tags")
+  spec["paths"].each_value do |methods|
+    methods.each_value do |op|
+      next unless op.is_a?(Hash)
+
+      op.delete("tags")
+
+      # Name the generated method-input wrappers <OperationId>Params:
+      # "Request" is reserved for spec body components.
+      params_name = op["operationId"].sub(/\A./) { |c| c.upcase } + "Params"
+      op["x-fern-request-name"] = params_name
+      op["x-fern-sdk-request-name"] = params_name
+    end
+  end
+
   init = spec["paths"]["/submissions"].delete("post")
   init["responses"]["200"]["content"]["application/json"].delete("example")
   init["responses"]["200"]["content"]["application/json"]["schema"] = {

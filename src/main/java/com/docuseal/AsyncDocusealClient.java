@@ -5,38 +5,497 @@
 package com.docuseal;
 
 import com.docuseal.core.ClientOptions;
-import com.docuseal.core.Suppliers;
-import com.docuseal.resources.submissions.AsyncSubmissionsClient;
-import com.docuseal.resources.submitters.AsyncSubmittersClient;
-import com.docuseal.resources.templates.AsyncTemplatesClient;
-import java.util.function.Supplier;
+import com.docuseal.core.RequestOptions;
+import com.docuseal.requests.AddDocumentToTemplateParams;
+import com.docuseal.requests.ArchiveSubmissionParams;
+import com.docuseal.requests.ArchiveTemplateParams;
+import com.docuseal.requests.CloneTemplateParams;
+import com.docuseal.requests.CreateSubmissionFromDocxParams;
+import com.docuseal.requests.CreateSubmissionFromHtmlParams;
+import com.docuseal.requests.CreateSubmissionFromPdfParams;
+import com.docuseal.requests.CreateSubmissionParams;
+import com.docuseal.requests.CreateSubmissionsFromEmailsParams;
+import com.docuseal.requests.CreateTemplateFromDocxParams;
+import com.docuseal.requests.CreateTemplateFromHtmlParams;
+import com.docuseal.requests.CreateTemplateFromPdfParams;
+import com.docuseal.requests.GetSubmissionDocumentsParams;
+import com.docuseal.requests.GetSubmissionParams;
+import com.docuseal.requests.GetSubmissionsParams;
+import com.docuseal.requests.GetSubmitterParams;
+import com.docuseal.requests.GetSubmittersParams;
+import com.docuseal.requests.GetTemplateParams;
+import com.docuseal.requests.GetTemplatesParams;
+import com.docuseal.requests.MergeTemplateParams;
+import com.docuseal.requests.UpdateSubmitterParams;
+import com.docuseal.requests.UpdateTemplateParams;
+import com.docuseal.types.ArchiveSubmissionResponse;
+import com.docuseal.types.ArchiveTemplateResponse;
+import com.docuseal.types.CreateSubmissionFromPdfResponse;
+import com.docuseal.types.CreateSubmissionResponse;
+import com.docuseal.types.CreateSubmissionsFromEmailsResponseItem;
+import com.docuseal.types.GetSubmissionDocumentsResponse;
+import com.docuseal.types.GetSubmissionResponse;
+import com.docuseal.types.GetSubmissionsResponse;
+import com.docuseal.types.GetSubmitterResponse;
+import com.docuseal.types.GetSubmittersResponse;
+import com.docuseal.types.GetTemplateResponse;
+import com.docuseal.types.GetTemplatesResponse;
+import com.docuseal.types.UpdateSubmitterResponse;
+import com.docuseal.types.UpdateTemplateResponse;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class AsyncDocusealClient {
   protected final ClientOptions clientOptions;
 
-  protected final Supplier<AsyncTemplatesClient> templatesClient;
-
-  protected final Supplier<AsyncSubmissionsClient> submissionsClient;
-
-  protected final Supplier<AsyncSubmittersClient> submittersClient;
+  private final AsyncRawDocusealClient rawClient;
 
   public AsyncDocusealClient(ClientOptions clientOptions) {
     this.clientOptions = clientOptions;
-    this.templatesClient = Suppliers.memoize(() -> new AsyncTemplatesClient(clientOptions));
-    this.submissionsClient = Suppliers.memoize(() -> new AsyncSubmissionsClient(clientOptions));
-    this.submittersClient = Suppliers.memoize(() -> new AsyncSubmittersClient(clientOptions));
+    this.rawClient = new AsyncRawDocusealClient(clientOptions);
   }
 
-  public AsyncTemplatesClient templates() {
-    return this.templatesClient.get();
+  /**
+   * Get responses with HTTP metadata like headers
+   */
+  public AsyncRawDocusealClient withRawResponse() {
+    return this.rawClient;
   }
 
-  public AsyncSubmissionsClient submissions() {
-    return this.submissionsClient.get();
+  /**
+   * The API endpoint provides the ability to retrieve a list of available document templates.
+   */
+  public CompletableFuture<GetTemplatesResponse> getTemplates() {
+    return this.rawClient.getTemplates().thenApply(response -> response.body());
   }
 
-  public AsyncSubmittersClient submitters() {
-    return this.submittersClient.get();
+  /**
+   * The API endpoint provides the ability to retrieve a list of available document templates.
+   */
+  public CompletableFuture<GetTemplatesResponse> getTemplates(GetTemplatesParams request) {
+    return this.rawClient.getTemplates(request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the ability to retrieve a list of available document templates.
+   */
+  public CompletableFuture<GetTemplatesResponse> getTemplates(GetTemplatesParams request,
+      RequestOptions requestOptions) {
+    return this.rawClient.getTemplates(request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to retrieve information about a document template.
+   */
+  public CompletableFuture<GetTemplateResponse> getTemplate(int id) {
+    return this.rawClient.getTemplate(id).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to retrieve information about a document template.
+   */
+  public CompletableFuture<GetTemplateResponse> getTemplate(int id, GetTemplateParams request) {
+    return this.rawClient.getTemplate(id, request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to retrieve information about a document template.
+   */
+  public CompletableFuture<GetTemplateResponse> getTemplate(int id, GetTemplateParams request,
+      RequestOptions requestOptions) {
+    return this.rawClient.getTemplate(id, request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to move a document template to a different folder and update the name of the template.
+   */
+  public CompletableFuture<UpdateTemplateResponse> updateTemplate(int id) {
+    return this.rawClient.updateTemplate(id).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to move a document template to a different folder and update the name of the template.
+   */
+  public CompletableFuture<UpdateTemplateResponse> updateTemplate(int id,
+      UpdateTemplateParams request) {
+    return this.rawClient.updateTemplate(id, request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to move a document template to a different folder and update the name of the template.
+   */
+  public CompletableFuture<UpdateTemplateResponse> updateTemplate(int id,
+      UpdateTemplateParams request, RequestOptions requestOptions) {
+    return this.rawClient.updateTemplate(id, request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to archive a document template.
+   */
+  public CompletableFuture<ArchiveTemplateResponse> archiveTemplate(int id) {
+    return this.rawClient.archiveTemplate(id).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to archive a document template.
+   */
+  public CompletableFuture<ArchiveTemplateResponse> archiveTemplate(int id,
+      ArchiveTemplateParams request) {
+    return this.rawClient.archiveTemplate(id, request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to archive a document template.
+   */
+  public CompletableFuture<ArchiveTemplateResponse> archiveTemplate(int id,
+      ArchiveTemplateParams request, RequestOptions requestOptions) {
+    return this.rawClient.archiveTemplate(id, request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the ability to retrieve a list of available submissions.
+   */
+  public CompletableFuture<GetSubmissionsResponse> getSubmissions() {
+    return this.rawClient.getSubmissions().thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the ability to retrieve a list of available submissions.
+   */
+  public CompletableFuture<GetSubmissionsResponse> getSubmissions(GetSubmissionsParams request) {
+    return this.rawClient.getSubmissions(request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the ability to retrieve a list of available submissions.
+   */
+  public CompletableFuture<GetSubmissionsResponse> getSubmissions(GetSubmissionsParams request,
+      RequestOptions requestOptions) {
+    return this.rawClient.getSubmissions(request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to retrieve information about a submission.
+   */
+  public CompletableFuture<GetSubmissionResponse> getSubmission(int id) {
+    return this.rawClient.getSubmission(id).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to retrieve information about a submission.
+   */
+  public CompletableFuture<GetSubmissionResponse> getSubmission(int id,
+      GetSubmissionParams request) {
+    return this.rawClient.getSubmission(id, request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to retrieve information about a submission.
+   */
+  public CompletableFuture<GetSubmissionResponse> getSubmission(int id, GetSubmissionParams request,
+      RequestOptions requestOptions) {
+    return this.rawClient.getSubmission(id, request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to archive a submission.
+   */
+  public CompletableFuture<ArchiveSubmissionResponse> archiveSubmission(int id) {
+    return this.rawClient.archiveSubmission(id).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to archive a submission.
+   */
+  public CompletableFuture<ArchiveSubmissionResponse> archiveSubmission(int id,
+      ArchiveSubmissionParams request) {
+    return this.rawClient.archiveSubmission(id, request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to archive a submission.
+   */
+  public CompletableFuture<ArchiveSubmissionResponse> archiveSubmission(int id,
+      ArchiveSubmissionParams request, RequestOptions requestOptions) {
+    return this.rawClient.archiveSubmission(id, request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * This endpoint returns a list of partially filled documents for a submission. If the submission has been completed, the final signed documents are returned.
+   */
+  public CompletableFuture<GetSubmissionDocumentsResponse> getSubmissionDocuments(int id) {
+    return this.rawClient.getSubmissionDocuments(id).thenApply(response -> response.body());
+  }
+
+  /**
+   * This endpoint returns a list of partially filled documents for a submission. If the submission has been completed, the final signed documents are returned.
+   */
+  public CompletableFuture<GetSubmissionDocumentsResponse> getSubmissionDocuments(int id,
+      GetSubmissionDocumentsParams request) {
+    return this.rawClient.getSubmissionDocuments(id, request).thenApply(response -> response.body());
+  }
+
+  /**
+   * This endpoint returns a list of partially filled documents for a submission. If the submission has been completed, the final signed documents are returned.
+   */
+  public CompletableFuture<GetSubmissionDocumentsResponse> getSubmissionDocuments(int id,
+      GetSubmissionDocumentsParams request, RequestOptions requestOptions) {
+    return this.rawClient.getSubmissionDocuments(id, request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * This API endpoint allows you to create submissions for a document template and send them to the specified email addresses. This is a simplified version of the POST /submissions API to be used with Zapier or other automation tools.
+   */
+  public CompletableFuture<List<CreateSubmissionsFromEmailsResponseItem>> createSubmissionsFromEmails(
+      CreateSubmissionsFromEmailsParams request) {
+    return this.rawClient.createSubmissionsFromEmails(request).thenApply(response -> response.body());
+  }
+
+  /**
+   * This API endpoint allows you to create submissions for a document template and send them to the specified email addresses. This is a simplified version of the POST /submissions API to be used with Zapier or other automation tools.
+   */
+  public CompletableFuture<List<CreateSubmissionsFromEmailsResponseItem>> createSubmissionsFromEmails(
+      CreateSubmissionsFromEmailsParams request, RequestOptions requestOptions) {
+    return this.rawClient.createSubmissionsFromEmails(request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to create one-off submission request from a PDF. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.pdf&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/fieldtags.pdf&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
+   */
+  public CompletableFuture<CreateSubmissionFromPdfResponse> createSubmissionFromPdf(
+      CreateSubmissionFromPdfParams request) {
+    return this.rawClient.createSubmissionFromPdf(request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to create one-off submission request from a PDF. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.pdf&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/fieldtags.pdf&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
+   */
+  public CompletableFuture<CreateSubmissionFromPdfResponse> createSubmissionFromPdf(
+      CreateSubmissionFromPdfParams request, RequestOptions requestOptions) {
+    return this.rawClient.createSubmissionFromPdf(request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides functionality to create a one-off submission request from a DOCX file with dynamic content variables. Use &lt;code&gt;[[variable_name]]&lt;/code&gt; text tags to define dynamic content variables in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/demo_template.docx&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/demo_template.docx&lt;/a&gt; for the specific text variable syntax, including dynamic content tables and lists. You can also use the &lt;code&gt;{{signature}}&lt;/code&gt; field syntax to define fillable fields, as in a PDF.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-dynamic-content-variables-in-docx-to-create-personalized-documents&quot; class=&quot;link&quot;&gt;Use dynamic content variables in DOCX to create personalized documents&lt;/a&gt;
+   */
+  public CompletableFuture<CreateSubmissionFromPdfResponse> createSubmissionFromDocx(
+      CreateSubmissionFromDocxParams request) {
+    return this.rawClient.createSubmissionFromDocx(request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides functionality to create a one-off submission request from a DOCX file with dynamic content variables. Use &lt;code&gt;[[variable_name]]&lt;/code&gt; text tags to define dynamic content variables in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/demo_template.docx&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/demo_template.docx&lt;/a&gt; for the specific text variable syntax, including dynamic content tables and lists. You can also use the &lt;code&gt;{{signature}}&lt;/code&gt; field syntax to define fillable fields, as in a PDF.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-dynamic-content-variables-in-docx-to-create-personalized-documents&quot; class=&quot;link&quot;&gt;Use dynamic content variables in DOCX to create personalized documents&lt;/a&gt;
+   */
+  public CompletableFuture<CreateSubmissionFromPdfResponse> createSubmissionFromDocx(
+      CreateSubmissionFromDocxParams request, RequestOptions requestOptions) {
+    return this.rawClient.createSubmissionFromDocx(request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * This API endpoint allows you to create a one-off submission request document using the provided HTML content, with special field tags rendered as a fillable and signable form.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
+   */
+  public CompletableFuture<CreateSubmissionFromPdfResponse> createSubmissionFromHtml(
+      CreateSubmissionFromHtmlParams request) {
+    return this.rawClient.createSubmissionFromHtml(request).thenApply(response -> response.body());
+  }
+
+  /**
+   * This API endpoint allows you to create a one-off submission request document using the provided HTML content, with special field tags rendered as a fillable and signable form.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
+   */
+  public CompletableFuture<CreateSubmissionFromPdfResponse> createSubmissionFromHtml(
+      CreateSubmissionFromHtmlParams request, RequestOptions requestOptions) {
+    return this.rawClient.createSubmissionFromHtml(request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides functionality to retrieve information about a submitter, along with the submitter documents and field values.
+   */
+  public CompletableFuture<GetSubmitterResponse> getSubmitter(int id) {
+    return this.rawClient.getSubmitter(id).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides functionality to retrieve information about a submitter, along with the submitter documents and field values.
+   */
+  public CompletableFuture<GetSubmitterResponse> getSubmitter(int id, GetSubmitterParams request) {
+    return this.rawClient.getSubmitter(id, request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides functionality to retrieve information about a submitter, along with the submitter documents and field values.
+   */
+  public CompletableFuture<GetSubmitterResponse> getSubmitter(int id, GetSubmitterParams request,
+      RequestOptions requestOptions) {
+    return this.rawClient.getSubmitter(id, request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to update submitter details, pre-fill or update field values and re-send emails.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api#automatically_sign_documents_via_api&quot; class=&quot;link&quot;&gt;Automatically sign documents via API&lt;/a&gt;
+   */
+  public CompletableFuture<UpdateSubmitterResponse> updateSubmitter(int id) {
+    return this.rawClient.updateSubmitter(id).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to update submitter details, pre-fill or update field values and re-send emails.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api#automatically_sign_documents_via_api&quot; class=&quot;link&quot;&gt;Automatically sign documents via API&lt;/a&gt;
+   */
+  public CompletableFuture<UpdateSubmitterResponse> updateSubmitter(int id,
+      UpdateSubmitterParams request) {
+    return this.rawClient.updateSubmitter(id, request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to update submitter details, pre-fill or update field values and re-send emails.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api#automatically_sign_documents_via_api&quot; class=&quot;link&quot;&gt;Automatically sign documents via API&lt;/a&gt;
+   */
+  public CompletableFuture<UpdateSubmitterResponse> updateSubmitter(int id,
+      UpdateSubmitterParams request, RequestOptions requestOptions) {
+    return this.rawClient.updateSubmitter(id, request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the ability to retrieve a list of submitters.
+   */
+  public CompletableFuture<GetSubmittersResponse> getSubmitters() {
+    return this.rawClient.getSubmitters().thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the ability to retrieve a list of submitters.
+   */
+  public CompletableFuture<GetSubmittersResponse> getSubmitters(GetSubmittersParams request) {
+    return this.rawClient.getSubmitters(request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the ability to retrieve a list of submitters.
+   */
+  public CompletableFuture<GetSubmittersResponse> getSubmitters(GetSubmittersParams request,
+      RequestOptions requestOptions) {
+    return this.rawClient.getSubmitters(request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to add, remove or replace documents in the template with provided PDF/DOCX file or HTML content.
+   */
+  public CompletableFuture<GetTemplateResponse> addDocumentToTemplate(int id) {
+    return this.rawClient.addDocumentToTemplate(id).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to add, remove or replace documents in the template with provided PDF/DOCX file or HTML content.
+   */
+  public CompletableFuture<GetTemplateResponse> addDocumentToTemplate(int id,
+      AddDocumentToTemplateParams request) {
+    return this.rawClient.addDocumentToTemplate(id, request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to add, remove or replace documents in the template with provided PDF/DOCX file or HTML content.
+   */
+  public CompletableFuture<GetTemplateResponse> addDocumentToTemplate(int id,
+      AddDocumentToTemplateParams request, RequestOptions requestOptions) {
+    return this.rawClient.addDocumentToTemplate(id, request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to clone an existing template into a new template.
+   */
+  public CompletableFuture<GetTemplateResponse> cloneTemplate(int id) {
+    return this.rawClient.cloneTemplate(id).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to clone an existing template into a new template.
+   */
+  public CompletableFuture<GetTemplateResponse> cloneTemplate(int id, CloneTemplateParams request) {
+    return this.rawClient.cloneTemplate(id, request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to clone an existing template into a new template.
+   */
+  public CompletableFuture<GetTemplateResponse> cloneTemplate(int id, CloneTemplateParams request,
+      RequestOptions requestOptions) {
+    return this.rawClient.cloneTemplate(id, request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to seamlessly generate a PDF document template by utilizing the provided HTML content while incorporating pre-defined fields.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
+   */
+  public CompletableFuture<GetTemplateResponse> createTemplateFromHtml(
+      CreateTemplateFromHtmlParams request) {
+    return this.rawClient.createTemplateFromHtml(request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to seamlessly generate a PDF document template by utilizing the provided HTML content while incorporating pre-defined fields.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
+   */
+  public CompletableFuture<GetTemplateResponse> createTemplateFromHtml(
+      CreateTemplateFromHtmlParams request, RequestOptions requestOptions) {
+    return this.rawClient.createTemplateFromHtml(request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to create a fillable document template for an existing Microsoft Word document. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.docx&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot; &gt;https://www.docuseal.com/examples/fieldtags.docx&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
+   */
+  public CompletableFuture<GetTemplateResponse> createTemplateFromDocx(
+      CreateTemplateFromDocxParams request) {
+    return this.rawClient.createTemplateFromDocx(request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to create a fillable document template for an existing Microsoft Word document. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.docx&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot; &gt;https://www.docuseal.com/examples/fieldtags.docx&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
+   */
+  public CompletableFuture<GetTemplateResponse> createTemplateFromDocx(
+      CreateTemplateFromDocxParams request, RequestOptions requestOptions) {
+    return this.rawClient.createTemplateFromDocx(request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to create a fillable document template for a PDF file. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.pdf&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/fieldtags.pdf&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
+   */
+  public CompletableFuture<GetTemplateResponse> createTemplateFromPdf(
+      CreateTemplateFromPdfParams request) {
+    return this.rawClient.createTemplateFromPdf(request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint provides the functionality to create a fillable document template for a PDF file. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.pdf&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/fieldtags.pdf&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
+   */
+  public CompletableFuture<GetTemplateResponse> createTemplateFromPdf(
+      CreateTemplateFromPdfParams request, RequestOptions requestOptions) {
+    return this.rawClient.createTemplateFromPdf(request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to merge multiple templates with documents and fields into a new combined template.
+   */
+  public CompletableFuture<GetTemplateResponse> mergeTemplate(MergeTemplateParams request) {
+    return this.rawClient.mergeTemplate(request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to merge multiple templates with documents and fields into a new combined template.
+   */
+  public CompletableFuture<GetTemplateResponse> mergeTemplate(MergeTemplateParams request,
+      RequestOptions requestOptions) {
+    return this.rawClient.mergeTemplate(request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * This API endpoint allows you to create signature requests (submissions) for a document template and send them to the specified submitters (signers).&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/send-documents-for-signature-via-api&quot; class=&quot;link&quot;&gt;Send documents for signature via API&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api&quot; class=&quot;link&quot;&gt;Pre-fill PDF document form fields with API&lt;/a&gt;
+   */
+  public CompletableFuture<CreateSubmissionResponse> createSubmission(
+      CreateSubmissionParams request) {
+    return this.rawClient.createSubmission(request).thenApply(response -> response.body());
+  }
+
+  /**
+   * This API endpoint allows you to create signature requests (submissions) for a document template and send them to the specified submitters (signers).&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/send-documents-for-signature-via-api&quot; class=&quot;link&quot;&gt;Send documents for signature via API&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api&quot; class=&quot;link&quot;&gt;Pre-fill PDF document form fields with API&lt;/a&gt;
+   */
+  public CompletableFuture<CreateSubmissionResponse> createSubmission(
+      CreateSubmissionParams request, RequestOptions requestOptions) {
+    return this.rawClient.createSubmission(request, requestOptions).thenApply(response -> response.body());
   }
 
   public static AsyncDocusealClientBuilder builder() {

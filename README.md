@@ -49,8 +49,8 @@ DocusealClient client = DocusealClient.builder()
 ### List templates
 
 ```java
-GetTemplatesResponse templates = client.templates().getTemplates(
-    GetTemplatesRequest.builder().limit(20).build());
+GetTemplatesResponse templates = client.getTemplates(
+    GetTemplatesParams.builder().limit(20).build());
 
 for (var template : templates.getData()) {
   System.out.println(template.getId() + " " + template.getName());
@@ -63,8 +63,8 @@ Builders are staged: required fields must be provided before `build()`
 compiles.
 
 ```java
-CreateSubmissionResponse submission = client.submissions().createSubmission(
-    CreateSubmissionRequest.builder()
+CreateSubmissionResponse submission = client.createSubmission(
+    CreateSubmissionParams.builder()
         .templateId(1000001)
         .submitters(List.of(
             CreateSubmissionRequestSubmitter.builder()
@@ -79,7 +79,7 @@ System.out.println(submission.getSubmitters().get(0).getEmbedSrc());
 ### Track a submission
 
 ```java
-GetSubmissionResponse submission = client.submissions().getSubmission(1001);
+GetSubmissionResponse submission = client.getSubmission(1001);
 
 System.out.println(submission.getStatus());
 
@@ -95,14 +95,14 @@ AsyncDocusealClient client = AsyncDocusealClient.builder()
     .apiKey(System.getenv("DOCUSEAL_API_KEY"))
     .build();
 
-CompletableFuture<GetTemplatesResponse> templates = client.templates().getTemplates();
+CompletableFuture<GetTemplatesResponse> templates = client.getTemplates();
 ```
 
 ### Handle errors
 
 ```java
 try {
-  client.templates().getTemplate(42);
+  client.getTemplate(42);
 } catch (DocusealClientApiException e) {
   System.out.println(e.statusCode() + " " + e.getMessage());
 }
