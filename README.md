@@ -12,7 +12,7 @@ Java client for the [DocuSeal API](https://www.docuseal.com/docs/api). DocuSeal 
 </dependency>
 ```
 
-Requires Java 17+. Dependencies: Jackson, jakarta.annotation-api.
+Requires Java 17+.
 
 ## Configuration
 
@@ -21,19 +21,27 @@ Get your API key at [console.docuseal.com/api](https://console.docuseal.com/api)
 ### Global cloud (docuseal.com)
 
 ```java
-DocusealClient client = new DocusealClient(System.getenv("DOCUSEAL_API_KEY"));
+DocusealClient client = DocusealClient.builder()
+    .apiKey(System.getenv("DOCUSEAL_API_KEY"))
+    .build();
 ```
 
 ### EU cloud (docuseal.eu)
 
 ```java
-DocusealClient client = new DocusealClient(System.getenv("DOCUSEAL_API_KEY"), DocusealClient.EU_URL);
+DocusealClient client = DocusealClient.builder()
+    .apiKey(System.getenv("DOCUSEAL_API_KEY"))
+    .url("https://api.docuseal.eu")
+    .build();
 ```
 
 ### On-premises
 
 ```java
-DocusealClient client = new DocusealClient(System.getenv("DOCUSEAL_API_KEY"), "https://yourdocuseal.com/api");
+DocusealClient client = DocusealClient.builder()
+    .apiKey(System.getenv("DOCUSEAL_API_KEY"))
+    .url("https://yourdocuseal.com/api")
+    .build();
 ```
 
 ## Usage
@@ -41,23 +49,29 @@ DocusealClient client = new DocusealClient(System.getenv("DOCUSEAL_API_KEY"), "h
 ### List templates
 
 ```java
-GetTemplatesResponse templates = client.listTemplates(new ListTemplatesParams().limit(20));
+GetTemplatesResponse templates = client.templates().getTemplates(
+    GetTemplatesRequest.builder().limit(20).build());
 
-for (GetTemplatesResponseDataInner template : templates.getData()) {
+for (var template : templates.getData()) {
   System.out.println(template.getId() + " " + template.getName());
 }
 ```
 
 ### Create a signature request
 
-```java
-CreateSubmissionRequest data = new CreateSubmissionRequest()
-    .templateId(1000001)
-    .addSubmittersItem(new CreateSubmissionRequestSubmittersInner()
-        .role("First Party")
-        .email("signer@example.com"));
+Builders are staged: required fields must be provided before `build()`
+compiles.
 
-CreateSubmissionResponse submission = client.createSubmission(data);
+```java
+CreateSubmissionResponse submission = client.submissions().createSubmission(
+    CreateSubmissionRequest.builder()
+        .templateId(1000001)
+        .submitters(List.of(
+            CreateSubmissionRequestSubmitter.builder()
+                .role("First Party")
+                .email("signer@example.com")
+                .build()))
+        .build());
 
 System.out.println(submission.getSubmitters().get(0).getEmbedSrc());
 ```
@@ -65,35 +79,46 @@ System.out.println(submission.getSubmitters().get(0).getEmbedSrc());
 ### Track a submission
 
 ```java
-GetSubmissionResponse submission = client.getSubmission(1001);
+GetSubmissionResponse submission = client.submissions().getSubmission(1001);
 
 System.out.println(submission.getStatus());
 
-for (CompletedDocument document : submission.getDocuments()) {
+for (var document : submission.getDocuments()) {
   System.out.println(document.getName() + " " + document.getUrl());
 }
+```
+
+### Async client
+
+```java
+AsyncDocusealClient client = AsyncDocusealClient.builder()
+    .apiKey(System.getenv("DOCUSEAL_API_KEY"))
+    .build();
+
+CompletableFuture<GetTemplatesResponse> templates = client.templates().getTemplates();
 ```
 
 ### Handle errors
 
 ```java
 try {
-  client.getTemplate(42);
-} catch (DocusealException e) {
-  System.out.println(e.getStatusCode() + " " + e.getMessage());
+  client.templates().getTemplate(42);
+} catch (DocusealClientApiException e) {
+  System.out.println(e.statusCode() + " " + e.getMessage());
 }
 ```
 
-## Regenerating models
+## Regenerating the SDK
 
-`com.docuseal.models` is generated from the DocuSeal OpenAPI specification
-and is never edited by hand:
+`src/main/java/com/docuseal` is generated from the DocuSeal OpenAPI
+specification by [Fern](https://buildwithfern.com) and is never edited by
+hand:
 
 ```sh
 ./generate-types.sh
 ```
 
-Requires Node.js (`npx`), Java and `ruby`.
+Requires Node.js (`npx`), Docker and `ruby`.
 
 ## Documentation
 

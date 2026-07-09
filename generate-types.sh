@@ -1,54 +1,50 @@
 #!/bin/sh
-# Regenerates src/main/java/com/docuseal/models from the DocuSeal OpenAPI spec.
-# Usage: ./scripts/generate-types.sh [path-or-url-to-openapi-json]
+# Regenerates src/main/java/com/docuseal from the DocuSeal OpenAPI spec
+# using Fern (runs the generator locally in Docker).
+# Usage: ./generate-types.sh [path-or-url-to-openapi-json]
 set -e
 
 cd "$(dirname "$0")"
 
 SPEC="${1:-https://console.docuseal.com/openapi.yml?format=json}"
-TMP_DIR="$(mktemp -d)"
-trap 'rm -rf "$TMP_DIR"' EXIT
 
 case "$SPEC" in
-  http*) curl -sf "$SPEC" -o "$TMP_DIR/openapi.json" ;;
-  *) cp "$SPEC" "$TMP_DIR/openapi.json" ;;
+  http*) curl -sf "$SPEC" -o openapi.tmp.json ;;
+  *) cp "$SPEC" openapi.tmp.json ;;
 esac
 
-# The SDK exposes only the REST API client: drop webhook payload schemas.
+# Drop webhook payload schemas (the SDK exposes only the REST client) and
+# swap the legacy POST /submissions for the newer /submissions/init, which
+# is not in the public spec yet: same request body, envelope response.
 ruby -rjson -e '
-  path = ARGV[0]
+  path = "openapi.tmp.json"
   spec = JSON.parse(File.read(path))
   spec.delete("webhooks")
+
+  init = spec["paths"]["/submissions"].delete("post")
+  init["responses"]["200"]["content"]["application/json"].delete("example")
+  init["responses"]["200"]["content"]["application/json"]["schema"] = {
+    "type" => "object",
+    "required" => %w[id submitters expired_at created_at],
+    "properties" => {
+      "id" => { "type" => "integer", "description" => "Submission unique ID number." },
+      "submitters" => { "$ref" => "#/components/schemas/CreateSubmissionsFromEmailsResponse" },
+      "expired_at" => { "type" => %w[string null], "description" => "The date and time when the submission expires." },
+      "created_at" => { "type" => "string", "description" => "The date and time when the submission was created." }
+    }
+  }
+  spec["paths"]["/submissions/init"] = { "post" => init }
+
   File.write(path, JSON.generate(spec))
-' "$TMP_DIR/openapi.json"
+'
 
-npx -y @openapitools/openapi-generator-cli generate -g java \
-  -i "$TMP_DIR/openapi.json" -o "$TMP_DIR/out" \
-  --additional-properties library=native,openApiNullable=false,useJakartaEe=true,invokerPackage=com.docuseal,modelPackage=com.docuseal.models,apiPackage=com.docuseal.api,hideGenerationTimestamp=true \
-  --global-property models,supportingFiles,modelDocs=false,modelTests=false \
-  --skip-validate-spec > /dev/null
+rm -rf .fern-out
+CI=true npx -y fern-api@5.67.1 generate --local
 
-rm -rf src/main/java/com/docuseal/models
-mkdir -p src/main/java/com/docuseal/models
-cp "$TMP_DIR"/out/src/main/java/com/docuseal/models/*.java src/main/java/com/docuseal/models/
-cp "$TMP_DIR"/out/src/main/java/com/docuseal/JSON.java \
-   "$TMP_DIR"/out/src/main/java/com/docuseal/RFC3339DateFormat.java \
-   "$TMP_DIR"/out/src/main/java/com/docuseal/RFC3339InstantDeserializer.java \
-   "$TMP_DIR"/out/src/main/java/com/docuseal/RFC3339JavaTimeModule.java \
-   src/main/java/com/docuseal/
+rm -rf src/main/java/com/docuseal
+mkdir -p src/main/java/com/docuseal
+cp -r .fern-out/. src/main/java/com/docuseal/
+rm -f src/main/java/com/docuseal/core/*Test.java
+rm -f src/main/java/com/docuseal/README.md
 
-MODELS=src/main/java/com/docuseal/models/*.java
-
-# Drop toUrlQueryString helpers: they are the only thing pulling the generated
-# ApiClient into models, which this SDK replaces with a hand-written client.
-perl -0pi -e 's{  /\*\*\n   \* Convert the instance into URL query string.*?return joiner\.toString\(\);\n  \}\n}{}s' $MODELS
-perl -0pi -e 's{  /\*\*\n   \* Convert the instance into URL query string.*?\n    return null;\n  \}\n}{}s' $MODELS
-perl -0pi -e 's{^import com\.docuseal\.ApiClient;\n}{}m' $MODELS
-
-# openapi-generator bugs for oneOf schemas with an array variant:
-# method names with generics and .class on parameterized types.
-perl -pi -e 's/getList<(\w+)>\(\)/get\1List()/g' $MODELS
-perl -pi -e 's/List<\w+>\.class/List.class/g' $MODELS
-
-# Invalid Java for `default: false` on the oneOf `mask` field preference.
-perl -pi -e 's/(private \w*PreferencesMask mask) = false;/$1;/' $MODELS
+rm -rf .fern-out openapi.tmp.json

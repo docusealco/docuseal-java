@@ -1,2 +1,4 @@
 target/
+.fern-out/
+openapi.tmp.json
 .DS_Store
