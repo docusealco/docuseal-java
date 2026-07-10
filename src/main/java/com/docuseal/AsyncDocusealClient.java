@@ -26,6 +26,7 @@ import com.docuseal.requests.GetSubmittersParams;
 import com.docuseal.requests.GetTemplateParams;
 import com.docuseal.requests.GetTemplatesParams;
 import com.docuseal.requests.MergeTemplateParams;
+import com.docuseal.requests.UpdateSubmissionParams;
 import com.docuseal.requests.UpdateSubmitterParams;
 import com.docuseal.requests.UpdateTemplateParams;
 import com.docuseal.types.ArchiveSubmissionResponse;
@@ -40,6 +41,7 @@ import com.docuseal.types.GetSubmitterResponse;
 import com.docuseal.types.GetSubmittersResponse;
 import com.docuseal.types.GetTemplateResponse;
 import com.docuseal.types.GetTemplatesResponse;
+import com.docuseal.types.UpdateSubmissionResponse;
 import com.docuseal.types.UpdateSubmitterResponse;
 import com.docuseal.types.UpdateTemplateResponse;
 import java.util.List;
@@ -195,6 +197,29 @@ public class AsyncDocusealClient {
   public CompletableFuture<GetSubmissionResponse> getSubmission(int id, GetSubmissionParams request,
       RequestOptions requestOptions) {
     return this.rawClient.getSubmission(id, request, requestOptions).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to update a submission: change its name, expiration date, and archive or unarchive it.
+   */
+  public CompletableFuture<UpdateSubmissionResponse> updateSubmission(int id) {
+    return this.rawClient.updateSubmission(id).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to update a submission: change its name, expiration date, and archive or unarchive it.
+   */
+  public CompletableFuture<UpdateSubmissionResponse> updateSubmission(int id,
+      UpdateSubmissionParams request) {
+    return this.rawClient.updateSubmission(id, request).thenApply(response -> response.body());
+  }
+
+  /**
+   * The API endpoint allows you to update a submission: change its name, expiration date, and archive or unarchive it.
+   */
+  public CompletableFuture<UpdateSubmissionResponse> updateSubmission(int id,
+      UpdateSubmissionParams request, RequestOptions requestOptions) {
+    return this.rawClient.updateSubmission(id, request, requestOptions).thenApply(response -> response.body());
   }
 
   /**

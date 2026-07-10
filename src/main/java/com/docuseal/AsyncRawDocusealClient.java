@@ -32,6 +32,7 @@ import com.docuseal.requests.GetSubmittersParams;
 import com.docuseal.requests.GetTemplateParams;
 import com.docuseal.requests.GetTemplatesParams;
 import com.docuseal.requests.MergeTemplateParams;
+import com.docuseal.requests.UpdateSubmissionParams;
 import com.docuseal.requests.UpdateSubmitterParams;
 import com.docuseal.requests.UpdateTemplateParams;
 import com.docuseal.types.ArchiveSubmissionResponse;
@@ -46,6 +47,7 @@ import com.docuseal.types.GetSubmitterResponse;
 import com.docuseal.types.GetSubmittersResponse;
 import com.docuseal.types.GetTemplateResponse;
 import com.docuseal.types.GetTemplatesResponse;
+import com.docuseal.types.UpdateSubmissionResponse;
 import com.docuseal.types.UpdateSubmitterResponse;
 import com.docuseal.types.UpdateTemplateResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -481,6 +483,76 @@ public class AsyncRawDocusealClient {
             try (ResponseBody responseBody = response.body()) {
               if (response.isSuccessful()) {
                 future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetSubmissionResponse.class), response));
+                return;
+              }
+              String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+              future.completeExceptionally(new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+              return;
+            }
+            catch (IOException e) {
+              future.completeExceptionally(new DocusealClientException("Network error executing HTTP request", e));
+            }
+          }
+
+          @Override
+          public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            future.completeExceptionally(new DocusealClientException("Network error executing HTTP request", e));
+          }
+        });
+        return future;
+      }
+
+      /**
+       * The API endpoint allows you to update a submission: change its name, expiration date, and archive or unarchive it.
+       */
+      public CompletableFuture<DocusealClientHttpResponse<UpdateSubmissionResponse>> updateSubmission(
+          int id) {
+        return updateSubmission(id,UpdateSubmissionParams.builder().build());
+      }
+
+      /**
+       * The API endpoint allows you to update a submission: change its name, expiration date, and archive or unarchive it.
+       */
+      public CompletableFuture<DocusealClientHttpResponse<UpdateSubmissionResponse>> updateSubmission(
+          int id, UpdateSubmissionParams request) {
+        return updateSubmission(id,request,null);
+      }
+
+      /**
+       * The API endpoint allows you to update a submission: change its name, expiration date, and archive or unarchive it.
+       */
+      public CompletableFuture<DocusealClientHttpResponse<UpdateSubmissionResponse>> updateSubmission(
+          int id, UpdateSubmissionParams request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
+
+          .addPathSegments("submissions")
+          .addPathSegment(Integer.toString(id))
+          .build();
+        RequestBody body;
+        try {
+          body = RequestBody.create(ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        }
+        catch(JsonProcessingException e) {
+          throw new DocusealClientException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+          .url(httpUrl)
+          .method("PUT", body)
+          .headers(Headers.of(clientOptions.headers(requestOptions)))
+          .addHeader("Content-Type", "application/json")
+          .addHeader("Accept", "application/json")
+          .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+          client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<DocusealClientHttpResponse<UpdateSubmissionResponse>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+          @Override
+          public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+            try (ResponseBody responseBody = response.body()) {
+              if (response.isSuccessful()) {
+                future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpdateSubmissionResponse.class), response));
                 return;
               }
               String responseBodyString = responseBody != null ? responseBody.string() : "{}";
