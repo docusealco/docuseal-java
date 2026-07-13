@@ -5,8 +5,8 @@
 package com.docuseal.requests;
 
 import com.docuseal.core.ObjectMappers;
-import com.docuseal.types.CreateSubmissionsFromEmailsRequestMessage;
-import com.docuseal.types.UpdateSubmitterRequestField;
+import com.docuseal.types.UpdateSubmitterFieldParams;
+import com.docuseal.types.UpdateSubmitterMessageParams;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -55,9 +55,9 @@ public final class UpdateSubmitterParams {
 
   private final Optional<Boolean> requireEmail2Fa;
 
-  private final Optional<CreateSubmissionsFromEmailsRequestMessage> message;
+  private final Optional<UpdateSubmitterMessageParams> message;
 
-  private final Optional<List<UpdateSubmitterRequestField>> fields;
+  private final Optional<List<UpdateSubmitterFieldParams>> fields;
 
   private final Map<String, Object> additionalProperties;
 
@@ -66,10 +66,8 @@ public final class UpdateSubmitterParams {
       Optional<Boolean> sendEmail, Optional<Boolean> sendSms, Optional<String> replyTo,
       Optional<Boolean> completed, Optional<Map<String, Object>> metadata,
       Optional<String> completedRedirectUrl, Optional<Boolean> requirePhone2Fa,
-      Optional<Boolean> requireEmail2Fa,
-      Optional<CreateSubmissionsFromEmailsRequestMessage> message,
-      Optional<List<UpdateSubmitterRequestField>> fields,
-      Map<String, Object> additionalProperties) {
+      Optional<Boolean> requireEmail2Fa, Optional<UpdateSubmitterMessageParams> message,
+      Optional<List<UpdateSubmitterFieldParams>> fields, Map<String, Object> additionalProperties) {
     this.name = name;
     this.email = email;
     this.phone = phone;
@@ -193,7 +191,7 @@ public final class UpdateSubmitterParams {
   }
 
   @JsonProperty("message")
-  public Optional<CreateSubmissionsFromEmailsRequestMessage> getMessage() {
+  public Optional<UpdateSubmitterMessageParams> getMessage() {
     return message;
   }
 
@@ -201,7 +199,7 @@ public final class UpdateSubmitterParams {
    * @return A list of configurations for template document form fields.
    */
   @JsonProperty("fields")
-  public Optional<List<UpdateSubmitterRequestField>> getFields() {
+  public Optional<List<UpdateSubmitterFieldParams>> getFields() {
     return fields;
   }
 
@@ -264,9 +262,9 @@ public final class UpdateSubmitterParams {
 
     private Optional<Boolean> requireEmail2Fa = Optional.empty();
 
-    private Optional<CreateSubmissionsFromEmailsRequestMessage> message = Optional.empty();
+    private Optional<UpdateSubmitterMessageParams> message = Optional.empty();
 
-    private Optional<List<UpdateSubmitterRequestField>> fields = Optional.empty();
+    private Optional<List<UpdateSubmitterFieldParams>> fields = Optional.empty();
 
     @JsonAnySetter
     private Map<String, Object> additionalProperties = new HashMap<>();
@@ -518,12 +516,12 @@ public final class UpdateSubmitterParams {
         value = "message",
         nulls = Nulls.SKIP
     )
-    public Builder message(Optional<CreateSubmissionsFromEmailsRequestMessage> message) {
+    public Builder message(Optional<UpdateSubmitterMessageParams> message) {
       this.message = message;
       return this;
     }
 
-    public Builder message(CreateSubmissionsFromEmailsRequestMessage message) {
+    public Builder message(UpdateSubmitterMessageParams message) {
       this.message = Optional.ofNullable(message);
       return this;
     }
@@ -535,12 +533,12 @@ public final class UpdateSubmitterParams {
         value = "fields",
         nulls = Nulls.SKIP
     )
-    public Builder fields(Optional<List<UpdateSubmitterRequestField>> fields) {
+    public Builder fields(Optional<List<UpdateSubmitterFieldParams>> fields) {
       this.fields = fields;
       return this;
     }
 
-    public Builder fields(List<UpdateSubmitterRequestField> fields) {
+    public Builder fields(List<UpdateSubmitterFieldParams> fields) {
       this.fields = Optional.ofNullable(fields);
       return this;
     }

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.lang.Boolean;
 import java.lang.Double;
 import java.lang.Integer;
 import java.lang.Object;
@@ -30,35 +31,34 @@ import java.util.Optional;
 public final class FieldPreferences {
   private final Optional<Integer> fontSize;
 
-  private final Optional<FieldPreferencesFontType> fontType;
+  private final Optional<String> fontType;
 
-  private final Optional<FieldPreferencesFont> font;
+  private final Optional<String> font;
 
-  private final Optional<FieldPreferencesColor> color;
+  private final Optional<String> color;
 
-  private final Optional<FieldPreferencesBackground> background;
+  private final Optional<String> background;
 
-  private final Optional<FieldPreferencesAlign> align;
+  private final Optional<String> align;
 
-  private final Optional<FieldPreferencesValign> valign;
+  private final Optional<String> valign;
 
   private final Optional<String> format;
 
   private final Optional<Double> price;
 
-  private final Optional<FieldPreferencesCurrency> currency;
+  private final Optional<String> currency;
 
-  private final Optional<FieldPreferencesMask> mask;
+  private final Optional<Boolean> mask;
 
   private final Optional<List<String>> reasons;
 
   private final Map<String, Object> additionalProperties;
 
-  private FieldPreferences(Optional<Integer> fontSize, Optional<FieldPreferencesFontType> fontType,
-      Optional<FieldPreferencesFont> font, Optional<FieldPreferencesColor> color,
-      Optional<FieldPreferencesBackground> background, Optional<FieldPreferencesAlign> align,
-      Optional<FieldPreferencesValign> valign, Optional<String> format, Optional<Double> price,
-      Optional<FieldPreferencesCurrency> currency, Optional<FieldPreferencesMask> mask,
+  private FieldPreferences(Optional<Integer> fontSize, Optional<String> fontType,
+      Optional<String> font, Optional<String> color, Optional<String> background,
+      Optional<String> align, Optional<String> valign, Optional<String> format,
+      Optional<Double> price, Optional<String> currency, Optional<Boolean> mask,
       Optional<List<String>> reasons, Map<String, Object> additionalProperties) {
     this.fontSize = fontSize;
     this.fontType = fontType;
@@ -87,7 +87,7 @@ public final class FieldPreferences {
    * @return Font type of the field value.
    */
   @JsonProperty("font_type")
-  public Optional<FieldPreferencesFontType> getFontType() {
+  public Optional<String> getFontType() {
     return fontType;
   }
 
@@ -95,7 +95,7 @@ public final class FieldPreferences {
    * @return Font family of the field value.
    */
   @JsonProperty("font")
-  public Optional<FieldPreferencesFont> getFont() {
+  public Optional<String> getFont() {
     return font;
   }
 
@@ -103,7 +103,7 @@ public final class FieldPreferences {
    * @return Font color of the field value.
    */
   @JsonProperty("color")
-  public Optional<FieldPreferencesColor> getColor() {
+  public Optional<String> getColor() {
     return color;
   }
 
@@ -111,7 +111,7 @@ public final class FieldPreferences {
    * @return Field box background color.
    */
   @JsonProperty("background")
-  public Optional<FieldPreferencesBackground> getBackground() {
+  public Optional<String> getBackground() {
     return background;
   }
 
@@ -119,7 +119,7 @@ public final class FieldPreferences {
    * @return Horizontal alignment of the field text value.
    */
   @JsonProperty("align")
-  public Optional<FieldPreferencesAlign> getAlign() {
+  public Optional<String> getAlign() {
     return align;
   }
 
@@ -127,12 +127,12 @@ public final class FieldPreferences {
    * @return Vertical alignment of the field text value.
    */
   @JsonProperty("valign")
-  public Optional<FieldPreferencesValign> getValign() {
+  public Optional<String> getValign() {
     return valign;
   }
 
   /**
-   * @return The data format for different field types.&lt;br&gt;- Date field: accepts formats such as DD/MM/YYYY (default: MM/DD/YYYY).&lt;br&gt;- Signature field: accepts drawn, typed, drawn_or_typed (default), or upload.&lt;br&gt;- Number field: accepts currency formats such as usd, eur, gbp.
+   * @return The data format for different field types.
    */
   @JsonProperty("format")
   public Optional<String> getFormat() {
@@ -151,15 +151,15 @@ public final class FieldPreferences {
    * @return Currency value of the payment field. Only for payment fields.
    */
   @JsonProperty("currency")
-  public Optional<FieldPreferencesCurrency> getCurrency() {
+  public Optional<String> getCurrency() {
     return currency;
   }
 
   /**
-   * @return Set <code>true</code> to make sensitive data masked on the document.
+   * @return Indicates if the field is masked on the document.
    */
   @JsonProperty("mask")
-  public Optional<FieldPreferencesMask> getMask() {
+  public Optional<Boolean> getMask() {
     return mask;
   }
 
@@ -206,25 +206,25 @@ public final class FieldPreferences {
   public static final class Builder {
     private Optional<Integer> fontSize = Optional.empty();
 
-    private Optional<FieldPreferencesFontType> fontType = Optional.empty();
+    private Optional<String> fontType = Optional.empty();
 
-    private Optional<FieldPreferencesFont> font = Optional.empty();
+    private Optional<String> font = Optional.empty();
 
-    private Optional<FieldPreferencesColor> color = Optional.empty();
+    private Optional<String> color = Optional.empty();
 
-    private Optional<FieldPreferencesBackground> background = Optional.empty();
+    private Optional<String> background = Optional.empty();
 
-    private Optional<FieldPreferencesAlign> align = Optional.empty();
+    private Optional<String> align = Optional.empty();
 
-    private Optional<FieldPreferencesValign> valign = Optional.empty();
+    private Optional<String> valign = Optional.empty();
 
     private Optional<String> format = Optional.empty();
 
     private Optional<Double> price = Optional.empty();
 
-    private Optional<FieldPreferencesCurrency> currency = Optional.empty();
+    private Optional<String> currency = Optional.empty();
 
-    private Optional<FieldPreferencesMask> mask = Optional.empty();
+    private Optional<Boolean> mask = Optional.empty();
 
     private Optional<List<String>> reasons = Optional.empty();
 
@@ -274,12 +274,12 @@ public final class FieldPreferences {
         value = "font_type",
         nulls = Nulls.SKIP
     )
-    public Builder fontType(Optional<FieldPreferencesFontType> fontType) {
+    public Builder fontType(Optional<String> fontType) {
       this.fontType = fontType;
       return this;
     }
 
-    public Builder fontType(FieldPreferencesFontType fontType) {
+    public Builder fontType(String fontType) {
       this.fontType = Optional.ofNullable(fontType);
       return this;
     }
@@ -291,12 +291,12 @@ public final class FieldPreferences {
         value = "font",
         nulls = Nulls.SKIP
     )
-    public Builder font(Optional<FieldPreferencesFont> font) {
+    public Builder font(Optional<String> font) {
       this.font = font;
       return this;
     }
 
-    public Builder font(FieldPreferencesFont font) {
+    public Builder font(String font) {
       this.font = Optional.ofNullable(font);
       return this;
     }
@@ -308,12 +308,12 @@ public final class FieldPreferences {
         value = "color",
         nulls = Nulls.SKIP
     )
-    public Builder color(Optional<FieldPreferencesColor> color) {
+    public Builder color(Optional<String> color) {
       this.color = color;
       return this;
     }
 
-    public Builder color(FieldPreferencesColor color) {
+    public Builder color(String color) {
       this.color = Optional.ofNullable(color);
       return this;
     }
@@ -325,12 +325,12 @@ public final class FieldPreferences {
         value = "background",
         nulls = Nulls.SKIP
     )
-    public Builder background(Optional<FieldPreferencesBackground> background) {
+    public Builder background(Optional<String> background) {
       this.background = background;
       return this;
     }
 
-    public Builder background(FieldPreferencesBackground background) {
+    public Builder background(String background) {
       this.background = Optional.ofNullable(background);
       return this;
     }
@@ -342,12 +342,12 @@ public final class FieldPreferences {
         value = "align",
         nulls = Nulls.SKIP
     )
-    public Builder align(Optional<FieldPreferencesAlign> align) {
+    public Builder align(Optional<String> align) {
       this.align = align;
       return this;
     }
 
-    public Builder align(FieldPreferencesAlign align) {
+    public Builder align(String align) {
       this.align = Optional.ofNullable(align);
       return this;
     }
@@ -359,18 +359,18 @@ public final class FieldPreferences {
         value = "valign",
         nulls = Nulls.SKIP
     )
-    public Builder valign(Optional<FieldPreferencesValign> valign) {
+    public Builder valign(Optional<String> valign) {
       this.valign = valign;
       return this;
     }
 
-    public Builder valign(FieldPreferencesValign valign) {
+    public Builder valign(String valign) {
       this.valign = Optional.ofNullable(valign);
       return this;
     }
 
     /**
-     * <p>The data format for different field types.&lt;br&gt;- Date field: accepts formats such as DD/MM/YYYY (default: MM/DD/YYYY).&lt;br&gt;- Signature field: accepts drawn, typed, drawn_or_typed (default), or upload.&lt;br&gt;- Number field: accepts currency formats such as usd, eur, gbp.</p>
+     * <p>The data format for different field types.</p>
      */
     @JsonSetter(
         value = "format",
@@ -410,29 +410,29 @@ public final class FieldPreferences {
         value = "currency",
         nulls = Nulls.SKIP
     )
-    public Builder currency(Optional<FieldPreferencesCurrency> currency) {
+    public Builder currency(Optional<String> currency) {
       this.currency = currency;
       return this;
     }
 
-    public Builder currency(FieldPreferencesCurrency currency) {
+    public Builder currency(String currency) {
       this.currency = Optional.ofNullable(currency);
       return this;
     }
 
     /**
-     * <p>Set <code>true</code> to make sensitive data masked on the document.</p>
+     * <p>Indicates if the field is masked on the document.</p>
      */
     @JsonSetter(
         value = "mask",
         nulls = Nulls.SKIP
     )
-    public Builder mask(Optional<FieldPreferencesMask> mask) {
+    public Builder mask(Optional<Boolean> mask) {
       this.mask = mask;
       return this;
     }
 
-    public Builder mask(FieldPreferencesMask mask) {
+    public Builder mask(Boolean mask) {
       this.mask = Optional.ofNullable(mask);
       return this;
     }

@@ -5,10 +5,10 @@
 package com.docuseal.requests;
 
 import com.docuseal.core.ObjectMappers;
-import com.docuseal.types.CreateSubmissionFromDocxRequestDocument;
+import com.docuseal.types.CreateSubmissionFromDocxDocumentParams;
 import com.docuseal.types.CreateSubmissionFromDocxRequestOrder;
-import com.docuseal.types.CreateSubmissionFromPdfRequestMessage;
-import com.docuseal.types.CreateSubmissionFromPdfRequestSubmitter;
+import com.docuseal.types.CreateSubmissionMessageParams;
+import com.docuseal.types.CreateSubmissionSubmitterParams;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -53,11 +53,11 @@ public final class CreateSubmissionFromDocxParams {
 
   private final Optional<List<Integer>> templateIds;
 
-  private final List<CreateSubmissionFromDocxRequestDocument> documents;
+  private final List<CreateSubmissionFromDocxDocumentParams> documents;
 
-  private final List<CreateSubmissionFromPdfRequestSubmitter> submitters;
+  private final List<CreateSubmissionSubmitterParams> submitters;
 
-  private final Optional<CreateSubmissionFromPdfRequestMessage> message;
+  private final Optional<CreateSubmissionMessageParams> message;
 
   private final Optional<Boolean> mergeDocuments;
 
@@ -69,9 +69,9 @@ public final class CreateSubmissionFromDocxParams {
       Optional<Boolean> sendSms, Optional<Map<String, Object>> variables,
       Optional<CreateSubmissionFromDocxRequestOrder> order, Optional<String> completedRedirectUrl,
       Optional<String> bccCompleted, Optional<String> replyTo, Optional<String> expireAt,
-      Optional<List<Integer>> templateIds, List<CreateSubmissionFromDocxRequestDocument> documents,
-      List<CreateSubmissionFromPdfRequestSubmitter> submitters,
-      Optional<CreateSubmissionFromPdfRequestMessage> message, Optional<Boolean> mergeDocuments,
+      Optional<List<Integer>> templateIds, List<CreateSubmissionFromDocxDocumentParams> documents,
+      List<CreateSubmissionSubmitterParams> submitters,
+      Optional<CreateSubmissionMessageParams> message, Optional<Boolean> mergeDocuments,
       Optional<Boolean> removeTags, Map<String, Object> additionalProperties) {
     this.name = name;
     this.sendEmail = sendEmail;
@@ -175,7 +175,7 @@ public final class CreateSubmissionFromDocxParams {
    * @return An array of DOCX documents to create a submission.
    */
   @JsonProperty("documents")
-  public List<CreateSubmissionFromDocxRequestDocument> getDocuments() {
+  public List<CreateSubmissionFromDocxDocumentParams> getDocuments() {
     return documents;
   }
 
@@ -183,12 +183,12 @@ public final class CreateSubmissionFromDocxParams {
    * @return The list of submitters for the submission.
    */
   @JsonProperty("submitters")
-  public List<CreateSubmissionFromPdfRequestSubmitter> getSubmitters() {
+  public List<CreateSubmissionSubmitterParams> getSubmitters() {
     return submitters;
   }
 
   @JsonProperty("message")
-  public Optional<CreateSubmissionFromPdfRequestMessage> getMessage() {
+  public Optional<CreateSubmissionMessageParams> getMessage() {
     return message;
   }
 
@@ -261,11 +261,11 @@ public final class CreateSubmissionFromDocxParams {
 
     private Optional<List<Integer>> templateIds = Optional.empty();
 
-    private List<CreateSubmissionFromDocxRequestDocument> documents = new ArrayList<>();
+    private List<CreateSubmissionFromDocxDocumentParams> documents = new ArrayList<>();
 
-    private List<CreateSubmissionFromPdfRequestSubmitter> submitters = new ArrayList<>();
+    private List<CreateSubmissionSubmitterParams> submitters = new ArrayList<>();
 
-    private Optional<CreateSubmissionFromPdfRequestMessage> message = Optional.empty();
+    private Optional<CreateSubmissionMessageParams> message = Optional.empty();
 
     private Optional<Boolean> mergeDocuments = Optional.empty();
 
@@ -473,18 +473,18 @@ public final class CreateSubmissionFromDocxParams {
         value = "documents",
         nulls = Nulls.SKIP
     )
-    public Builder documents(List<CreateSubmissionFromDocxRequestDocument> documents) {
+    public Builder documents(List<CreateSubmissionFromDocxDocumentParams> documents) {
       this.documents.clear();
       this.documents.addAll(documents);
       return this;
     }
 
-    public Builder addDocuments(CreateSubmissionFromDocxRequestDocument documents) {
+    public Builder addDocuments(CreateSubmissionFromDocxDocumentParams documents) {
       this.documents.add(documents);
       return this;
     }
 
-    public Builder addAllDocuments(List<CreateSubmissionFromDocxRequestDocument> documents) {
+    public Builder addAllDocuments(List<CreateSubmissionFromDocxDocumentParams> documents) {
       this.documents.addAll(documents);
       return this;
     }
@@ -496,18 +496,18 @@ public final class CreateSubmissionFromDocxParams {
         value = "submitters",
         nulls = Nulls.SKIP
     )
-    public Builder submitters(List<CreateSubmissionFromPdfRequestSubmitter> submitters) {
+    public Builder submitters(List<CreateSubmissionSubmitterParams> submitters) {
       this.submitters.clear();
       this.submitters.addAll(submitters);
       return this;
     }
 
-    public Builder addSubmitters(CreateSubmissionFromPdfRequestSubmitter submitters) {
+    public Builder addSubmitters(CreateSubmissionSubmitterParams submitters) {
       this.submitters.add(submitters);
       return this;
     }
 
-    public Builder addAllSubmitters(List<CreateSubmissionFromPdfRequestSubmitter> submitters) {
+    public Builder addAllSubmitters(List<CreateSubmissionSubmitterParams> submitters) {
       this.submitters.addAll(submitters);
       return this;
     }
@@ -516,12 +516,12 @@ public final class CreateSubmissionFromDocxParams {
         value = "message",
         nulls = Nulls.SKIP
     )
-    public Builder message(Optional<CreateSubmissionFromPdfRequestMessage> message) {
+    public Builder message(Optional<CreateSubmissionMessageParams> message) {
       this.message = message;
       return this;
     }
 
-    public Builder message(CreateSubmissionFromPdfRequestMessage message) {
+    public Builder message(CreateSubmissionMessageParams message) {
       this.message = Optional.ofNullable(message);
       return this;
     }

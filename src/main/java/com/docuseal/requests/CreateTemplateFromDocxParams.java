@@ -5,7 +5,7 @@
 package com.docuseal.requests;
 
 import com.docuseal.core.ObjectMappers;
-import com.docuseal.types.CreateTemplateFromDocxRequestDocument;
+import com.docuseal.types.CreateTemplateFromDocxDocumentParams;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -37,13 +37,13 @@ public final class CreateTemplateFromDocxParams {
 
   private final Optional<Boolean> sharedLink;
 
-  private final List<CreateTemplateFromDocxRequestDocument> documents;
+  private final List<CreateTemplateFromDocxDocumentParams> documents;
 
   private final Map<String, Object> additionalProperties;
 
   private CreateTemplateFromDocxParams(Optional<String> name, Optional<String> externalId,
       Optional<String> folderName, Optional<Boolean> sharedLink,
-      List<CreateTemplateFromDocxRequestDocument> documents,
+      List<CreateTemplateFromDocxDocumentParams> documents,
       Map<String, Object> additionalProperties) {
     this.name = name;
     this.externalId = externalId;
@@ -89,7 +89,7 @@ public final class CreateTemplateFromDocxParams {
    * @return An array of DOCX documents to create a template.
    */
   @JsonProperty("documents")
-  public List<CreateTemplateFromDocxRequestDocument> getDocuments() {
+  public List<CreateTemplateFromDocxDocumentParams> getDocuments() {
     return documents;
   }
 
@@ -134,7 +134,7 @@ public final class CreateTemplateFromDocxParams {
 
     private Optional<Boolean> sharedLink = Optional.empty();
 
-    private List<CreateTemplateFromDocxRequestDocument> documents = new ArrayList<>();
+    private List<CreateTemplateFromDocxDocumentParams> documents = new ArrayList<>();
 
     @JsonAnySetter
     private Map<String, Object> additionalProperties = new HashMap<>();
@@ -226,18 +226,18 @@ public final class CreateTemplateFromDocxParams {
         value = "documents",
         nulls = Nulls.SKIP
     )
-    public Builder documents(List<CreateTemplateFromDocxRequestDocument> documents) {
+    public Builder documents(List<CreateTemplateFromDocxDocumentParams> documents) {
       this.documents.clear();
       this.documents.addAll(documents);
       return this;
     }
 
-    public Builder addDocuments(CreateTemplateFromDocxRequestDocument documents) {
+    public Builder addDocuments(CreateTemplateFromDocxDocumentParams documents) {
       this.documents.add(documents);
       return this;
     }
 
-    public Builder addAllDocuments(List<CreateTemplateFromDocxRequestDocument> documents) {
+    public Builder addAllDocuments(List<CreateTemplateFromDocxDocumentParams> documents) {
       this.documents.addAll(documents);
       return this;
     }

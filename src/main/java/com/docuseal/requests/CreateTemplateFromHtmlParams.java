@@ -5,7 +5,7 @@
 package com.docuseal.requests;
 
 import com.docuseal.core.ObjectMappers;
-import com.docuseal.types.CreateTemplateFromHtmlRequestDocument;
+import com.docuseal.types.CreateTemplateFromHtmlDocumentParams;
 import com.docuseal.types.CreateTemplateFromHtmlRequestSize;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -23,14 +23,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(
     builder = CreateTemplateFromHtmlParams.Builder.class
 )
 public final class CreateTemplateFromHtmlParams {
-  private final String html;
+  private final Optional<String> html;
 
   private final Optional<String> htmlHeader;
 
@@ -46,15 +45,15 @@ public final class CreateTemplateFromHtmlParams {
 
   private final Optional<Boolean> sharedLink;
 
-  private final Optional<List<CreateTemplateFromHtmlRequestDocument>> documents;
+  private final Optional<List<CreateTemplateFromHtmlDocumentParams>> documents;
 
   private final Map<String, Object> additionalProperties;
 
-  private CreateTemplateFromHtmlParams(String html, Optional<String> htmlHeader,
+  private CreateTemplateFromHtmlParams(Optional<String> html, Optional<String> htmlHeader,
       Optional<String> htmlFooter, Optional<String> name,
       Optional<CreateTemplateFromHtmlRequestSize> size, Optional<String> externalId,
       Optional<String> folderName, Optional<Boolean> sharedLink,
-      Optional<List<CreateTemplateFromHtmlRequestDocument>> documents,
+      Optional<List<CreateTemplateFromHtmlDocumentParams>> documents,
       Map<String, Object> additionalProperties) {
     this.html = html;
     this.htmlHeader = htmlHeader;
@@ -72,7 +71,7 @@ public final class CreateTemplateFromHtmlParams {
    * @return HTML template with field tags.
    */
   @JsonProperty("html")
-  public String getHtml() {
+  public Optional<String> getHtml() {
     return html;
   }
 
@@ -136,7 +135,7 @@ public final class CreateTemplateFromHtmlParams {
    * @return The list of documents built from HTML. Can be used to create a template with multiple documents. Leave <code>documents</code> param empty when using a top-level <code>html</code> param for a template with a single document.
    */
   @JsonProperty("documents")
-  public Optional<List<CreateTemplateFromHtmlRequestDocument>> getDocuments() {
+  public Optional<List<CreateTemplateFromHtmlDocumentParams>> getDocuments() {
     return documents;
   }
 
@@ -165,100 +164,31 @@ public final class CreateTemplateFromHtmlParams {
     return ObjectMappers.stringify(this);
   }
 
-  public static HtmlStage builder() {
+  public static Builder builder() {
     return new Builder();
-  }
-
-  public interface HtmlStage {
-    /**
-     * <p>HTML template with field tags.</p>
-     */
-    _FinalStage html(@NotNull String html);
-
-    Builder from(CreateTemplateFromHtmlParams other);
-  }
-
-  public interface _FinalStage {
-    CreateTemplateFromHtmlParams build();
-
-    /**
-     * <p>HTML template of the header to be displayed on every page.</p>
-     */
-    _FinalStage htmlHeader(Optional<String> htmlHeader);
-
-    _FinalStage htmlHeader(String htmlHeader);
-
-    /**
-     * <p>HTML template of the footer to be displayed on every page.</p>
-     */
-    _FinalStage htmlFooter(Optional<String> htmlFooter);
-
-    _FinalStage htmlFooter(String htmlFooter);
-
-    /**
-     * <p>Template name. Random uuid will be assigned when not specified.</p>
-     */
-    _FinalStage name(Optional<String> name);
-
-    _FinalStage name(String name);
-
-    /**
-     * <p>Page size. Letter 8.5 x 11 will be assigned when not specified.</p>
-     */
-    _FinalStage size(Optional<CreateTemplateFromHtmlRequestSize> size);
-
-    _FinalStage size(CreateTemplateFromHtmlRequestSize size);
-
-    /**
-     * <p>Your application-specific unique string key to identify this template within your app. Existing template with specified <code>external_id</code> will be updated with a new HTML.</p>
-     */
-    _FinalStage externalId(Optional<String> externalId);
-
-    _FinalStage externalId(String externalId);
-
-    /**
-     * <p>The folder's name in which the template should be created.</p>
-     */
-    _FinalStage folderName(Optional<String> folderName);
-
-    _FinalStage folderName(String folderName);
-
-    /**
-     * <p>Set to <code>true</code> to make the template available via a shared link. This will allow anyone with the link to create a submission from this template.</p>
-     */
-    _FinalStage sharedLink(Optional<Boolean> sharedLink);
-
-    _FinalStage sharedLink(Boolean sharedLink);
-
-    /**
-     * <p>The list of documents built from HTML. Can be used to create a template with multiple documents. Leave <code>documents</code> param empty when using a top-level <code>html</code> param for a template with a single document.</p>
-     */
-    _FinalStage documents(Optional<List<CreateTemplateFromHtmlRequestDocument>> documents);
-
-    _FinalStage documents(List<CreateTemplateFromHtmlRequestDocument> documents);
   }
 
   @JsonIgnoreProperties(
       ignoreUnknown = true
   )
-  public static final class Builder implements HtmlStage, _FinalStage {
-    private String html;
+  public static final class Builder {
+    private Optional<String> html = Optional.empty();
 
-    private Optional<List<CreateTemplateFromHtmlRequestDocument>> documents = Optional.empty();
-
-    private Optional<Boolean> sharedLink = Optional.empty();
-
-    private Optional<String> folderName = Optional.empty();
-
-    private Optional<String> externalId = Optional.empty();
-
-    private Optional<CreateTemplateFromHtmlRequestSize> size = Optional.empty();
-
-    private Optional<String> name = Optional.empty();
+    private Optional<String> htmlHeader = Optional.empty();
 
     private Optional<String> htmlFooter = Optional.empty();
 
-    private Optional<String> htmlHeader = Optional.empty();
+    private Optional<String> name = Optional.empty();
+
+    private Optional<CreateTemplateFromHtmlRequestSize> size = Optional.empty();
+
+    private Optional<String> externalId = Optional.empty();
+
+    private Optional<String> folderName = Optional.empty();
+
+    private Optional<Boolean> sharedLink = Optional.empty();
+
+    private Optional<List<CreateTemplateFromHtmlDocumentParams>> documents = Optional.empty();
 
     @JsonAnySetter
     private Map<String, Object> additionalProperties = new HashMap<>();
@@ -266,7 +196,6 @@ public final class CreateTemplateFromHtmlParams {
     private Builder() {
     }
 
-    @java.lang.Override
     public Builder from(CreateTemplateFromHtmlParams other) {
       html(other.getHtml());
       htmlHeader(other.getHtmlHeader());
@@ -282,201 +211,157 @@ public final class CreateTemplateFromHtmlParams {
 
     /**
      * <p>HTML template with field tags.</p>
-     * <p>HTML template with field tags.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
      */
-    @java.lang.Override
-    @JsonSetter("html")
-    public _FinalStage html(@NotNull String html) {
-      this.html = Objects.requireNonNull(html, "html must not be null");
-      return this;
-    }
-
-    /**
-     * <p>The list of documents built from HTML. Can be used to create a template with multiple documents. Leave <code>documents</code> param empty when using a top-level <code>html</code> param for a template with a single document.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    public _FinalStage documents(List<CreateTemplateFromHtmlRequestDocument> documents) {
-      this.documents = Optional.ofNullable(documents);
-      return this;
-    }
-
-    /**
-     * <p>The list of documents built from HTML. Can be used to create a template with multiple documents. Leave <code>documents</code> param empty when using a top-level <code>html</code> param for a template with a single document.</p>
-     */
-    @java.lang.Override
     @JsonSetter(
-        value = "documents",
+        value = "html",
         nulls = Nulls.SKIP
     )
-    public _FinalStage documents(Optional<List<CreateTemplateFromHtmlRequestDocument>> documents) {
-      this.documents = documents;
+    public Builder html(Optional<String> html) {
+      this.html = html;
       return this;
     }
 
-    /**
-     * <p>Set to <code>true</code> to make the template available via a shared link. This will allow anyone with the link to create a submission from this template.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    public _FinalStage sharedLink(Boolean sharedLink) {
-      this.sharedLink = Optional.ofNullable(sharedLink);
-      return this;
-    }
-
-    /**
-     * <p>Set to <code>true</code> to make the template available via a shared link. This will allow anyone with the link to create a submission from this template.</p>
-     */
-    @java.lang.Override
-    @JsonSetter(
-        value = "shared_link",
-        nulls = Nulls.SKIP
-    )
-    public _FinalStage sharedLink(Optional<Boolean> sharedLink) {
-      this.sharedLink = sharedLink;
-      return this;
-    }
-
-    /**
-     * <p>The folder's name in which the template should be created.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    public _FinalStage folderName(String folderName) {
-      this.folderName = Optional.ofNullable(folderName);
-      return this;
-    }
-
-    /**
-     * <p>The folder's name in which the template should be created.</p>
-     */
-    @java.lang.Override
-    @JsonSetter(
-        value = "folder_name",
-        nulls = Nulls.SKIP
-    )
-    public _FinalStage folderName(Optional<String> folderName) {
-      this.folderName = folderName;
-      return this;
-    }
-
-    /**
-     * <p>Your application-specific unique string key to identify this template within your app. Existing template with specified <code>external_id</code> will be updated with a new HTML.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    public _FinalStage externalId(String externalId) {
-      this.externalId = Optional.ofNullable(externalId);
-      return this;
-    }
-
-    /**
-     * <p>Your application-specific unique string key to identify this template within your app. Existing template with specified <code>external_id</code> will be updated with a new HTML.</p>
-     */
-    @java.lang.Override
-    @JsonSetter(
-        value = "external_id",
-        nulls = Nulls.SKIP
-    )
-    public _FinalStage externalId(Optional<String> externalId) {
-      this.externalId = externalId;
-      return this;
-    }
-
-    /**
-     * <p>Page size. Letter 8.5 x 11 will be assigned when not specified.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    public _FinalStage size(CreateTemplateFromHtmlRequestSize size) {
-      this.size = Optional.ofNullable(size);
-      return this;
-    }
-
-    /**
-     * <p>Page size. Letter 8.5 x 11 will be assigned when not specified.</p>
-     */
-    @java.lang.Override
-    @JsonSetter(
-        value = "size",
-        nulls = Nulls.SKIP
-    )
-    public _FinalStage size(Optional<CreateTemplateFromHtmlRequestSize> size) {
-      this.size = size;
-      return this;
-    }
-
-    /**
-     * <p>Template name. Random uuid will be assigned when not specified.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    public _FinalStage name(String name) {
-      this.name = Optional.ofNullable(name);
-      return this;
-    }
-
-    /**
-     * <p>Template name. Random uuid will be assigned when not specified.</p>
-     */
-    @java.lang.Override
-    @JsonSetter(
-        value = "name",
-        nulls = Nulls.SKIP
-    )
-    public _FinalStage name(Optional<String> name) {
-      this.name = name;
-      return this;
-    }
-
-    /**
-     * <p>HTML template of the footer to be displayed on every page.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    public _FinalStage htmlFooter(String htmlFooter) {
-      this.htmlFooter = Optional.ofNullable(htmlFooter);
-      return this;
-    }
-
-    /**
-     * <p>HTML template of the footer to be displayed on every page.</p>
-     */
-    @java.lang.Override
-    @JsonSetter(
-        value = "html_footer",
-        nulls = Nulls.SKIP
-    )
-    public _FinalStage htmlFooter(Optional<String> htmlFooter) {
-      this.htmlFooter = htmlFooter;
+    public Builder html(String html) {
+      this.html = Optional.ofNullable(html);
       return this;
     }
 
     /**
      * <p>HTML template of the header to be displayed on every page.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
      */
-    @java.lang.Override
-    public _FinalStage htmlHeader(String htmlHeader) {
+    @JsonSetter(
+        value = "html_header",
+        nulls = Nulls.SKIP
+    )
+    public Builder htmlHeader(Optional<String> htmlHeader) {
+      this.htmlHeader = htmlHeader;
+      return this;
+    }
+
+    public Builder htmlHeader(String htmlHeader) {
       this.htmlHeader = Optional.ofNullable(htmlHeader);
       return this;
     }
 
     /**
-     * <p>HTML template of the header to be displayed on every page.</p>
+     * <p>HTML template of the footer to be displayed on every page.</p>
      */
-    @java.lang.Override
     @JsonSetter(
-        value = "html_header",
+        value = "html_footer",
         nulls = Nulls.SKIP
     )
-    public _FinalStage htmlHeader(Optional<String> htmlHeader) {
-      this.htmlHeader = htmlHeader;
+    public Builder htmlFooter(Optional<String> htmlFooter) {
+      this.htmlFooter = htmlFooter;
       return this;
     }
 
-    @java.lang.Override
+    public Builder htmlFooter(String htmlFooter) {
+      this.htmlFooter = Optional.ofNullable(htmlFooter);
+      return this;
+    }
+
+    /**
+     * <p>Template name. Random uuid will be assigned when not specified.</p>
+     */
+    @JsonSetter(
+        value = "name",
+        nulls = Nulls.SKIP
+    )
+    public Builder name(Optional<String> name) {
+      this.name = name;
+      return this;
+    }
+
+    public Builder name(String name) {
+      this.name = Optional.ofNullable(name);
+      return this;
+    }
+
+    /**
+     * <p>Page size. Letter 8.5 x 11 will be assigned when not specified.</p>
+     */
+    @JsonSetter(
+        value = "size",
+        nulls = Nulls.SKIP
+    )
+    public Builder size(Optional<CreateTemplateFromHtmlRequestSize> size) {
+      this.size = size;
+      return this;
+    }
+
+    public Builder size(CreateTemplateFromHtmlRequestSize size) {
+      this.size = Optional.ofNullable(size);
+      return this;
+    }
+
+    /**
+     * <p>Your application-specific unique string key to identify this template within your app. Existing template with specified <code>external_id</code> will be updated with a new HTML.</p>
+     */
+    @JsonSetter(
+        value = "external_id",
+        nulls = Nulls.SKIP
+    )
+    public Builder externalId(Optional<String> externalId) {
+      this.externalId = externalId;
+      return this;
+    }
+
+    public Builder externalId(String externalId) {
+      this.externalId = Optional.ofNullable(externalId);
+      return this;
+    }
+
+    /**
+     * <p>The folder's name in which the template should be created.</p>
+     */
+    @JsonSetter(
+        value = "folder_name",
+        nulls = Nulls.SKIP
+    )
+    public Builder folderName(Optional<String> folderName) {
+      this.folderName = folderName;
+      return this;
+    }
+
+    public Builder folderName(String folderName) {
+      this.folderName = Optional.ofNullable(folderName);
+      return this;
+    }
+
+    /**
+     * <p>Set to <code>true</code> to make the template available via a shared link. This will allow anyone with the link to create a submission from this template.</p>
+     */
+    @JsonSetter(
+        value = "shared_link",
+        nulls = Nulls.SKIP
+    )
+    public Builder sharedLink(Optional<Boolean> sharedLink) {
+      this.sharedLink = sharedLink;
+      return this;
+    }
+
+    public Builder sharedLink(Boolean sharedLink) {
+      this.sharedLink = Optional.ofNullable(sharedLink);
+      return this;
+    }
+
+    /**
+     * <p>The list of documents built from HTML. Can be used to create a template with multiple documents. Leave <code>documents</code> param empty when using a top-level <code>html</code> param for a template with a single document.</p>
+     */
+    @JsonSetter(
+        value = "documents",
+        nulls = Nulls.SKIP
+    )
+    public Builder documents(Optional<List<CreateTemplateFromHtmlDocumentParams>> documents) {
+      this.documents = documents;
+      return this;
+    }
+
+    public Builder documents(List<CreateTemplateFromHtmlDocumentParams> documents) {
+      this.documents = Optional.ofNullable(documents);
+      return this;
+    }
+
     public CreateTemplateFromHtmlParams build() {
       return new CreateTemplateFromHtmlParams(html, htmlHeader, htmlFooter, name, size, externalId, folderName, sharedLink, documents, additionalProperties);
     }

@@ -12,7 +12,6 @@ import com.docuseal.core.MediaTypes;
 import com.docuseal.core.ObjectMappers;
 import com.docuseal.core.QueryStringMapper;
 import com.docuseal.core.RequestOptions;
-import com.docuseal.requests.AddDocumentToTemplateParams;
 import com.docuseal.requests.ArchiveSubmissionParams;
 import com.docuseal.requests.ArchiveTemplateParams;
 import com.docuseal.requests.CloneTemplateParams;
@@ -20,7 +19,6 @@ import com.docuseal.requests.CreateSubmissionFromDocxParams;
 import com.docuseal.requests.CreateSubmissionFromHtmlParams;
 import com.docuseal.requests.CreateSubmissionFromPdfParams;
 import com.docuseal.requests.CreateSubmissionParams;
-import com.docuseal.requests.CreateSubmissionsFromEmailsParams;
 import com.docuseal.requests.CreateTemplateFromDocxParams;
 import com.docuseal.requests.CreateTemplateFromHtmlParams;
 import com.docuseal.requests.CreateTemplateFromPdfParams;
@@ -34,30 +32,28 @@ import com.docuseal.requests.GetTemplatesParams;
 import com.docuseal.requests.MergeTemplateParams;
 import com.docuseal.requests.UpdateSubmissionParams;
 import com.docuseal.requests.UpdateSubmitterParams;
+import com.docuseal.requests.UpdateTemplateDocumentsParams;
 import com.docuseal.requests.UpdateTemplateParams;
-import com.docuseal.types.ArchiveSubmissionResponse;
-import com.docuseal.types.ArchiveTemplateResponse;
-import com.docuseal.types.CreateSubmissionFromPdfResponse;
-import com.docuseal.types.CreateSubmissionResponse;
-import com.docuseal.types.CreateSubmissionsFromEmailsResponseSubmitter;
-import com.docuseal.types.GetSubmissionDocumentsResponse;
-import com.docuseal.types.GetSubmissionResponse;
-import com.docuseal.types.GetSubmissionsResponse;
-import com.docuseal.types.GetSubmitterResponse;
-import com.docuseal.types.GetSubmittersResponse;
-import com.docuseal.types.GetTemplateResponse;
-import com.docuseal.types.GetTemplatesResponse;
-import com.docuseal.types.UpdateSubmissionResponse;
-import com.docuseal.types.UpdateSubmitterResponse;
-import com.docuseal.types.UpdateTemplateResponse;
+import com.docuseal.types.CreateSubmissionResult;
+import com.docuseal.types.Submission;
+import com.docuseal.types.SubmissionArchiveResult;
+import com.docuseal.types.SubmissionCreateResult;
+import com.docuseal.types.SubmissionDocuments;
+import com.docuseal.types.SubmissionList;
+import com.docuseal.types.SubmissionUpdateResult;
+import com.docuseal.types.Submitter;
+import com.docuseal.types.SubmitterList;
+import com.docuseal.types.SubmitterUpdateResult;
+import com.docuseal.types.Template;
+import com.docuseal.types.TemplateArchiveResult;
+import com.docuseal.types.TemplateList;
+import com.docuseal.types.TemplateUpdateResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
 import java.lang.Integer;
 import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -80,14 +76,14 @@ public class AsyncRawDocusealClient {
   /**
    * The API endpoint provides the ability to retrieve a list of available document templates.
    */
-  public CompletableFuture<DocusealClientHttpResponse<GetTemplatesResponse>> getTemplates() {
+  public CompletableFuture<DocusealClientHttpResponse<TemplateList>> getTemplates() {
     return getTemplates(GetTemplatesParams.builder().build());
   }
 
   /**
    * The API endpoint provides the ability to retrieve a list of available document templates.
    */
-  public CompletableFuture<DocusealClientHttpResponse<GetTemplatesResponse>> getTemplates(
+  public CompletableFuture<DocusealClientHttpResponse<TemplateList>> getTemplates(
       GetTemplatesParams request) {
     return getTemplates(request,null);
   }
@@ -95,7 +91,7 @@ public class AsyncRawDocusealClient {
   /**
    * The API endpoint provides the ability to retrieve a list of available document templates.
    */
-  public CompletableFuture<DocusealClientHttpResponse<GetTemplatesResponse>> getTemplates(
+  public CompletableFuture<DocusealClientHttpResponse<TemplateList>> getTemplates(
       GetTemplatesParams request, RequestOptions requestOptions) {
     HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -136,13 +132,13 @@ public class AsyncRawDocusealClient {
       if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
         client = clientOptions.httpClientWithTimeout(requestOptions);
       }
-      CompletableFuture<DocusealClientHttpResponse<GetTemplatesResponse>> future = new CompletableFuture<>();
+      CompletableFuture<DocusealClientHttpResponse<TemplateList>> future = new CompletableFuture<>();
       client.newCall(okhttpRequest).enqueue(new Callback() {
         @Override
         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
           try (ResponseBody responseBody = response.body()) {
             if (response.isSuccessful()) {
-              future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplatesResponse.class), response));
+              future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TemplateList.class), response));
               return;
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -165,14 +161,14 @@ public class AsyncRawDocusealClient {
     /**
      * The API endpoint provides the functionality to retrieve information about a document template.
      */
-    public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> getTemplate(int id) {
+    public CompletableFuture<DocusealClientHttpResponse<Template>> getTemplate(int id) {
       return getTemplate(id,GetTemplateParams.builder().build());
     }
 
     /**
      * The API endpoint provides the functionality to retrieve information about a document template.
      */
-    public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> getTemplate(int id,
+    public CompletableFuture<DocusealClientHttpResponse<Template>> getTemplate(int id,
         GetTemplateParams request) {
       return getTemplate(id,request,null);
     }
@@ -180,7 +176,7 @@ public class AsyncRawDocusealClient {
     /**
      * The API endpoint provides the functionality to retrieve information about a document template.
      */
-    public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> getTemplate(int id,
+    public CompletableFuture<DocusealClientHttpResponse<Template>> getTemplate(int id,
         GetTemplateParams request, RequestOptions requestOptions) {
       HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -197,13 +193,13 @@ public class AsyncRawDocusealClient {
       if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
         client = clientOptions.httpClientWithTimeout(requestOptions);
       }
-      CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> future = new CompletableFuture<>();
+      CompletableFuture<DocusealClientHttpResponse<Template>> future = new CompletableFuture<>();
       client.newCall(okhttpRequest).enqueue(new Callback() {
         @Override
         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
           try (ResponseBody responseBody = response.body()) {
             if (response.isSuccessful()) {
-              future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateResponse.class), response));
+              future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Template.class), response));
               return;
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -226,7 +222,7 @@ public class AsyncRawDocusealClient {
     /**
      * The API endpoint provides the functionality to move a document template to a different folder and update the name of the template.
      */
-    public CompletableFuture<DocusealClientHttpResponse<UpdateTemplateResponse>> updateTemplate(
+    public CompletableFuture<DocusealClientHttpResponse<TemplateUpdateResult>> updateTemplate(
         int id) {
       return updateTemplate(id,UpdateTemplateParams.builder().build());
     }
@@ -234,7 +230,7 @@ public class AsyncRawDocusealClient {
     /**
      * The API endpoint provides the functionality to move a document template to a different folder and update the name of the template.
      */
-    public CompletableFuture<DocusealClientHttpResponse<UpdateTemplateResponse>> updateTemplate(
+    public CompletableFuture<DocusealClientHttpResponse<TemplateUpdateResult>> updateTemplate(
         int id, UpdateTemplateParams request) {
       return updateTemplate(id,request,null);
     }
@@ -242,7 +238,7 @@ public class AsyncRawDocusealClient {
     /**
      * The API endpoint provides the functionality to move a document template to a different folder and update the name of the template.
      */
-    public CompletableFuture<DocusealClientHttpResponse<UpdateTemplateResponse>> updateTemplate(
+    public CompletableFuture<DocusealClientHttpResponse<TemplateUpdateResult>> updateTemplate(
         int id, UpdateTemplateParams request, RequestOptions requestOptions) {
       HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -267,13 +263,13 @@ public class AsyncRawDocusealClient {
       if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
         client = clientOptions.httpClientWithTimeout(requestOptions);
       }
-      CompletableFuture<DocusealClientHttpResponse<UpdateTemplateResponse>> future = new CompletableFuture<>();
+      CompletableFuture<DocusealClientHttpResponse<TemplateUpdateResult>> future = new CompletableFuture<>();
       client.newCall(okhttpRequest).enqueue(new Callback() {
         @Override
         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
           try (ResponseBody responseBody = response.body()) {
             if (response.isSuccessful()) {
-              future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpdateTemplateResponse.class), response));
+              future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TemplateUpdateResult.class), response));
               return;
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -296,7 +292,7 @@ public class AsyncRawDocusealClient {
     /**
      * The API endpoint allows you to archive a document template.
      */
-    public CompletableFuture<DocusealClientHttpResponse<ArchiveTemplateResponse>> archiveTemplate(
+    public CompletableFuture<DocusealClientHttpResponse<TemplateArchiveResult>> archiveTemplate(
         int id) {
       return archiveTemplate(id,ArchiveTemplateParams.builder().build());
     }
@@ -304,7 +300,7 @@ public class AsyncRawDocusealClient {
     /**
      * The API endpoint allows you to archive a document template.
      */
-    public CompletableFuture<DocusealClientHttpResponse<ArchiveTemplateResponse>> archiveTemplate(
+    public CompletableFuture<DocusealClientHttpResponse<TemplateArchiveResult>> archiveTemplate(
         int id, ArchiveTemplateParams request) {
       return archiveTemplate(id,request,null);
     }
@@ -312,7 +308,7 @@ public class AsyncRawDocusealClient {
     /**
      * The API endpoint allows you to archive a document template.
      */
-    public CompletableFuture<DocusealClientHttpResponse<ArchiveTemplateResponse>> archiveTemplate(
+    public CompletableFuture<DocusealClientHttpResponse<TemplateArchiveResult>> archiveTemplate(
         int id, ArchiveTemplateParams request, RequestOptions requestOptions) {
       HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -329,13 +325,13 @@ public class AsyncRawDocusealClient {
       if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
         client = clientOptions.httpClientWithTimeout(requestOptions);
       }
-      CompletableFuture<DocusealClientHttpResponse<ArchiveTemplateResponse>> future = new CompletableFuture<>();
+      CompletableFuture<DocusealClientHttpResponse<TemplateArchiveResult>> future = new CompletableFuture<>();
       client.newCall(okhttpRequest).enqueue(new Callback() {
         @Override
         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
           try (ResponseBody responseBody = response.body()) {
             if (response.isSuccessful()) {
-              future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ArchiveTemplateResponse.class), response));
+              future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TemplateArchiveResult.class), response));
               return;
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -358,14 +354,14 @@ public class AsyncRawDocusealClient {
     /**
      * The API endpoint provides the ability to retrieve a list of available submissions.
      */
-    public CompletableFuture<DocusealClientHttpResponse<GetSubmissionsResponse>> getSubmissions() {
+    public CompletableFuture<DocusealClientHttpResponse<SubmissionList>> getSubmissions() {
       return getSubmissions(GetSubmissionsParams.builder().build());
     }
 
     /**
      * The API endpoint provides the ability to retrieve a list of available submissions.
      */
-    public CompletableFuture<DocusealClientHttpResponse<GetSubmissionsResponse>> getSubmissions(
+    public CompletableFuture<DocusealClientHttpResponse<SubmissionList>> getSubmissions(
         GetSubmissionsParams request) {
       return getSubmissions(request,null);
     }
@@ -373,7 +369,7 @@ public class AsyncRawDocusealClient {
     /**
      * The API endpoint provides the ability to retrieve a list of available submissions.
      */
-    public CompletableFuture<DocusealClientHttpResponse<GetSubmissionsResponse>> getSubmissions(
+    public CompletableFuture<DocusealClientHttpResponse<SubmissionList>> getSubmissions(
         GetSubmissionsParams request, RequestOptions requestOptions) {
       HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -414,13 +410,13 @@ public class AsyncRawDocusealClient {
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
           client = clientOptions.httpClientWithTimeout(requestOptions);
         }
-        CompletableFuture<DocusealClientHttpResponse<GetSubmissionsResponse>> future = new CompletableFuture<>();
+        CompletableFuture<DocusealClientHttpResponse<SubmissionList>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
           @Override
           public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
             try (ResponseBody responseBody = response.body()) {
               if (response.isSuccessful()) {
-                future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetSubmissionsResponse.class), response));
+                future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionList.class), response));
                 return;
               }
               String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -443,24 +439,23 @@ public class AsyncRawDocusealClient {
       /**
        * The API endpoint provides the functionality to retrieve information about a submission.
        */
-      public CompletableFuture<DocusealClientHttpResponse<GetSubmissionResponse>> getSubmission(
-          int id) {
+      public CompletableFuture<DocusealClientHttpResponse<Submission>> getSubmission(int id) {
         return getSubmission(id,GetSubmissionParams.builder().build());
       }
 
       /**
        * The API endpoint provides the functionality to retrieve information about a submission.
        */
-      public CompletableFuture<DocusealClientHttpResponse<GetSubmissionResponse>> getSubmission(
-          int id, GetSubmissionParams request) {
+      public CompletableFuture<DocusealClientHttpResponse<Submission>> getSubmission(int id,
+          GetSubmissionParams request) {
         return getSubmission(id,request,null);
       }
 
       /**
        * The API endpoint provides the functionality to retrieve information about a submission.
        */
-      public CompletableFuture<DocusealClientHttpResponse<GetSubmissionResponse>> getSubmission(
-          int id, GetSubmissionParams request, RequestOptions requestOptions) {
+      public CompletableFuture<DocusealClientHttpResponse<Submission>> getSubmission(int id,
+          GetSubmissionParams request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
           .addPathSegments("submissions")
@@ -476,13 +471,13 @@ public class AsyncRawDocusealClient {
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
           client = clientOptions.httpClientWithTimeout(requestOptions);
         }
-        CompletableFuture<DocusealClientHttpResponse<GetSubmissionResponse>> future = new CompletableFuture<>();
+        CompletableFuture<DocusealClientHttpResponse<Submission>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
           @Override
           public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
             try (ResponseBody responseBody = response.body()) {
               if (response.isSuccessful()) {
-                future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetSubmissionResponse.class), response));
+                future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Submission.class), response));
                 return;
               }
               String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -505,7 +500,7 @@ public class AsyncRawDocusealClient {
       /**
        * The API endpoint allows you to update a submission: change its name, expiration date, and archive or unarchive it.
        */
-      public CompletableFuture<DocusealClientHttpResponse<UpdateSubmissionResponse>> updateSubmission(
+      public CompletableFuture<DocusealClientHttpResponse<SubmissionUpdateResult>> updateSubmission(
           int id) {
         return updateSubmission(id,UpdateSubmissionParams.builder().build());
       }
@@ -513,7 +508,7 @@ public class AsyncRawDocusealClient {
       /**
        * The API endpoint allows you to update a submission: change its name, expiration date, and archive or unarchive it.
        */
-      public CompletableFuture<DocusealClientHttpResponse<UpdateSubmissionResponse>> updateSubmission(
+      public CompletableFuture<DocusealClientHttpResponse<SubmissionUpdateResult>> updateSubmission(
           int id, UpdateSubmissionParams request) {
         return updateSubmission(id,request,null);
       }
@@ -521,7 +516,7 @@ public class AsyncRawDocusealClient {
       /**
        * The API endpoint allows you to update a submission: change its name, expiration date, and archive or unarchive it.
        */
-      public CompletableFuture<DocusealClientHttpResponse<UpdateSubmissionResponse>> updateSubmission(
+      public CompletableFuture<DocusealClientHttpResponse<SubmissionUpdateResult>> updateSubmission(
           int id, UpdateSubmissionParams request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -546,13 +541,13 @@ public class AsyncRawDocusealClient {
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
           client = clientOptions.httpClientWithTimeout(requestOptions);
         }
-        CompletableFuture<DocusealClientHttpResponse<UpdateSubmissionResponse>> future = new CompletableFuture<>();
+        CompletableFuture<DocusealClientHttpResponse<SubmissionUpdateResult>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
           @Override
           public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
             try (ResponseBody responseBody = response.body()) {
               if (response.isSuccessful()) {
-                future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpdateSubmissionResponse.class), response));
+                future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionUpdateResult.class), response));
                 return;
               }
               String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -575,7 +570,7 @@ public class AsyncRawDocusealClient {
       /**
        * The API endpoint allows you to archive a submission.
        */
-      public CompletableFuture<DocusealClientHttpResponse<ArchiveSubmissionResponse>> archiveSubmission(
+      public CompletableFuture<DocusealClientHttpResponse<SubmissionArchiveResult>> archiveSubmission(
           int id) {
         return archiveSubmission(id,ArchiveSubmissionParams.builder().build());
       }
@@ -583,7 +578,7 @@ public class AsyncRawDocusealClient {
       /**
        * The API endpoint allows you to archive a submission.
        */
-      public CompletableFuture<DocusealClientHttpResponse<ArchiveSubmissionResponse>> archiveSubmission(
+      public CompletableFuture<DocusealClientHttpResponse<SubmissionArchiveResult>> archiveSubmission(
           int id, ArchiveSubmissionParams request) {
         return archiveSubmission(id,request,null);
       }
@@ -591,7 +586,7 @@ public class AsyncRawDocusealClient {
       /**
        * The API endpoint allows you to archive a submission.
        */
-      public CompletableFuture<DocusealClientHttpResponse<ArchiveSubmissionResponse>> archiveSubmission(
+      public CompletableFuture<DocusealClientHttpResponse<SubmissionArchiveResult>> archiveSubmission(
           int id, ArchiveSubmissionParams request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -608,13 +603,13 @@ public class AsyncRawDocusealClient {
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
           client = clientOptions.httpClientWithTimeout(requestOptions);
         }
-        CompletableFuture<DocusealClientHttpResponse<ArchiveSubmissionResponse>> future = new CompletableFuture<>();
+        CompletableFuture<DocusealClientHttpResponse<SubmissionArchiveResult>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
           @Override
           public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
             try (ResponseBody responseBody = response.body()) {
               if (response.isSuccessful()) {
-                future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ArchiveSubmissionResponse.class), response));
+                future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionArchiveResult.class), response));
                 return;
               }
               String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -637,7 +632,7 @@ public class AsyncRawDocusealClient {
       /**
        * This endpoint returns a list of partially filled documents for a submission. If the submission has been completed, the final signed documents are returned.
        */
-      public CompletableFuture<DocusealClientHttpResponse<GetSubmissionDocumentsResponse>> getSubmissionDocuments(
+      public CompletableFuture<DocusealClientHttpResponse<SubmissionDocuments>> getSubmissionDocuments(
           int id) {
         return getSubmissionDocuments(id,GetSubmissionDocumentsParams.builder().build());
       }
@@ -645,7 +640,7 @@ public class AsyncRawDocusealClient {
       /**
        * This endpoint returns a list of partially filled documents for a submission. If the submission has been completed, the final signed documents are returned.
        */
-      public CompletableFuture<DocusealClientHttpResponse<GetSubmissionDocumentsResponse>> getSubmissionDocuments(
+      public CompletableFuture<DocusealClientHttpResponse<SubmissionDocuments>> getSubmissionDocuments(
           int id, GetSubmissionDocumentsParams request) {
         return getSubmissionDocuments(id,request,null);
       }
@@ -653,7 +648,7 @@ public class AsyncRawDocusealClient {
       /**
        * This endpoint returns a list of partially filled documents for a submission. If the submission has been completed, the final signed documents are returned.
        */
-      public CompletableFuture<DocusealClientHttpResponse<GetSubmissionDocumentsResponse>> getSubmissionDocuments(
+      public CompletableFuture<DocusealClientHttpResponse<SubmissionDocuments>> getSubmissionDocuments(
           int id, GetSubmissionDocumentsParams request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -672,74 +667,13 @@ public class AsyncRawDocusealClient {
           if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
           }
-          CompletableFuture<DocusealClientHttpResponse<GetSubmissionDocumentsResponse>> future = new CompletableFuture<>();
+          CompletableFuture<DocusealClientHttpResponse<SubmissionDocuments>> future = new CompletableFuture<>();
           client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
               try (ResponseBody responseBody = response.body()) {
                 if (response.isSuccessful()) {
-                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetSubmissionDocumentsResponse.class), response));
-                  return;
-                }
-                String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-                future.completeExceptionally(new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
-                return;
-              }
-              catch (IOException e) {
-                future.completeExceptionally(new DocusealClientException("Network error executing HTTP request", e));
-              }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-              future.completeExceptionally(new DocusealClientException("Network error executing HTTP request", e));
-            }
-          });
-          return future;
-        }
-
-        /**
-         * This API endpoint allows you to create submissions for a document template and send them to the specified email addresses. This is a simplified version of the POST /submissions API to be used with Zapier or other automation tools.
-         */
-        public CompletableFuture<DocusealClientHttpResponse<List<CreateSubmissionsFromEmailsResponseSubmitter>>> createSubmissionsFromEmails(
-            CreateSubmissionsFromEmailsParams request) {
-          return createSubmissionsFromEmails(request,null);
-        }
-
-        /**
-         * This API endpoint allows you to create submissions for a document template and send them to the specified email addresses. This is a simplified version of the POST /submissions API to be used with Zapier or other automation tools.
-         */
-        public CompletableFuture<DocusealClientHttpResponse<List<CreateSubmissionsFromEmailsResponseSubmitter>>> createSubmissionsFromEmails(
-            CreateSubmissionsFromEmailsParams request, RequestOptions requestOptions) {
-          HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
-
-            .addPathSegments("submissions/emails")
-            .build();
-          RequestBody body;
-          try {
-            body = RequestBody.create(ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-          }
-          catch(JsonProcessingException e) {
-            throw new DocusealClientException("Failed to serialize request", e);
-          }
-          Request okhttpRequest = new Request.Builder()
-            .url(httpUrl)
-            .method("POST", body)
-            .headers(Headers.of(clientOptions.headers(requestOptions)))
-            .addHeader("Content-Type", "application/json")
-            .addHeader("Accept", "application/json")
-            .build();
-          OkHttpClient client = clientOptions.httpClient();
-          if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-          }
-          CompletableFuture<DocusealClientHttpResponse<List<CreateSubmissionsFromEmailsResponseSubmitter>>> future = new CompletableFuture<>();
-          client.newCall(okhttpRequest).enqueue(new Callback() {
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-              try (ResponseBody responseBody = response.body()) {
-                if (response.isSuccessful()) {
-                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), new TypeReference<List<CreateSubmissionsFromEmailsResponseSubmitter>>() {}), response));
+                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionDocuments.class), response));
                   return;
                 }
                 String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -762,7 +696,7 @@ public class AsyncRawDocusealClient {
         /**
          * The API endpoint provides the functionality to create one-off submission request from a PDF. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.pdf&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/fieldtags.pdf&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
          */
-        public CompletableFuture<DocusealClientHttpResponse<CreateSubmissionFromPdfResponse>> createSubmissionFromPdf(
+        public CompletableFuture<DocusealClientHttpResponse<SubmissionCreateResult>> createSubmissionFromPdf(
             CreateSubmissionFromPdfParams request) {
           return createSubmissionFromPdf(request,null);
         }
@@ -770,7 +704,7 @@ public class AsyncRawDocusealClient {
         /**
          * The API endpoint provides the functionality to create one-off submission request from a PDF. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.pdf&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/fieldtags.pdf&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
          */
-        public CompletableFuture<DocusealClientHttpResponse<CreateSubmissionFromPdfResponse>> createSubmissionFromPdf(
+        public CompletableFuture<DocusealClientHttpResponse<SubmissionCreateResult>> createSubmissionFromPdf(
             CreateSubmissionFromPdfParams request, RequestOptions requestOptions) {
           HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -794,13 +728,13 @@ public class AsyncRawDocusealClient {
           if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
           }
-          CompletableFuture<DocusealClientHttpResponse<CreateSubmissionFromPdfResponse>> future = new CompletableFuture<>();
+          CompletableFuture<DocusealClientHttpResponse<SubmissionCreateResult>> future = new CompletableFuture<>();
           client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
               try (ResponseBody responseBody = response.body()) {
                 if (response.isSuccessful()) {
-                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateSubmissionFromPdfResponse.class), response));
+                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionCreateResult.class), response));
                   return;
                 }
                 String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -823,7 +757,7 @@ public class AsyncRawDocusealClient {
         /**
          * The API endpoint provides functionality to create a one-off submission request from a DOCX file with dynamic content variables. Use &lt;code&gt;[[variable_name]]&lt;/code&gt; text tags to define dynamic content variables in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/demo_template.docx&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/demo_template.docx&lt;/a&gt; for the specific text variable syntax, including dynamic content tables and lists. You can also use the &lt;code&gt;{{signature}}&lt;/code&gt; field syntax to define fillable fields, as in a PDF.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-dynamic-content-variables-in-docx-to-create-personalized-documents&quot; class=&quot;link&quot;&gt;Use dynamic content variables in DOCX to create personalized documents&lt;/a&gt;
          */
-        public CompletableFuture<DocusealClientHttpResponse<CreateSubmissionFromPdfResponse>> createSubmissionFromDocx(
+        public CompletableFuture<DocusealClientHttpResponse<SubmissionCreateResult>> createSubmissionFromDocx(
             CreateSubmissionFromDocxParams request) {
           return createSubmissionFromDocx(request,null);
         }
@@ -831,7 +765,7 @@ public class AsyncRawDocusealClient {
         /**
          * The API endpoint provides functionality to create a one-off submission request from a DOCX file with dynamic content variables. Use &lt;code&gt;[[variable_name]]&lt;/code&gt; text tags to define dynamic content variables in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/demo_template.docx&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/demo_template.docx&lt;/a&gt; for the specific text variable syntax, including dynamic content tables and lists. You can also use the &lt;code&gt;{{signature}}&lt;/code&gt; field syntax to define fillable fields, as in a PDF.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-dynamic-content-variables-in-docx-to-create-personalized-documents&quot; class=&quot;link&quot;&gt;Use dynamic content variables in DOCX to create personalized documents&lt;/a&gt;
          */
-        public CompletableFuture<DocusealClientHttpResponse<CreateSubmissionFromPdfResponse>> createSubmissionFromDocx(
+        public CompletableFuture<DocusealClientHttpResponse<SubmissionCreateResult>> createSubmissionFromDocx(
             CreateSubmissionFromDocxParams request, RequestOptions requestOptions) {
           HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -855,13 +789,13 @@ public class AsyncRawDocusealClient {
           if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
           }
-          CompletableFuture<DocusealClientHttpResponse<CreateSubmissionFromPdfResponse>> future = new CompletableFuture<>();
+          CompletableFuture<DocusealClientHttpResponse<SubmissionCreateResult>> future = new CompletableFuture<>();
           client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
               try (ResponseBody responseBody = response.body()) {
                 if (response.isSuccessful()) {
-                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateSubmissionFromPdfResponse.class), response));
+                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionCreateResult.class), response));
                   return;
                 }
                 String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -884,7 +818,7 @@ public class AsyncRawDocusealClient {
         /**
          * This API endpoint allows you to create a one-off submission request document using the provided HTML content, with special field tags rendered as a fillable and signable form.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
          */
-        public CompletableFuture<DocusealClientHttpResponse<CreateSubmissionFromPdfResponse>> createSubmissionFromHtml(
+        public CompletableFuture<DocusealClientHttpResponse<SubmissionCreateResult>> createSubmissionFromHtml(
             CreateSubmissionFromHtmlParams request) {
           return createSubmissionFromHtml(request,null);
         }
@@ -892,7 +826,7 @@ public class AsyncRawDocusealClient {
         /**
          * This API endpoint allows you to create a one-off submission request document using the provided HTML content, with special field tags rendered as a fillable and signable form.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
          */
-        public CompletableFuture<DocusealClientHttpResponse<CreateSubmissionFromPdfResponse>> createSubmissionFromHtml(
+        public CompletableFuture<DocusealClientHttpResponse<SubmissionCreateResult>> createSubmissionFromHtml(
             CreateSubmissionFromHtmlParams request, RequestOptions requestOptions) {
           HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -916,13 +850,13 @@ public class AsyncRawDocusealClient {
           if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
           }
-          CompletableFuture<DocusealClientHttpResponse<CreateSubmissionFromPdfResponse>> future = new CompletableFuture<>();
+          CompletableFuture<DocusealClientHttpResponse<SubmissionCreateResult>> future = new CompletableFuture<>();
           client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
               try (ResponseBody responseBody = response.body()) {
                 if (response.isSuccessful()) {
-                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateSubmissionFromPdfResponse.class), response));
+                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionCreateResult.class), response));
                   return;
                 }
                 String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -945,24 +879,23 @@ public class AsyncRawDocusealClient {
         /**
          * The API endpoint provides functionality to retrieve information about a submitter, along with the submitter documents and field values.
          */
-        public CompletableFuture<DocusealClientHttpResponse<GetSubmitterResponse>> getSubmitter(
-            int id) {
+        public CompletableFuture<DocusealClientHttpResponse<Submitter>> getSubmitter(int id) {
           return getSubmitter(id,GetSubmitterParams.builder().build());
         }
 
         /**
          * The API endpoint provides functionality to retrieve information about a submitter, along with the submitter documents and field values.
          */
-        public CompletableFuture<DocusealClientHttpResponse<GetSubmitterResponse>> getSubmitter(
-            int id, GetSubmitterParams request) {
+        public CompletableFuture<DocusealClientHttpResponse<Submitter>> getSubmitter(int id,
+            GetSubmitterParams request) {
           return getSubmitter(id,request,null);
         }
 
         /**
          * The API endpoint provides functionality to retrieve information about a submitter, along with the submitter documents and field values.
          */
-        public CompletableFuture<DocusealClientHttpResponse<GetSubmitterResponse>> getSubmitter(
-            int id, GetSubmitterParams request, RequestOptions requestOptions) {
+        public CompletableFuture<DocusealClientHttpResponse<Submitter>> getSubmitter(int id,
+            GetSubmitterParams request, RequestOptions requestOptions) {
           HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
             .addPathSegments("submitters")
@@ -978,13 +911,13 @@ public class AsyncRawDocusealClient {
           if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
           }
-          CompletableFuture<DocusealClientHttpResponse<GetSubmitterResponse>> future = new CompletableFuture<>();
+          CompletableFuture<DocusealClientHttpResponse<Submitter>> future = new CompletableFuture<>();
           client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
               try (ResponseBody responseBody = response.body()) {
                 if (response.isSuccessful()) {
-                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetSubmitterResponse.class), response));
+                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Submitter.class), response));
                   return;
                 }
                 String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -1007,7 +940,7 @@ public class AsyncRawDocusealClient {
         /**
          * The API endpoint allows you to update submitter details, pre-fill or update field values and re-send emails.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api#automatically_sign_documents_via_api&quot; class=&quot;link&quot;&gt;Automatically sign documents via API&lt;/a&gt;
          */
-        public CompletableFuture<DocusealClientHttpResponse<UpdateSubmitterResponse>> updateSubmitter(
+        public CompletableFuture<DocusealClientHttpResponse<SubmitterUpdateResult>> updateSubmitter(
             int id) {
           return updateSubmitter(id,UpdateSubmitterParams.builder().build());
         }
@@ -1015,7 +948,7 @@ public class AsyncRawDocusealClient {
         /**
          * The API endpoint allows you to update submitter details, pre-fill or update field values and re-send emails.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api#automatically_sign_documents_via_api&quot; class=&quot;link&quot;&gt;Automatically sign documents via API&lt;/a&gt;
          */
-        public CompletableFuture<DocusealClientHttpResponse<UpdateSubmitterResponse>> updateSubmitter(
+        public CompletableFuture<DocusealClientHttpResponse<SubmitterUpdateResult>> updateSubmitter(
             int id, UpdateSubmitterParams request) {
           return updateSubmitter(id,request,null);
         }
@@ -1023,7 +956,7 @@ public class AsyncRawDocusealClient {
         /**
          * The API endpoint allows you to update submitter details, pre-fill or update field values and re-send emails.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api#automatically_sign_documents_via_api&quot; class=&quot;link&quot;&gt;Automatically sign documents via API&lt;/a&gt;
          */
-        public CompletableFuture<DocusealClientHttpResponse<UpdateSubmitterResponse>> updateSubmitter(
+        public CompletableFuture<DocusealClientHttpResponse<SubmitterUpdateResult>> updateSubmitter(
             int id, UpdateSubmitterParams request, RequestOptions requestOptions) {
           HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -1048,13 +981,13 @@ public class AsyncRawDocusealClient {
           if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
           }
-          CompletableFuture<DocusealClientHttpResponse<UpdateSubmitterResponse>> future = new CompletableFuture<>();
+          CompletableFuture<DocusealClientHttpResponse<SubmitterUpdateResult>> future = new CompletableFuture<>();
           client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
               try (ResponseBody responseBody = response.body()) {
                 if (response.isSuccessful()) {
-                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpdateSubmitterResponse.class), response));
+                  future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmitterUpdateResult.class), response));
                   return;
                 }
                 String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -1077,15 +1010,14 @@ public class AsyncRawDocusealClient {
         /**
          * The API endpoint provides the ability to retrieve a list of submitters.
          */
-        public CompletableFuture<DocusealClientHttpResponse<GetSubmittersResponse>> getSubmitters(
-            ) {
+        public CompletableFuture<DocusealClientHttpResponse<SubmitterList>> getSubmitters() {
           return getSubmitters(GetSubmittersParams.builder().build());
         }
 
         /**
          * The API endpoint provides the ability to retrieve a list of submitters.
          */
-        public CompletableFuture<DocusealClientHttpResponse<GetSubmittersResponse>> getSubmitters(
+        public CompletableFuture<DocusealClientHttpResponse<SubmitterList>> getSubmitters(
             GetSubmittersParams request) {
           return getSubmitters(request,null);
         }
@@ -1093,7 +1025,7 @@ public class AsyncRawDocusealClient {
         /**
          * The API endpoint provides the ability to retrieve a list of submitters.
          */
-        public CompletableFuture<DocusealClientHttpResponse<GetSubmittersResponse>> getSubmitters(
+        public CompletableFuture<DocusealClientHttpResponse<SubmitterList>> getSubmitters(
             GetSubmittersParams request, RequestOptions requestOptions) {
           HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -1134,13 +1066,13 @@ public class AsyncRawDocusealClient {
             if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
               client = clientOptions.httpClientWithTimeout(requestOptions);
             }
-            CompletableFuture<DocusealClientHttpResponse<GetSubmittersResponse>> future = new CompletableFuture<>();
+            CompletableFuture<DocusealClientHttpResponse<SubmitterList>> future = new CompletableFuture<>();
             client.newCall(okhttpRequest).enqueue(new Callback() {
               @Override
               public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
                   if (response.isSuccessful()) {
-                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetSubmittersResponse.class), response));
+                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmitterList.class), response));
                     return;
                   }
                   String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -1163,24 +1095,24 @@ public class AsyncRawDocusealClient {
           /**
            * The API endpoint allows you to add, remove or replace documents in the template with provided PDF/DOCX file or HTML content.
            */
-          public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> addDocumentToTemplate(
+          public CompletableFuture<DocusealClientHttpResponse<Template>> updateTemplateDocuments(
               int id) {
-            return addDocumentToTemplate(id,AddDocumentToTemplateParams.builder().build());
+            return updateTemplateDocuments(id,UpdateTemplateDocumentsParams.builder().build());
           }
 
           /**
            * The API endpoint allows you to add, remove or replace documents in the template with provided PDF/DOCX file or HTML content.
            */
-          public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> addDocumentToTemplate(
-              int id, AddDocumentToTemplateParams request) {
-            return addDocumentToTemplate(id,request,null);
+          public CompletableFuture<DocusealClientHttpResponse<Template>> updateTemplateDocuments(
+              int id, UpdateTemplateDocumentsParams request) {
+            return updateTemplateDocuments(id,request,null);
           }
 
           /**
            * The API endpoint allows you to add, remove or replace documents in the template with provided PDF/DOCX file or HTML content.
            */
-          public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> addDocumentToTemplate(
-              int id, AddDocumentToTemplateParams request, RequestOptions requestOptions) {
+          public CompletableFuture<DocusealClientHttpResponse<Template>> updateTemplateDocuments(
+              int id, UpdateTemplateDocumentsParams request, RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
               .addPathSegments("templates")
@@ -1205,13 +1137,13 @@ public class AsyncRawDocusealClient {
             if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
               client = clientOptions.httpClientWithTimeout(requestOptions);
             }
-            CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> future = new CompletableFuture<>();
+            CompletableFuture<DocusealClientHttpResponse<Template>> future = new CompletableFuture<>();
             client.newCall(okhttpRequest).enqueue(new Callback() {
               @Override
               public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
                   if (response.isSuccessful()) {
-                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateResponse.class), response));
+                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Template.class), response));
                     return;
                   }
                   String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -1234,24 +1166,23 @@ public class AsyncRawDocusealClient {
           /**
            * The API endpoint allows you to clone an existing template into a new template.
            */
-          public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> cloneTemplate(
-              int id) {
+          public CompletableFuture<DocusealClientHttpResponse<Template>> cloneTemplate(int id) {
             return cloneTemplate(id,CloneTemplateParams.builder().build());
           }
 
           /**
            * The API endpoint allows you to clone an existing template into a new template.
            */
-          public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> cloneTemplate(
-              int id, CloneTemplateParams request) {
+          public CompletableFuture<DocusealClientHttpResponse<Template>> cloneTemplate(int id,
+              CloneTemplateParams request) {
             return cloneTemplate(id,request,null);
           }
 
           /**
            * The API endpoint allows you to clone an existing template into a new template.
            */
-          public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> cloneTemplate(
-              int id, CloneTemplateParams request, RequestOptions requestOptions) {
+          public CompletableFuture<DocusealClientHttpResponse<Template>> cloneTemplate(int id,
+              CloneTemplateParams request, RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
               .addPathSegments("templates")
@@ -1276,13 +1207,13 @@ public class AsyncRawDocusealClient {
             if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
               client = clientOptions.httpClientWithTimeout(requestOptions);
             }
-            CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> future = new CompletableFuture<>();
+            CompletableFuture<DocusealClientHttpResponse<Template>> future = new CompletableFuture<>();
             client.newCall(okhttpRequest).enqueue(new Callback() {
               @Override
               public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
                   if (response.isSuccessful()) {
-                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateResponse.class), response));
+                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Template.class), response));
                     return;
                   }
                   String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -1305,7 +1236,14 @@ public class AsyncRawDocusealClient {
           /**
            * The API endpoint provides the functionality to seamlessly generate a PDF document template by utilizing the provided HTML content while incorporating pre-defined fields.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
            */
-          public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> createTemplateFromHtml(
+          public CompletableFuture<DocusealClientHttpResponse<Template>> createTemplateFromHtml() {
+            return createTemplateFromHtml(CreateTemplateFromHtmlParams.builder().build());
+          }
+
+          /**
+           * The API endpoint provides the functionality to seamlessly generate a PDF document template by utilizing the provided HTML content while incorporating pre-defined fields.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
+           */
+          public CompletableFuture<DocusealClientHttpResponse<Template>> createTemplateFromHtml(
               CreateTemplateFromHtmlParams request) {
             return createTemplateFromHtml(request,null);
           }
@@ -1313,7 +1251,7 @@ public class AsyncRawDocusealClient {
           /**
            * The API endpoint provides the functionality to seamlessly generate a PDF document template by utilizing the provided HTML content while incorporating pre-defined fields.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
            */
-          public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> createTemplateFromHtml(
+          public CompletableFuture<DocusealClientHttpResponse<Template>> createTemplateFromHtml(
               CreateTemplateFromHtmlParams request, RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -1337,13 +1275,13 @@ public class AsyncRawDocusealClient {
             if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
               client = clientOptions.httpClientWithTimeout(requestOptions);
             }
-            CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> future = new CompletableFuture<>();
+            CompletableFuture<DocusealClientHttpResponse<Template>> future = new CompletableFuture<>();
             client.newCall(okhttpRequest).enqueue(new Callback() {
               @Override
               public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
                   if (response.isSuccessful()) {
-                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateResponse.class), response));
+                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Template.class), response));
                     return;
                   }
                   String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -1366,7 +1304,7 @@ public class AsyncRawDocusealClient {
           /**
            * The API endpoint provides the functionality to create a fillable document template for an existing Microsoft Word document. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.docx&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot; &gt;https://www.docuseal.com/examples/fieldtags.docx&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
            */
-          public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> createTemplateFromDocx(
+          public CompletableFuture<DocusealClientHttpResponse<Template>> createTemplateFromDocx(
               CreateTemplateFromDocxParams request) {
             return createTemplateFromDocx(request,null);
           }
@@ -1374,7 +1312,7 @@ public class AsyncRawDocusealClient {
           /**
            * The API endpoint provides the functionality to create a fillable document template for an existing Microsoft Word document. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.docx&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot; &gt;https://www.docuseal.com/examples/fieldtags.docx&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
            */
-          public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> createTemplateFromDocx(
+          public CompletableFuture<DocusealClientHttpResponse<Template>> createTemplateFromDocx(
               CreateTemplateFromDocxParams request, RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -1398,13 +1336,13 @@ public class AsyncRawDocusealClient {
             if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
               client = clientOptions.httpClientWithTimeout(requestOptions);
             }
-            CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> future = new CompletableFuture<>();
+            CompletableFuture<DocusealClientHttpResponse<Template>> future = new CompletableFuture<>();
             client.newCall(okhttpRequest).enqueue(new Callback() {
               @Override
               public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
                   if (response.isSuccessful()) {
-                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateResponse.class), response));
+                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Template.class), response));
                     return;
                   }
                   String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -1427,7 +1365,7 @@ public class AsyncRawDocusealClient {
           /**
            * The API endpoint provides the functionality to create a fillable document template for a PDF file. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.pdf&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/fieldtags.pdf&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
            */
-          public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> createTemplateFromPdf(
+          public CompletableFuture<DocusealClientHttpResponse<Template>> createTemplateFromPdf(
               CreateTemplateFromPdfParams request) {
             return createTemplateFromPdf(request,null);
           }
@@ -1435,7 +1373,7 @@ public class AsyncRawDocusealClient {
           /**
            * The API endpoint provides the functionality to create a fillable document template for a PDF file. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.pdf&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/fieldtags.pdf&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
            */
-          public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> createTemplateFromPdf(
+          public CompletableFuture<DocusealClientHttpResponse<Template>> createTemplateFromPdf(
               CreateTemplateFromPdfParams request, RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -1459,13 +1397,13 @@ public class AsyncRawDocusealClient {
             if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
               client = clientOptions.httpClientWithTimeout(requestOptions);
             }
-            CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> future = new CompletableFuture<>();
+            CompletableFuture<DocusealClientHttpResponse<Template>> future = new CompletableFuture<>();
             client.newCall(okhttpRequest).enqueue(new Callback() {
               @Override
               public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
                   if (response.isSuccessful()) {
-                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateResponse.class), response));
+                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Template.class), response));
                     return;
                   }
                   String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -1488,7 +1426,7 @@ public class AsyncRawDocusealClient {
           /**
            * The API endpoint allows you to merge multiple templates with documents and fields into a new combined template.
            */
-          public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> mergeTemplate(
+          public CompletableFuture<DocusealClientHttpResponse<Template>> mergeTemplate(
               MergeTemplateParams request) {
             return mergeTemplate(request,null);
           }
@@ -1496,7 +1434,7 @@ public class AsyncRawDocusealClient {
           /**
            * The API endpoint allows you to merge multiple templates with documents and fields into a new combined template.
            */
-          public CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> mergeTemplate(
+          public CompletableFuture<DocusealClientHttpResponse<Template>> mergeTemplate(
               MergeTemplateParams request, RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -1520,13 +1458,13 @@ public class AsyncRawDocusealClient {
             if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
               client = clientOptions.httpClientWithTimeout(requestOptions);
             }
-            CompletableFuture<DocusealClientHttpResponse<GetTemplateResponse>> future = new CompletableFuture<>();
+            CompletableFuture<DocusealClientHttpResponse<Template>> future = new CompletableFuture<>();
             client.newCall(okhttpRequest).enqueue(new Callback() {
               @Override
               public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
                   if (response.isSuccessful()) {
-                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateResponse.class), response));
+                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Template.class), response));
                     return;
                   }
                   String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -1549,7 +1487,7 @@ public class AsyncRawDocusealClient {
           /**
            * This API endpoint allows you to create signature requests (submissions) for a document template and send them to the specified submitters (signers).&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/send-documents-for-signature-via-api&quot; class=&quot;link&quot;&gt;Send documents for signature via API&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api&quot; class=&quot;link&quot;&gt;Pre-fill PDF document form fields with API&lt;/a&gt;
            */
-          public CompletableFuture<DocusealClientHttpResponse<CreateSubmissionResponse>> createSubmission(
+          public CompletableFuture<DocusealClientHttpResponse<CreateSubmissionResult>> createSubmission(
               CreateSubmissionParams request) {
             return createSubmission(request,null);
           }
@@ -1557,7 +1495,7 @@ public class AsyncRawDocusealClient {
           /**
            * This API endpoint allows you to create signature requests (submissions) for a document template and send them to the specified submitters (signers).&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/send-documents-for-signature-via-api&quot; class=&quot;link&quot;&gt;Send documents for signature via API&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api&quot; class=&quot;link&quot;&gt;Pre-fill PDF document form fields with API&lt;/a&gt;
            */
-          public CompletableFuture<DocusealClientHttpResponse<CreateSubmissionResponse>> createSubmission(
+          public CompletableFuture<DocusealClientHttpResponse<CreateSubmissionResult>> createSubmission(
               CreateSubmissionParams request, RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -1581,13 +1519,13 @@ public class AsyncRawDocusealClient {
             if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
               client = clientOptions.httpClientWithTimeout(requestOptions);
             }
-            CompletableFuture<DocusealClientHttpResponse<CreateSubmissionResponse>> future = new CompletableFuture<>();
+            CompletableFuture<DocusealClientHttpResponse<CreateSubmissionResult>> future = new CompletableFuture<>();
             client.newCall(okhttpRequest).enqueue(new Callback() {
               @Override
               public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
                   if (response.isSuccessful()) {
-                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateSubmissionResponse.class), response));
+                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateSubmissionResult.class), response));
                     return;
                   }
                   String responseBodyString = responseBody != null ? responseBody.string() : "{}";

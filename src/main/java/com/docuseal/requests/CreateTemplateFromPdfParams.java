@@ -5,7 +5,7 @@
 package com.docuseal.requests;
 
 import com.docuseal.core.ObjectMappers;
-import com.docuseal.types.CreateTemplateFromPdfRequestDocument;
+import com.docuseal.types.CreateTemplateFromPdfDocumentParams;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -37,7 +37,7 @@ public final class CreateTemplateFromPdfParams {
 
   private final Optional<Boolean> sharedLink;
 
-  private final List<CreateTemplateFromPdfRequestDocument> documents;
+  private final List<CreateTemplateFromPdfDocumentParams> documents;
 
   private final Optional<Boolean> flatten;
 
@@ -47,7 +47,7 @@ public final class CreateTemplateFromPdfParams {
 
   private CreateTemplateFromPdfParams(Optional<String> name, Optional<String> folderName,
       Optional<String> externalId, Optional<Boolean> sharedLink,
-      List<CreateTemplateFromPdfRequestDocument> documents, Optional<Boolean> flatten,
+      List<CreateTemplateFromPdfDocumentParams> documents, Optional<Boolean> flatten,
       Optional<Boolean> removeTags, Map<String, Object> additionalProperties) {
     this.name = name;
     this.folderName = folderName;
@@ -95,7 +95,7 @@ public final class CreateTemplateFromPdfParams {
    * @return An array of PDF documents to create a template.
    */
   @JsonProperty("documents")
-  public List<CreateTemplateFromPdfRequestDocument> getDocuments() {
+  public List<CreateTemplateFromPdfDocumentParams> getDocuments() {
     return documents;
   }
 
@@ -156,7 +156,7 @@ public final class CreateTemplateFromPdfParams {
 
     private Optional<Boolean> sharedLink = Optional.empty();
 
-    private List<CreateTemplateFromPdfRequestDocument> documents = new ArrayList<>();
+    private List<CreateTemplateFromPdfDocumentParams> documents = new ArrayList<>();
 
     private Optional<Boolean> flatten = Optional.empty();
 
@@ -254,18 +254,18 @@ public final class CreateTemplateFromPdfParams {
         value = "documents",
         nulls = Nulls.SKIP
     )
-    public Builder documents(List<CreateTemplateFromPdfRequestDocument> documents) {
+    public Builder documents(List<CreateTemplateFromPdfDocumentParams> documents) {
       this.documents.clear();
       this.documents.addAll(documents);
       return this;
     }
 
-    public Builder addDocuments(CreateTemplateFromPdfRequestDocument documents) {
+    public Builder addDocuments(CreateTemplateFromPdfDocumentParams documents) {
       this.documents.add(documents);
       return this;
     }
 
-    public Builder addAllDocuments(List<CreateTemplateFromPdfRequestDocument> documents) {
+    public Builder addAllDocuments(List<CreateTemplateFromPdfDocumentParams> documents) {
       this.documents.addAll(documents);
       return this;
     }

@@ -5,9 +5,9 @@
 package com.docuseal.requests;
 
 import com.docuseal.core.ObjectMappers;
+import com.docuseal.types.CreateSubmissionMessageParams;
 import com.docuseal.types.CreateSubmissionRequestOrder;
-import com.docuseal.types.CreateSubmissionRequestSubmitter;
-import com.docuseal.types.CreateSubmissionsFromEmailsRequestMessage;
+import com.docuseal.types.CreateSubmissionSubmitterParams;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -49,9 +49,9 @@ public final class CreateSubmissionParams {
 
   private final Optional<Map<String, Object>> variables;
 
-  private final Optional<CreateSubmissionsFromEmailsRequestMessage> message;
+  private final Optional<CreateSubmissionMessageParams> message;
 
-  private final List<CreateSubmissionRequestSubmitter> submitters;
+  private final List<CreateSubmissionSubmitterParams> submitters;
 
   private final Map<String, Object> additionalProperties;
 
@@ -59,8 +59,8 @@ public final class CreateSubmissionParams {
       Optional<Boolean> sendSms, Optional<CreateSubmissionRequestOrder> order,
       Optional<String> completedRedirectUrl, Optional<String> bccCompleted,
       Optional<String> replyTo, Optional<String> expireAt, Optional<Map<String, Object>> variables,
-      Optional<CreateSubmissionsFromEmailsRequestMessage> message,
-      List<CreateSubmissionRequestSubmitter> submitters, Map<String, Object> additionalProperties) {
+      Optional<CreateSubmissionMessageParams> message,
+      List<CreateSubmissionSubmitterParams> submitters, Map<String, Object> additionalProperties) {
     this.templateId = templateId;
     this.sendEmail = sendEmail;
     this.sendSms = sendSms;
@@ -148,7 +148,7 @@ public final class CreateSubmissionParams {
   }
 
   @JsonProperty("message")
-  public Optional<CreateSubmissionsFromEmailsRequestMessage> getMessage() {
+  public Optional<CreateSubmissionMessageParams> getMessage() {
     return message;
   }
 
@@ -156,7 +156,7 @@ public final class CreateSubmissionParams {
    * @return The list of submitters for the submission.
    */
   @JsonProperty("submitters")
-  public List<CreateSubmissionRequestSubmitter> getSubmitters() {
+  public List<CreateSubmissionSubmitterParams> getSubmitters() {
     return submitters;
   }
 
@@ -257,18 +257,18 @@ public final class CreateSubmissionParams {
 
     _FinalStage variables(Map<String, Object> variables);
 
-    _FinalStage message(Optional<CreateSubmissionsFromEmailsRequestMessage> message);
+    _FinalStage message(Optional<CreateSubmissionMessageParams> message);
 
-    _FinalStage message(CreateSubmissionsFromEmailsRequestMessage message);
+    _FinalStage message(CreateSubmissionMessageParams message);
 
     /**
      * <p>The list of submitters for the submission.</p>
      */
-    _FinalStage submitters(List<CreateSubmissionRequestSubmitter> submitters);
+    _FinalStage submitters(List<CreateSubmissionSubmitterParams> submitters);
 
-    _FinalStage addSubmitters(CreateSubmissionRequestSubmitter submitters);
+    _FinalStage addSubmitters(CreateSubmissionSubmitterParams submitters);
 
-    _FinalStage addAllSubmitters(List<CreateSubmissionRequestSubmitter> submitters);
+    _FinalStage addAllSubmitters(List<CreateSubmissionSubmitterParams> submitters);
   }
 
   @JsonIgnoreProperties(
@@ -277,9 +277,9 @@ public final class CreateSubmissionParams {
   public static final class Builder implements TemplateIdStage, _FinalStage {
     private int templateId;
 
-    private List<CreateSubmissionRequestSubmitter> submitters = new ArrayList<>();
+    private List<CreateSubmissionSubmitterParams> submitters = new ArrayList<>();
 
-    private Optional<CreateSubmissionsFromEmailsRequestMessage> message = Optional.empty();
+    private Optional<CreateSubmissionMessageParams> message = Optional.empty();
 
     private Optional<Map<String, Object>> variables = Optional.empty();
 
@@ -336,7 +336,7 @@ public final class CreateSubmissionParams {
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage addAllSubmitters(List<CreateSubmissionRequestSubmitter> submitters) {
+    public _FinalStage addAllSubmitters(List<CreateSubmissionSubmitterParams> submitters) {
       this.submitters.addAll(submitters);
       return this;
     }
@@ -346,7 +346,7 @@ public final class CreateSubmissionParams {
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage addSubmitters(CreateSubmissionRequestSubmitter submitters) {
+    public _FinalStage addSubmitters(CreateSubmissionSubmitterParams submitters) {
       this.submitters.add(submitters);
       return this;
     }
@@ -359,14 +359,14 @@ public final class CreateSubmissionParams {
         value = "submitters",
         nulls = Nulls.SKIP
     )
-    public _FinalStage submitters(List<CreateSubmissionRequestSubmitter> submitters) {
+    public _FinalStage submitters(List<CreateSubmissionSubmitterParams> submitters) {
       this.submitters.clear();
       this.submitters.addAll(submitters);
       return this;
     }
 
     @java.lang.Override
-    public _FinalStage message(CreateSubmissionsFromEmailsRequestMessage message) {
+    public _FinalStage message(CreateSubmissionMessageParams message) {
       this.message = Optional.ofNullable(message);
       return this;
     }
@@ -376,7 +376,7 @@ public final class CreateSubmissionParams {
         value = "message",
         nulls = Nulls.SKIP
     )
-    public _FinalStage message(Optional<CreateSubmissionsFromEmailsRequestMessage> message) {
+    public _FinalStage message(Optional<CreateSubmissionMessageParams> message) {
       this.message = message;
       return this;
     }

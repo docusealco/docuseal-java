@@ -12,7 +12,6 @@ import com.docuseal.core.MediaTypes;
 import com.docuseal.core.ObjectMappers;
 import com.docuseal.core.QueryStringMapper;
 import com.docuseal.core.RequestOptions;
-import com.docuseal.requests.AddDocumentToTemplateParams;
 import com.docuseal.requests.ArchiveSubmissionParams;
 import com.docuseal.requests.ArchiveTemplateParams;
 import com.docuseal.requests.CloneTemplateParams;
@@ -20,7 +19,6 @@ import com.docuseal.requests.CreateSubmissionFromDocxParams;
 import com.docuseal.requests.CreateSubmissionFromHtmlParams;
 import com.docuseal.requests.CreateSubmissionFromPdfParams;
 import com.docuseal.requests.CreateSubmissionParams;
-import com.docuseal.requests.CreateSubmissionsFromEmailsParams;
 import com.docuseal.requests.CreateTemplateFromDocxParams;
 import com.docuseal.requests.CreateTemplateFromHtmlParams;
 import com.docuseal.requests.CreateTemplateFromPdfParams;
@@ -34,29 +32,27 @@ import com.docuseal.requests.GetTemplatesParams;
 import com.docuseal.requests.MergeTemplateParams;
 import com.docuseal.requests.UpdateSubmissionParams;
 import com.docuseal.requests.UpdateSubmitterParams;
+import com.docuseal.requests.UpdateTemplateDocumentsParams;
 import com.docuseal.requests.UpdateTemplateParams;
-import com.docuseal.types.ArchiveSubmissionResponse;
-import com.docuseal.types.ArchiveTemplateResponse;
-import com.docuseal.types.CreateSubmissionFromPdfResponse;
-import com.docuseal.types.CreateSubmissionResponse;
-import com.docuseal.types.CreateSubmissionsFromEmailsResponseSubmitter;
-import com.docuseal.types.GetSubmissionDocumentsResponse;
-import com.docuseal.types.GetSubmissionResponse;
-import com.docuseal.types.GetSubmissionsResponse;
-import com.docuseal.types.GetSubmitterResponse;
-import com.docuseal.types.GetSubmittersResponse;
-import com.docuseal.types.GetTemplateResponse;
-import com.docuseal.types.GetTemplatesResponse;
-import com.docuseal.types.UpdateSubmissionResponse;
-import com.docuseal.types.UpdateSubmitterResponse;
-import com.docuseal.types.UpdateTemplateResponse;
+import com.docuseal.types.CreateSubmissionResult;
+import com.docuseal.types.Submission;
+import com.docuseal.types.SubmissionArchiveResult;
+import com.docuseal.types.SubmissionCreateResult;
+import com.docuseal.types.SubmissionDocuments;
+import com.docuseal.types.SubmissionList;
+import com.docuseal.types.SubmissionUpdateResult;
+import com.docuseal.types.Submitter;
+import com.docuseal.types.SubmitterList;
+import com.docuseal.types.SubmitterUpdateResult;
+import com.docuseal.types.Template;
+import com.docuseal.types.TemplateArchiveResult;
+import com.docuseal.types.TemplateList;
+import com.docuseal.types.TemplateUpdateResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
 import java.lang.Integer;
 import java.lang.Object;
 import java.lang.String;
-import java.util.List;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -75,21 +71,21 @@ public class RawDocusealClient {
   /**
    * The API endpoint provides the ability to retrieve a list of available document templates.
    */
-  public DocusealClientHttpResponse<GetTemplatesResponse> getTemplates() {
+  public DocusealClientHttpResponse<TemplateList> getTemplates() {
     return getTemplates(GetTemplatesParams.builder().build());
   }
 
   /**
    * The API endpoint provides the ability to retrieve a list of available document templates.
    */
-  public DocusealClientHttpResponse<GetTemplatesResponse> getTemplates(GetTemplatesParams request) {
+  public DocusealClientHttpResponse<TemplateList> getTemplates(GetTemplatesParams request) {
     return getTemplates(request,null);
   }
 
   /**
    * The API endpoint provides the ability to retrieve a list of available document templates.
    */
-  public DocusealClientHttpResponse<GetTemplatesResponse> getTemplates(GetTemplatesParams request,
+  public DocusealClientHttpResponse<TemplateList> getTemplates(GetTemplatesParams request,
       RequestOptions requestOptions) {
     HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -133,7 +129,7 @@ public class RawDocusealClient {
       try (Response response = client.newCall(okhttpRequest).execute()) {
         ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
-          return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplatesResponse.class), response);
+          return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TemplateList.class), response);
         }
         String responseBodyString = responseBody != null ? responseBody.string() : "{}";
         throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -146,23 +142,22 @@ public class RawDocusealClient {
     /**
      * The API endpoint provides the functionality to retrieve information about a document template.
      */
-    public DocusealClientHttpResponse<GetTemplateResponse> getTemplate(int id) {
+    public DocusealClientHttpResponse<Template> getTemplate(int id) {
       return getTemplate(id,GetTemplateParams.builder().build());
     }
 
     /**
      * The API endpoint provides the functionality to retrieve information about a document template.
      */
-    public DocusealClientHttpResponse<GetTemplateResponse> getTemplate(int id,
-        GetTemplateParams request) {
+    public DocusealClientHttpResponse<Template> getTemplate(int id, GetTemplateParams request) {
       return getTemplate(id,request,null);
     }
 
     /**
      * The API endpoint provides the functionality to retrieve information about a document template.
      */
-    public DocusealClientHttpResponse<GetTemplateResponse> getTemplate(int id,
-        GetTemplateParams request, RequestOptions requestOptions) {
+    public DocusealClientHttpResponse<Template> getTemplate(int id, GetTemplateParams request,
+        RequestOptions requestOptions) {
       HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
         .addPathSegments("templates")
@@ -181,7 +176,7 @@ public class RawDocusealClient {
       try (Response response = client.newCall(okhttpRequest).execute()) {
         ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
-          return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateResponse.class), response);
+          return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Template.class), response);
         }
         String responseBodyString = responseBody != null ? responseBody.string() : "{}";
         throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -194,14 +189,14 @@ public class RawDocusealClient {
     /**
      * The API endpoint provides the functionality to move a document template to a different folder and update the name of the template.
      */
-    public DocusealClientHttpResponse<UpdateTemplateResponse> updateTemplate(int id) {
+    public DocusealClientHttpResponse<TemplateUpdateResult> updateTemplate(int id) {
       return updateTemplate(id,UpdateTemplateParams.builder().build());
     }
 
     /**
      * The API endpoint provides the functionality to move a document template to a different folder and update the name of the template.
      */
-    public DocusealClientHttpResponse<UpdateTemplateResponse> updateTemplate(int id,
+    public DocusealClientHttpResponse<TemplateUpdateResult> updateTemplate(int id,
         UpdateTemplateParams request) {
       return updateTemplate(id,request,null);
     }
@@ -209,7 +204,7 @@ public class RawDocusealClient {
     /**
      * The API endpoint provides the functionality to move a document template to a different folder and update the name of the template.
      */
-    public DocusealClientHttpResponse<UpdateTemplateResponse> updateTemplate(int id,
+    public DocusealClientHttpResponse<TemplateUpdateResult> updateTemplate(int id,
         UpdateTemplateParams request, RequestOptions requestOptions) {
       HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -237,7 +232,7 @@ public class RawDocusealClient {
       try (Response response = client.newCall(okhttpRequest).execute()) {
         ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
-          return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpdateTemplateResponse.class), response);
+          return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TemplateUpdateResult.class), response);
         }
         String responseBodyString = responseBody != null ? responseBody.string() : "{}";
         throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -250,14 +245,14 @@ public class RawDocusealClient {
     /**
      * The API endpoint allows you to archive a document template.
      */
-    public DocusealClientHttpResponse<ArchiveTemplateResponse> archiveTemplate(int id) {
+    public DocusealClientHttpResponse<TemplateArchiveResult> archiveTemplate(int id) {
       return archiveTemplate(id,ArchiveTemplateParams.builder().build());
     }
 
     /**
      * The API endpoint allows you to archive a document template.
      */
-    public DocusealClientHttpResponse<ArchiveTemplateResponse> archiveTemplate(int id,
+    public DocusealClientHttpResponse<TemplateArchiveResult> archiveTemplate(int id,
         ArchiveTemplateParams request) {
       return archiveTemplate(id,request,null);
     }
@@ -265,7 +260,7 @@ public class RawDocusealClient {
     /**
      * The API endpoint allows you to archive a document template.
      */
-    public DocusealClientHttpResponse<ArchiveTemplateResponse> archiveTemplate(int id,
+    public DocusealClientHttpResponse<TemplateArchiveResult> archiveTemplate(int id,
         ArchiveTemplateParams request, RequestOptions requestOptions) {
       HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -285,7 +280,7 @@ public class RawDocusealClient {
       try (Response response = client.newCall(okhttpRequest).execute()) {
         ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
-          return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ArchiveTemplateResponse.class), response);
+          return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TemplateArchiveResult.class), response);
         }
         String responseBodyString = responseBody != null ? responseBody.string() : "{}";
         throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -298,23 +293,22 @@ public class RawDocusealClient {
     /**
      * The API endpoint provides the ability to retrieve a list of available submissions.
      */
-    public DocusealClientHttpResponse<GetSubmissionsResponse> getSubmissions() {
+    public DocusealClientHttpResponse<SubmissionList> getSubmissions() {
       return getSubmissions(GetSubmissionsParams.builder().build());
     }
 
     /**
      * The API endpoint provides the ability to retrieve a list of available submissions.
      */
-    public DocusealClientHttpResponse<GetSubmissionsResponse> getSubmissions(
-        GetSubmissionsParams request) {
+    public DocusealClientHttpResponse<SubmissionList> getSubmissions(GetSubmissionsParams request) {
       return getSubmissions(request,null);
     }
 
     /**
      * The API endpoint provides the ability to retrieve a list of available submissions.
      */
-    public DocusealClientHttpResponse<GetSubmissionsResponse> getSubmissions(
-        GetSubmissionsParams request, RequestOptions requestOptions) {
+    public DocusealClientHttpResponse<SubmissionList> getSubmissions(GetSubmissionsParams request,
+        RequestOptions requestOptions) {
       HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
         .addPathSegments("submissions");if (request.getTemplateId().isPresent()) {
@@ -357,7 +351,7 @@ public class RawDocusealClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
           ResponseBody responseBody = response.body();
           if (response.isSuccessful()) {
-            return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetSubmissionsResponse.class), response);
+            return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionList.class), response);
           }
           String responseBodyString = responseBody != null ? responseBody.string() : "{}";
           throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -370,14 +364,14 @@ public class RawDocusealClient {
       /**
        * The API endpoint provides the functionality to retrieve information about a submission.
        */
-      public DocusealClientHttpResponse<GetSubmissionResponse> getSubmission(int id) {
+      public DocusealClientHttpResponse<Submission> getSubmission(int id) {
         return getSubmission(id,GetSubmissionParams.builder().build());
       }
 
       /**
        * The API endpoint provides the functionality to retrieve information about a submission.
        */
-      public DocusealClientHttpResponse<GetSubmissionResponse> getSubmission(int id,
+      public DocusealClientHttpResponse<Submission> getSubmission(int id,
           GetSubmissionParams request) {
         return getSubmission(id,request,null);
       }
@@ -385,7 +379,7 @@ public class RawDocusealClient {
       /**
        * The API endpoint provides the functionality to retrieve information about a submission.
        */
-      public DocusealClientHttpResponse<GetSubmissionResponse> getSubmission(int id,
+      public DocusealClientHttpResponse<Submission> getSubmission(int id,
           GetSubmissionParams request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -405,7 +399,7 @@ public class RawDocusealClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
           ResponseBody responseBody = response.body();
           if (response.isSuccessful()) {
-            return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetSubmissionResponse.class), response);
+            return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Submission.class), response);
           }
           String responseBodyString = responseBody != null ? responseBody.string() : "{}";
           throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -418,14 +412,14 @@ public class RawDocusealClient {
       /**
        * The API endpoint allows you to update a submission: change its name, expiration date, and archive or unarchive it.
        */
-      public DocusealClientHttpResponse<UpdateSubmissionResponse> updateSubmission(int id) {
+      public DocusealClientHttpResponse<SubmissionUpdateResult> updateSubmission(int id) {
         return updateSubmission(id,UpdateSubmissionParams.builder().build());
       }
 
       /**
        * The API endpoint allows you to update a submission: change its name, expiration date, and archive or unarchive it.
        */
-      public DocusealClientHttpResponse<UpdateSubmissionResponse> updateSubmission(int id,
+      public DocusealClientHttpResponse<SubmissionUpdateResult> updateSubmission(int id,
           UpdateSubmissionParams request) {
         return updateSubmission(id,request,null);
       }
@@ -433,7 +427,7 @@ public class RawDocusealClient {
       /**
        * The API endpoint allows you to update a submission: change its name, expiration date, and archive or unarchive it.
        */
-      public DocusealClientHttpResponse<UpdateSubmissionResponse> updateSubmission(int id,
+      public DocusealClientHttpResponse<SubmissionUpdateResult> updateSubmission(int id,
           UpdateSubmissionParams request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -461,7 +455,7 @@ public class RawDocusealClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
           ResponseBody responseBody = response.body();
           if (response.isSuccessful()) {
-            return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpdateSubmissionResponse.class), response);
+            return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionUpdateResult.class), response);
           }
           String responseBodyString = responseBody != null ? responseBody.string() : "{}";
           throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -474,14 +468,14 @@ public class RawDocusealClient {
       /**
        * The API endpoint allows you to archive a submission.
        */
-      public DocusealClientHttpResponse<ArchiveSubmissionResponse> archiveSubmission(int id) {
+      public DocusealClientHttpResponse<SubmissionArchiveResult> archiveSubmission(int id) {
         return archiveSubmission(id,ArchiveSubmissionParams.builder().build());
       }
 
       /**
        * The API endpoint allows you to archive a submission.
        */
-      public DocusealClientHttpResponse<ArchiveSubmissionResponse> archiveSubmission(int id,
+      public DocusealClientHttpResponse<SubmissionArchiveResult> archiveSubmission(int id,
           ArchiveSubmissionParams request) {
         return archiveSubmission(id,request,null);
       }
@@ -489,7 +483,7 @@ public class RawDocusealClient {
       /**
        * The API endpoint allows you to archive a submission.
        */
-      public DocusealClientHttpResponse<ArchiveSubmissionResponse> archiveSubmission(int id,
+      public DocusealClientHttpResponse<SubmissionArchiveResult> archiveSubmission(int id,
           ArchiveSubmissionParams request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -509,7 +503,7 @@ public class RawDocusealClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
           ResponseBody responseBody = response.body();
           if (response.isSuccessful()) {
-            return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ArchiveSubmissionResponse.class), response);
+            return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionArchiveResult.class), response);
           }
           String responseBodyString = responseBody != null ? responseBody.string() : "{}";
           throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -522,24 +516,23 @@ public class RawDocusealClient {
       /**
        * This endpoint returns a list of partially filled documents for a submission. If the submission has been completed, the final signed documents are returned.
        */
-      public DocusealClientHttpResponse<GetSubmissionDocumentsResponse> getSubmissionDocuments(
-          int id) {
+      public DocusealClientHttpResponse<SubmissionDocuments> getSubmissionDocuments(int id) {
         return getSubmissionDocuments(id,GetSubmissionDocumentsParams.builder().build());
       }
 
       /**
        * This endpoint returns a list of partially filled documents for a submission. If the submission has been completed, the final signed documents are returned.
        */
-      public DocusealClientHttpResponse<GetSubmissionDocumentsResponse> getSubmissionDocuments(
-          int id, GetSubmissionDocumentsParams request) {
+      public DocusealClientHttpResponse<SubmissionDocuments> getSubmissionDocuments(int id,
+          GetSubmissionDocumentsParams request) {
         return getSubmissionDocuments(id,request,null);
       }
 
       /**
        * This endpoint returns a list of partially filled documents for a submission. If the submission has been completed, the final signed documents are returned.
        */
-      public DocusealClientHttpResponse<GetSubmissionDocumentsResponse> getSubmissionDocuments(
-          int id, GetSubmissionDocumentsParams request, RequestOptions requestOptions) {
+      public DocusealClientHttpResponse<SubmissionDocuments> getSubmissionDocuments(int id,
+          GetSubmissionDocumentsParams request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
           .addPathSegments("submissions")
@@ -560,55 +553,7 @@ public class RawDocusealClient {
           try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-              return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetSubmissionDocumentsResponse.class), response);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
-          }
-          catch (IOException e) {
-            throw new DocusealClientException("Network error executing HTTP request", e);
-          }
-        }
-
-        /**
-         * This API endpoint allows you to create submissions for a document template and send them to the specified email addresses. This is a simplified version of the POST /submissions API to be used with Zapier or other automation tools.
-         */
-        public DocusealClientHttpResponse<List<CreateSubmissionsFromEmailsResponseSubmitter>> createSubmissionsFromEmails(
-            CreateSubmissionsFromEmailsParams request) {
-          return createSubmissionsFromEmails(request,null);
-        }
-
-        /**
-         * This API endpoint allows you to create submissions for a document template and send them to the specified email addresses. This is a simplified version of the POST /submissions API to be used with Zapier or other automation tools.
-         */
-        public DocusealClientHttpResponse<List<CreateSubmissionsFromEmailsResponseSubmitter>> createSubmissionsFromEmails(
-            CreateSubmissionsFromEmailsParams request, RequestOptions requestOptions) {
-          HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
-
-            .addPathSegments("submissions/emails")
-            .build();
-          RequestBody body;
-          try {
-            body = RequestBody.create(ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-          }
-          catch(JsonProcessingException e) {
-            throw new DocusealClientException("Failed to serialize request", e);
-          }
-          Request okhttpRequest = new Request.Builder()
-            .url(httpUrl)
-            .method("POST", body)
-            .headers(Headers.of(clientOptions.headers(requestOptions)))
-            .addHeader("Content-Type", "application/json")
-            .addHeader("Accept", "application/json")
-            .build();
-          OkHttpClient client = clientOptions.httpClient();
-          if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-          }
-          try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-              return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), new TypeReference<List<CreateSubmissionsFromEmailsResponseSubmitter>>() {}), response);
+              return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionDocuments.class), response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -621,7 +566,7 @@ public class RawDocusealClient {
         /**
          * The API endpoint provides the functionality to create one-off submission request from a PDF. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.pdf&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/fieldtags.pdf&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
          */
-        public DocusealClientHttpResponse<CreateSubmissionFromPdfResponse> createSubmissionFromPdf(
+        public DocusealClientHttpResponse<SubmissionCreateResult> createSubmissionFromPdf(
             CreateSubmissionFromPdfParams request) {
           return createSubmissionFromPdf(request,null);
         }
@@ -629,7 +574,7 @@ public class RawDocusealClient {
         /**
          * The API endpoint provides the functionality to create one-off submission request from a PDF. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.pdf&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/fieldtags.pdf&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
          */
-        public DocusealClientHttpResponse<CreateSubmissionFromPdfResponse> createSubmissionFromPdf(
+        public DocusealClientHttpResponse<SubmissionCreateResult> createSubmissionFromPdf(
             CreateSubmissionFromPdfParams request, RequestOptions requestOptions) {
           HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -656,7 +601,7 @@ public class RawDocusealClient {
           try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-              return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateSubmissionFromPdfResponse.class), response);
+              return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionCreateResult.class), response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -669,7 +614,7 @@ public class RawDocusealClient {
         /**
          * The API endpoint provides functionality to create a one-off submission request from a DOCX file with dynamic content variables. Use &lt;code&gt;[[variable_name]]&lt;/code&gt; text tags to define dynamic content variables in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/demo_template.docx&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/demo_template.docx&lt;/a&gt; for the specific text variable syntax, including dynamic content tables and lists. You can also use the &lt;code&gt;{{signature}}&lt;/code&gt; field syntax to define fillable fields, as in a PDF.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-dynamic-content-variables-in-docx-to-create-personalized-documents&quot; class=&quot;link&quot;&gt;Use dynamic content variables in DOCX to create personalized documents&lt;/a&gt;
          */
-        public DocusealClientHttpResponse<CreateSubmissionFromPdfResponse> createSubmissionFromDocx(
+        public DocusealClientHttpResponse<SubmissionCreateResult> createSubmissionFromDocx(
             CreateSubmissionFromDocxParams request) {
           return createSubmissionFromDocx(request,null);
         }
@@ -677,7 +622,7 @@ public class RawDocusealClient {
         /**
          * The API endpoint provides functionality to create a one-off submission request from a DOCX file with dynamic content variables. Use &lt;code&gt;[[variable_name]]&lt;/code&gt; text tags to define dynamic content variables in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/demo_template.docx&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/demo_template.docx&lt;/a&gt; for the specific text variable syntax, including dynamic content tables and lists. You can also use the &lt;code&gt;{{signature}}&lt;/code&gt; field syntax to define fillable fields, as in a PDF.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-dynamic-content-variables-in-docx-to-create-personalized-documents&quot; class=&quot;link&quot;&gt;Use dynamic content variables in DOCX to create personalized documents&lt;/a&gt;
          */
-        public DocusealClientHttpResponse<CreateSubmissionFromPdfResponse> createSubmissionFromDocx(
+        public DocusealClientHttpResponse<SubmissionCreateResult> createSubmissionFromDocx(
             CreateSubmissionFromDocxParams request, RequestOptions requestOptions) {
           HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -704,7 +649,7 @@ public class RawDocusealClient {
           try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-              return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateSubmissionFromPdfResponse.class), response);
+              return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionCreateResult.class), response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -717,7 +662,7 @@ public class RawDocusealClient {
         /**
          * This API endpoint allows you to create a one-off submission request document using the provided HTML content, with special field tags rendered as a fillable and signable form.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
          */
-        public DocusealClientHttpResponse<CreateSubmissionFromPdfResponse> createSubmissionFromHtml(
+        public DocusealClientHttpResponse<SubmissionCreateResult> createSubmissionFromHtml(
             CreateSubmissionFromHtmlParams request) {
           return createSubmissionFromHtml(request,null);
         }
@@ -725,7 +670,7 @@ public class RawDocusealClient {
         /**
          * This API endpoint allows you to create a one-off submission request document using the provided HTML content, with special field tags rendered as a fillable and signable form.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
          */
-        public DocusealClientHttpResponse<CreateSubmissionFromPdfResponse> createSubmissionFromHtml(
+        public DocusealClientHttpResponse<SubmissionCreateResult> createSubmissionFromHtml(
             CreateSubmissionFromHtmlParams request, RequestOptions requestOptions) {
           HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -752,7 +697,7 @@ public class RawDocusealClient {
           try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-              return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateSubmissionFromPdfResponse.class), response);
+              return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionCreateResult.class), response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -765,14 +710,14 @@ public class RawDocusealClient {
         /**
          * The API endpoint provides functionality to retrieve information about a submitter, along with the submitter documents and field values.
          */
-        public DocusealClientHttpResponse<GetSubmitterResponse> getSubmitter(int id) {
+        public DocusealClientHttpResponse<Submitter> getSubmitter(int id) {
           return getSubmitter(id,GetSubmitterParams.builder().build());
         }
 
         /**
          * The API endpoint provides functionality to retrieve information about a submitter, along with the submitter documents and field values.
          */
-        public DocusealClientHttpResponse<GetSubmitterResponse> getSubmitter(int id,
+        public DocusealClientHttpResponse<Submitter> getSubmitter(int id,
             GetSubmitterParams request) {
           return getSubmitter(id,request,null);
         }
@@ -780,7 +725,7 @@ public class RawDocusealClient {
         /**
          * The API endpoint provides functionality to retrieve information about a submitter, along with the submitter documents and field values.
          */
-        public DocusealClientHttpResponse<GetSubmitterResponse> getSubmitter(int id,
+        public DocusealClientHttpResponse<Submitter> getSubmitter(int id,
             GetSubmitterParams request, RequestOptions requestOptions) {
           HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -800,7 +745,7 @@ public class RawDocusealClient {
           try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-              return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetSubmitterResponse.class), response);
+              return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Submitter.class), response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -813,14 +758,14 @@ public class RawDocusealClient {
         /**
          * The API endpoint allows you to update submitter details, pre-fill or update field values and re-send emails.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api#automatically_sign_documents_via_api&quot; class=&quot;link&quot;&gt;Automatically sign documents via API&lt;/a&gt;
          */
-        public DocusealClientHttpResponse<UpdateSubmitterResponse> updateSubmitter(int id) {
+        public DocusealClientHttpResponse<SubmitterUpdateResult> updateSubmitter(int id) {
           return updateSubmitter(id,UpdateSubmitterParams.builder().build());
         }
 
         /**
          * The API endpoint allows you to update submitter details, pre-fill or update field values and re-send emails.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api#automatically_sign_documents_via_api&quot; class=&quot;link&quot;&gt;Automatically sign documents via API&lt;/a&gt;
          */
-        public DocusealClientHttpResponse<UpdateSubmitterResponse> updateSubmitter(int id,
+        public DocusealClientHttpResponse<SubmitterUpdateResult> updateSubmitter(int id,
             UpdateSubmitterParams request) {
           return updateSubmitter(id,request,null);
         }
@@ -828,7 +773,7 @@ public class RawDocusealClient {
         /**
          * The API endpoint allows you to update submitter details, pre-fill or update field values and re-send emails.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api#automatically_sign_documents_via_api&quot; class=&quot;link&quot;&gt;Automatically sign documents via API&lt;/a&gt;
          */
-        public DocusealClientHttpResponse<UpdateSubmitterResponse> updateSubmitter(int id,
+        public DocusealClientHttpResponse<SubmitterUpdateResult> updateSubmitter(int id,
             UpdateSubmitterParams request, RequestOptions requestOptions) {
           HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -856,7 +801,7 @@ public class RawDocusealClient {
           try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-              return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UpdateSubmitterResponse.class), response);
+              return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmitterUpdateResult.class), response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -869,14 +814,14 @@ public class RawDocusealClient {
         /**
          * The API endpoint provides the ability to retrieve a list of submitters.
          */
-        public DocusealClientHttpResponse<GetSubmittersResponse> getSubmitters() {
+        public DocusealClientHttpResponse<SubmitterList> getSubmitters() {
           return getSubmitters(GetSubmittersParams.builder().build());
         }
 
         /**
          * The API endpoint provides the ability to retrieve a list of submitters.
          */
-        public DocusealClientHttpResponse<GetSubmittersResponse> getSubmitters(
+        public DocusealClientHttpResponse<SubmitterList> getSubmitters(
             GetSubmittersParams request) {
           return getSubmitters(request,null);
         }
@@ -884,8 +829,8 @@ public class RawDocusealClient {
         /**
          * The API endpoint provides the ability to retrieve a list of submitters.
          */
-        public DocusealClientHttpResponse<GetSubmittersResponse> getSubmitters(
-            GetSubmittersParams request, RequestOptions requestOptions) {
+        public DocusealClientHttpResponse<SubmitterList> getSubmitters(GetSubmittersParams request,
+            RequestOptions requestOptions) {
           HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
             .addPathSegments("submitters");if (request.getSubmissionId().isPresent()) {
@@ -928,7 +873,7 @@ public class RawDocusealClient {
             try (Response response = client.newCall(okhttpRequest).execute()) {
               ResponseBody responseBody = response.body();
               if (response.isSuccessful()) {
-                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetSubmittersResponse.class), response);
+                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmitterList.class), response);
               }
               String responseBodyString = responseBody != null ? responseBody.string() : "{}";
               throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -941,23 +886,23 @@ public class RawDocusealClient {
           /**
            * The API endpoint allows you to add, remove or replace documents in the template with provided PDF/DOCX file or HTML content.
            */
-          public DocusealClientHttpResponse<GetTemplateResponse> addDocumentToTemplate(int id) {
-            return addDocumentToTemplate(id,AddDocumentToTemplateParams.builder().build());
+          public DocusealClientHttpResponse<Template> updateTemplateDocuments(int id) {
+            return updateTemplateDocuments(id,UpdateTemplateDocumentsParams.builder().build());
           }
 
           /**
            * The API endpoint allows you to add, remove or replace documents in the template with provided PDF/DOCX file or HTML content.
            */
-          public DocusealClientHttpResponse<GetTemplateResponse> addDocumentToTemplate(int id,
-              AddDocumentToTemplateParams request) {
-            return addDocumentToTemplate(id,request,null);
+          public DocusealClientHttpResponse<Template> updateTemplateDocuments(int id,
+              UpdateTemplateDocumentsParams request) {
+            return updateTemplateDocuments(id,request,null);
           }
 
           /**
            * The API endpoint allows you to add, remove or replace documents in the template with provided PDF/DOCX file or HTML content.
            */
-          public DocusealClientHttpResponse<GetTemplateResponse> addDocumentToTemplate(int id,
-              AddDocumentToTemplateParams request, RequestOptions requestOptions) {
+          public DocusealClientHttpResponse<Template> updateTemplateDocuments(int id,
+              UpdateTemplateDocumentsParams request, RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
               .addPathSegments("templates")
@@ -985,7 +930,7 @@ public class RawDocusealClient {
             try (Response response = client.newCall(okhttpRequest).execute()) {
               ResponseBody responseBody = response.body();
               if (response.isSuccessful()) {
-                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateResponse.class), response);
+                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Template.class), response);
               }
               String responseBodyString = responseBody != null ? responseBody.string() : "{}";
               throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -998,14 +943,14 @@ public class RawDocusealClient {
           /**
            * The API endpoint allows you to clone an existing template into a new template.
            */
-          public DocusealClientHttpResponse<GetTemplateResponse> cloneTemplate(int id) {
+          public DocusealClientHttpResponse<Template> cloneTemplate(int id) {
             return cloneTemplate(id,CloneTemplateParams.builder().build());
           }
 
           /**
            * The API endpoint allows you to clone an existing template into a new template.
            */
-          public DocusealClientHttpResponse<GetTemplateResponse> cloneTemplate(int id,
+          public DocusealClientHttpResponse<Template> cloneTemplate(int id,
               CloneTemplateParams request) {
             return cloneTemplate(id,request,null);
           }
@@ -1013,7 +958,7 @@ public class RawDocusealClient {
           /**
            * The API endpoint allows you to clone an existing template into a new template.
            */
-          public DocusealClientHttpResponse<GetTemplateResponse> cloneTemplate(int id,
+          public DocusealClientHttpResponse<Template> cloneTemplate(int id,
               CloneTemplateParams request, RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -1042,7 +987,7 @@ public class RawDocusealClient {
             try (Response response = client.newCall(okhttpRequest).execute()) {
               ResponseBody responseBody = response.body();
               if (response.isSuccessful()) {
-                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateResponse.class), response);
+                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Template.class), response);
               }
               String responseBodyString = responseBody != null ? responseBody.string() : "{}";
               throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -1055,7 +1000,14 @@ public class RawDocusealClient {
           /**
            * The API endpoint provides the functionality to seamlessly generate a PDF document template by utilizing the provided HTML content while incorporating pre-defined fields.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
            */
-          public DocusealClientHttpResponse<GetTemplateResponse> createTemplateFromHtml(
+          public DocusealClientHttpResponse<Template> createTemplateFromHtml() {
+            return createTemplateFromHtml(CreateTemplateFromHtmlParams.builder().build());
+          }
+
+          /**
+           * The API endpoint provides the functionality to seamlessly generate a PDF document template by utilizing the provided HTML content while incorporating pre-defined fields.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
+           */
+          public DocusealClientHttpResponse<Template> createTemplateFromHtml(
               CreateTemplateFromHtmlParams request) {
             return createTemplateFromHtml(request,null);
           }
@@ -1063,7 +1015,7 @@ public class RawDocusealClient {
           /**
            * The API endpoint provides the functionality to seamlessly generate a PDF document template by utilizing the provided HTML content while incorporating pre-defined fields.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
            */
-          public DocusealClientHttpResponse<GetTemplateResponse> createTemplateFromHtml(
+          public DocusealClientHttpResponse<Template> createTemplateFromHtml(
               CreateTemplateFromHtmlParams request, RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -1090,7 +1042,7 @@ public class RawDocusealClient {
             try (Response response = client.newCall(okhttpRequest).execute()) {
               ResponseBody responseBody = response.body();
               if (response.isSuccessful()) {
-                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateResponse.class), response);
+                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Template.class), response);
               }
               String responseBodyString = responseBody != null ? responseBody.string() : "{}";
               throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -1103,7 +1055,7 @@ public class RawDocusealClient {
           /**
            * The API endpoint provides the functionality to create a fillable document template for an existing Microsoft Word document. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.docx&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot; &gt;https://www.docuseal.com/examples/fieldtags.docx&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
            */
-          public DocusealClientHttpResponse<GetTemplateResponse> createTemplateFromDocx(
+          public DocusealClientHttpResponse<Template> createTemplateFromDocx(
               CreateTemplateFromDocxParams request) {
             return createTemplateFromDocx(request,null);
           }
@@ -1111,7 +1063,7 @@ public class RawDocusealClient {
           /**
            * The API endpoint provides the functionality to create a fillable document template for an existing Microsoft Word document. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.docx&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot; &gt;https://www.docuseal.com/examples/fieldtags.docx&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
            */
-          public DocusealClientHttpResponse<GetTemplateResponse> createTemplateFromDocx(
+          public DocusealClientHttpResponse<Template> createTemplateFromDocx(
               CreateTemplateFromDocxParams request, RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -1138,7 +1090,7 @@ public class RawDocusealClient {
             try (Response response = client.newCall(okhttpRequest).execute()) {
               ResponseBody responseBody = response.body();
               if (response.isSuccessful()) {
-                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateResponse.class), response);
+                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Template.class), response);
               }
               String responseBodyString = responseBody != null ? responseBody.string() : "{}";
               throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -1151,7 +1103,7 @@ public class RawDocusealClient {
           /**
            * The API endpoint provides the functionality to create a fillable document template for a PDF file. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.pdf&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/fieldtags.pdf&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
            */
-          public DocusealClientHttpResponse<GetTemplateResponse> createTemplateFromPdf(
+          public DocusealClientHttpResponse<Template> createTemplateFromPdf(
               CreateTemplateFromPdfParams request) {
             return createTemplateFromPdf(request,null);
           }
@@ -1159,7 +1111,7 @@ public class RawDocusealClient {
           /**
            * The API endpoint provides the functionality to create a fillable document template for a PDF file. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.pdf&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/fieldtags.pdf&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
            */
-          public DocusealClientHttpResponse<GetTemplateResponse> createTemplateFromPdf(
+          public DocusealClientHttpResponse<Template> createTemplateFromPdf(
               CreateTemplateFromPdfParams request, RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -1186,7 +1138,7 @@ public class RawDocusealClient {
             try (Response response = client.newCall(okhttpRequest).execute()) {
               ResponseBody responseBody = response.body();
               if (response.isSuccessful()) {
-                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateResponse.class), response);
+                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Template.class), response);
               }
               String responseBodyString = responseBody != null ? responseBody.string() : "{}";
               throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -1199,16 +1151,15 @@ public class RawDocusealClient {
           /**
            * The API endpoint allows you to merge multiple templates with documents and fields into a new combined template.
            */
-          public DocusealClientHttpResponse<GetTemplateResponse> mergeTemplate(
-              MergeTemplateParams request) {
+          public DocusealClientHttpResponse<Template> mergeTemplate(MergeTemplateParams request) {
             return mergeTemplate(request,null);
           }
 
           /**
            * The API endpoint allows you to merge multiple templates with documents and fields into a new combined template.
            */
-          public DocusealClientHttpResponse<GetTemplateResponse> mergeTemplate(
-              MergeTemplateParams request, RequestOptions requestOptions) {
+          public DocusealClientHttpResponse<Template> mergeTemplate(MergeTemplateParams request,
+              RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
               .addPathSegments("templates/merge")
@@ -1234,7 +1185,7 @@ public class RawDocusealClient {
             try (Response response = client.newCall(okhttpRequest).execute()) {
               ResponseBody responseBody = response.body();
               if (response.isSuccessful()) {
-                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateResponse.class), response);
+                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Template.class), response);
               }
               String responseBodyString = responseBody != null ? responseBody.string() : "{}";
               throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -1247,7 +1198,7 @@ public class RawDocusealClient {
           /**
            * This API endpoint allows you to create signature requests (submissions) for a document template and send them to the specified submitters (signers).&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/send-documents-for-signature-via-api&quot; class=&quot;link&quot;&gt;Send documents for signature via API&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api&quot; class=&quot;link&quot;&gt;Pre-fill PDF document form fields with API&lt;/a&gt;
            */
-          public DocusealClientHttpResponse<CreateSubmissionResponse> createSubmission(
+          public DocusealClientHttpResponse<CreateSubmissionResult> createSubmission(
               CreateSubmissionParams request) {
             return createSubmission(request,null);
           }
@@ -1255,7 +1206,7 @@ public class RawDocusealClient {
           /**
            * This API endpoint allows you to create signature requests (submissions) for a document template and send them to the specified submitters (signers).&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/send-documents-for-signature-via-api&quot; class=&quot;link&quot;&gt;Send documents for signature via API&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api&quot; class=&quot;link&quot;&gt;Pre-fill PDF document form fields with API&lt;/a&gt;
            */
-          public DocusealClientHttpResponse<CreateSubmissionResponse> createSubmission(
+          public DocusealClientHttpResponse<CreateSubmissionResult> createSubmission(
               CreateSubmissionParams request, RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -1282,7 +1233,7 @@ public class RawDocusealClient {
             try (Response response = client.newCall(okhttpRequest).execute()) {
               ResponseBody responseBody = response.body();
               if (response.isSuccessful()) {
-                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateSubmissionResponse.class), response);
+                return new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateSubmissionResult.class), response);
               }
               String responseBodyString = responseBody != null ? responseBody.string() : "{}";
               throw new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);

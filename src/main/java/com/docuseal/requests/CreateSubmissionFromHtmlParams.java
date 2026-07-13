@@ -5,10 +5,10 @@
 package com.docuseal.requests;
 
 import com.docuseal.core.ObjectMappers;
-import com.docuseal.types.CreateSubmissionFromHtmlRequestDocument;
+import com.docuseal.types.CreateSubmissionFromHtmlDocumentParams;
 import com.docuseal.types.CreateSubmissionFromHtmlRequestOrder;
-import com.docuseal.types.CreateSubmissionFromPdfRequestMessage;
-import com.docuseal.types.CreateSubmissionFromPdfRequestSubmitter;
+import com.docuseal.types.CreateSubmissionMessageParams;
+import com.docuseal.types.CreateSubmissionSubmitterParams;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -51,11 +51,11 @@ public final class CreateSubmissionFromHtmlParams {
 
   private final Optional<List<Integer>> templateIds;
 
-  private final List<CreateSubmissionFromHtmlRequestDocument> documents;
+  private final List<CreateSubmissionFromHtmlDocumentParams> documents;
 
-  private final List<CreateSubmissionFromPdfRequestSubmitter> submitters;
+  private final List<CreateSubmissionSubmitterParams> submitters;
 
-  private final Optional<CreateSubmissionFromPdfRequestMessage> message;
+  private final Optional<CreateSubmissionMessageParams> message;
 
   private final Optional<Boolean> mergeDocuments;
 
@@ -65,9 +65,9 @@ public final class CreateSubmissionFromHtmlParams {
       Optional<Boolean> sendSms, Optional<CreateSubmissionFromHtmlRequestOrder> order,
       Optional<String> completedRedirectUrl, Optional<String> bccCompleted,
       Optional<String> replyTo, Optional<String> expireAt, Optional<List<Integer>> templateIds,
-      List<CreateSubmissionFromHtmlRequestDocument> documents,
-      List<CreateSubmissionFromPdfRequestSubmitter> submitters,
-      Optional<CreateSubmissionFromPdfRequestMessage> message, Optional<Boolean> mergeDocuments,
+      List<CreateSubmissionFromHtmlDocumentParams> documents,
+      List<CreateSubmissionSubmitterParams> submitters,
+      Optional<CreateSubmissionMessageParams> message, Optional<Boolean> mergeDocuments,
       Map<String, Object> additionalProperties) {
     this.name = name;
     this.sendEmail = sendEmail;
@@ -161,7 +161,7 @@ public final class CreateSubmissionFromHtmlParams {
    * @return The list of documents built from HTML. Can be used to create a submission with multiple documents.
    */
   @JsonProperty("documents")
-  public List<CreateSubmissionFromHtmlRequestDocument> getDocuments() {
+  public List<CreateSubmissionFromHtmlDocumentParams> getDocuments() {
     return documents;
   }
 
@@ -169,12 +169,12 @@ public final class CreateSubmissionFromHtmlParams {
    * @return The list of submitters for the submission.
    */
   @JsonProperty("submitters")
-  public List<CreateSubmissionFromPdfRequestSubmitter> getSubmitters() {
+  public List<CreateSubmissionSubmitterParams> getSubmitters() {
     return submitters;
   }
 
   @JsonProperty("message")
-  public Optional<CreateSubmissionFromPdfRequestMessage> getMessage() {
+  public Optional<CreateSubmissionMessageParams> getMessage() {
     return message;
   }
 
@@ -237,11 +237,11 @@ public final class CreateSubmissionFromHtmlParams {
 
     private Optional<List<Integer>> templateIds = Optional.empty();
 
-    private List<CreateSubmissionFromHtmlRequestDocument> documents = new ArrayList<>();
+    private List<CreateSubmissionFromHtmlDocumentParams> documents = new ArrayList<>();
 
-    private List<CreateSubmissionFromPdfRequestSubmitter> submitters = new ArrayList<>();
+    private List<CreateSubmissionSubmitterParams> submitters = new ArrayList<>();
 
-    private Optional<CreateSubmissionFromPdfRequestMessage> message = Optional.empty();
+    private Optional<CreateSubmissionMessageParams> message = Optional.empty();
 
     private Optional<Boolean> mergeDocuments = Optional.empty();
 
@@ -428,18 +428,18 @@ public final class CreateSubmissionFromHtmlParams {
         value = "documents",
         nulls = Nulls.SKIP
     )
-    public Builder documents(List<CreateSubmissionFromHtmlRequestDocument> documents) {
+    public Builder documents(List<CreateSubmissionFromHtmlDocumentParams> documents) {
       this.documents.clear();
       this.documents.addAll(documents);
       return this;
     }
 
-    public Builder addDocuments(CreateSubmissionFromHtmlRequestDocument documents) {
+    public Builder addDocuments(CreateSubmissionFromHtmlDocumentParams documents) {
       this.documents.add(documents);
       return this;
     }
 
-    public Builder addAllDocuments(List<CreateSubmissionFromHtmlRequestDocument> documents) {
+    public Builder addAllDocuments(List<CreateSubmissionFromHtmlDocumentParams> documents) {
       this.documents.addAll(documents);
       return this;
     }
@@ -451,18 +451,18 @@ public final class CreateSubmissionFromHtmlParams {
         value = "submitters",
         nulls = Nulls.SKIP
     )
-    public Builder submitters(List<CreateSubmissionFromPdfRequestSubmitter> submitters) {
+    public Builder submitters(List<CreateSubmissionSubmitterParams> submitters) {
       this.submitters.clear();
       this.submitters.addAll(submitters);
       return this;
     }
 
-    public Builder addSubmitters(CreateSubmissionFromPdfRequestSubmitter submitters) {
+    public Builder addSubmitters(CreateSubmissionSubmitterParams submitters) {
       this.submitters.add(submitters);
       return this;
     }
 
-    public Builder addAllSubmitters(List<CreateSubmissionFromPdfRequestSubmitter> submitters) {
+    public Builder addAllSubmitters(List<CreateSubmissionSubmitterParams> submitters) {
       this.submitters.addAll(submitters);
       return this;
     }
@@ -471,12 +471,12 @@ public final class CreateSubmissionFromHtmlParams {
         value = "message",
         nulls = Nulls.SKIP
     )
-    public Builder message(Optional<CreateSubmissionFromPdfRequestMessage> message) {
+    public Builder message(Optional<CreateSubmissionMessageParams> message) {
       this.message = message;
       return this;
     }
 
-    public Builder message(CreateSubmissionFromPdfRequestMessage message) {
+    public Builder message(CreateSubmissionMessageParams message) {
       this.message = Optional.ofNullable(message);
       return this;
     }
