@@ -16,7 +16,11 @@ public enum Currency {
 
   CAD("CAD"),
 
-  AUD("AUD");
+  AUD("AUD"),
+
+  CHF("CHF"),
+
+  SEK("SEK");
 
   private final String value;
 

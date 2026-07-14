@@ -10,15 +10,17 @@ patches on generator output.
 ## Architecture
 
 - `src/main/java/com/docuseal/` - generated, never edit by hand.
-  Regenerate with `./generate-types.sh [spec-path-or-url]` (Node.js, Docker
+  Regenerate with `./generate-types.rb [spec-path-or-url]` (Node.js, Docker
   and ruby required; the Fern generator runs locally in Docker, no account).
 - `fern/` - Fern workspace config: generator version pin and
   `package-prefix: com.docuseal`.
-- `generate-types.sh` preprocesses the spec with ruby: drops webhook
-  schemas and swaps the legacy `POST /submissions` for `/submissions/init`
-  (same request body, envelope response `{id, submitters, expired_at,
-  created_at}`) so `createSubmission` is generated against the endpoint the
-  other SDKs use. It also removes the junit test Fern bundles into `core/`.
+- `generate-types.rb` fetches the spec in SDK mode (`?sdk=true`; the
+  webhook drop, `/submissions/init` swap, tag strip and
+  `<OperationId>Params` naming happen on the Rails side), removes the junit
+  test Fern bundles into `core/` and appends
+  `permanentlyDeleteTemplate`/`permanentlyDeleteSubmission` (same DELETE
+  endpoints with `?permanently=true`; not expressible in OpenAPI next to
+  the archive operations) into the four generated client classes.
 - Client surface is resource-grouped: `client.templates().getTemplate(id)`,
   `client.submissions().createSubmission(...)` - method names come from
   spec operationIds.

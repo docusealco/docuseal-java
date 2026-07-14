@@ -371,6 +371,7 @@ Provides the functionality to seamlessly generate a PDF document template by uti
 [Create PDF document fillable form with HTML](https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api)
 
 
+
 ```java
 var template = client.createTemplateFromHtml(CreateTemplateFromHtmlParams.builder()
     .html("""
@@ -453,6 +454,17 @@ Allows you to archive a document template.
 
 ```java
 client.archiveTemplate(1000001);
+```
+
+### Configuring Timeouts
+
+Set timeouts (in seconds) to avoid hanging requests:
+
+```java
+DocusealClient client = DocusealClient.builder()
+    .apiKey(System.getenv("DOCUSEAL_API_KEY"))
+    .timeout(30)
+    .build();
 ```
 
 ## Support

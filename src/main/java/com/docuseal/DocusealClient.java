@@ -30,9 +30,9 @@ import com.docuseal.requests.UpdateTemplateDocumentsParams;
 import com.docuseal.requests.UpdateTemplateParams;
 import com.docuseal.types.Submission;
 import com.docuseal.types.SubmissionArchiveResult;
+import com.docuseal.types.SubmissionCreateOneoffResult;
 import com.docuseal.types.SubmissionCreateResult;
 import com.docuseal.types.SubmissionDocuments;
-import com.docuseal.types.SubmissionInitResult;
 import com.docuseal.types.SubmissionList;
 import com.docuseal.types.SubmissionUpdateResult;
 import com.docuseal.types.Submitter;
@@ -259,14 +259,15 @@ public class DocusealClient {
   /**
    * The API endpoint provides the functionality to create one-off submission request from a PDF. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.pdf&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/fieldtags.pdf&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
    */
-  public SubmissionCreateResult createSubmissionFromPdf(CreateSubmissionFromPdfParams request) {
+  public SubmissionCreateOneoffResult createSubmissionFromPdf(
+      CreateSubmissionFromPdfParams request) {
     return this.rawClient.createSubmissionFromPdf(request).body();
   }
 
   /**
    * The API endpoint provides the functionality to create one-off submission request from a PDF. Use &lt;code&gt;{{Field Name;role=Signer1;type=date}}&lt;/code&gt; text tags to define fillable fields in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/fieldtags.pdf&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/fieldtags.pdf&lt;/a&gt; for more text tag formats. Or specify the exact pixel coordinates of the document fields using <code>fields</code> param.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form&quot; class=&quot;link&quot;&gt;Use embedded text field tags to create a fillable form&lt;/a&gt;
    */
-  public SubmissionCreateResult createSubmissionFromPdf(CreateSubmissionFromPdfParams request,
+  public SubmissionCreateOneoffResult createSubmissionFromPdf(CreateSubmissionFromPdfParams request,
       RequestOptions requestOptions) {
     return this.rawClient.createSubmissionFromPdf(request, requestOptions).body();
   }
@@ -274,30 +275,32 @@ public class DocusealClient {
   /**
    * The API endpoint provides functionality to create a one-off submission request from a DOCX file with dynamic content variables. Use &lt;code&gt;[[variable_name]]&lt;/code&gt; text tags to define dynamic content variables in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/demo_template.docx&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/demo_template.docx&lt;/a&gt; for the specific text variable syntax, including dynamic content tables and lists. You can also use the &lt;code&gt;{{signature}}&lt;/code&gt; field syntax to define fillable fields, as in a PDF.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-dynamic-content-variables-in-docx-to-create-personalized-documents&quot; class=&quot;link&quot;&gt;Use dynamic content variables in DOCX to create personalized documents&lt;/a&gt;
    */
-  public SubmissionCreateResult createSubmissionFromDocx(CreateSubmissionFromDocxParams request) {
+  public SubmissionCreateOneoffResult createSubmissionFromDocx(
+      CreateSubmissionFromDocxParams request) {
     return this.rawClient.createSubmissionFromDocx(request).body();
   }
 
   /**
    * The API endpoint provides functionality to create a one-off submission request from a DOCX file with dynamic content variables. Use &lt;code&gt;[[variable_name]]&lt;/code&gt; text tags to define dynamic content variables in the document. See &lt;a href=&quot;https://www.docuseal.com/examples/demo_template.docx&quot; target=&quot;_blank&quot; class=&quot;link font-bold&quot;&gt;https://www.docuseal.com/examples/demo_template.docx&lt;/a&gt; for the specific text variable syntax, including dynamic content tables and lists. You can also use the &lt;code&gt;{{signature}}&lt;/code&gt; field syntax to define fillable fields, as in a PDF.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/use-dynamic-content-variables-in-docx-to-create-personalized-documents&quot; class=&quot;link&quot;&gt;Use dynamic content variables in DOCX to create personalized documents&lt;/a&gt;
    */
-  public SubmissionCreateResult createSubmissionFromDocx(CreateSubmissionFromDocxParams request,
-      RequestOptions requestOptions) {
+  public SubmissionCreateOneoffResult createSubmissionFromDocx(
+      CreateSubmissionFromDocxParams request, RequestOptions requestOptions) {
     return this.rawClient.createSubmissionFromDocx(request, requestOptions).body();
   }
 
   /**
    * This API endpoint allows you to create a one-off submission request document using the provided HTML content, with special field tags rendered as a fillable and signable form.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
    */
-  public SubmissionCreateResult createSubmissionFromHtml(CreateSubmissionFromHtmlParams request) {
+  public SubmissionCreateOneoffResult createSubmissionFromHtml(
+      CreateSubmissionFromHtmlParams request) {
     return this.rawClient.createSubmissionFromHtml(request).body();
   }
 
   /**
    * This API endpoint allows you to create a one-off submission request document using the provided HTML content, with special field tags rendered as a fillable and signable form.&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api&quot; class=&quot;link&quot;&gt;Create PDF document fillable form with HTML&lt;/a&gt;
    */
-  public SubmissionCreateResult createSubmissionFromHtml(CreateSubmissionFromHtmlParams request,
-      RequestOptions requestOptions) {
+  public SubmissionCreateOneoffResult createSubmissionFromHtml(
+      CreateSubmissionFromHtmlParams request, RequestOptions requestOptions) {
     return this.rawClient.createSubmissionFromHtml(request, requestOptions).body();
   }
 
@@ -478,19 +481,46 @@ public class DocusealClient {
   /**
    * This API endpoint allows you to create signature requests (submissions) for a document template and send them to the specified submitters (signers).&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/send-documents-for-signature-via-api&quot; class=&quot;link&quot;&gt;Send documents for signature via API&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api&quot; class=&quot;link&quot;&gt;Pre-fill PDF document form fields with API&lt;/a&gt;
    */
-  public SubmissionInitResult createSubmission(CreateSubmissionParams request) {
+  public SubmissionCreateResult createSubmission(CreateSubmissionParams request) {
     return this.rawClient.createSubmission(request).body();
   }
 
   /**
    * This API endpoint allows you to create signature requests (submissions) for a document template and send them to the specified submitters (signers).&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/send-documents-for-signature-via-api&quot; class=&quot;link&quot;&gt;Send documents for signature via API&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api&quot; class=&quot;link&quot;&gt;Pre-fill PDF document form fields with API&lt;/a&gt;
    */
-  public SubmissionInitResult createSubmission(CreateSubmissionParams request,
+  public SubmissionCreateResult createSubmission(CreateSubmissionParams request,
       RequestOptions requestOptions) {
     return this.rawClient.createSubmission(request, requestOptions).body();
   }
 
   public static DocusealClientBuilder builder() {
     return new DocusealClientBuilder();
+  }
+  /**
+   * The API endpoint allows you to permanently delete a document template and all of its submissions.
+   */
+  public TemplateArchiveResult permanentlyDeleteTemplate(int id) {
+    return this.rawClient.permanentlyDeleteTemplate(id).body();
+  }
+
+  /**
+   * The API endpoint allows you to permanently delete a document template and all of its submissions.
+   */
+  public TemplateArchiveResult permanentlyDeleteTemplate(int id, RequestOptions requestOptions) {
+    return this.rawClient.permanentlyDeleteTemplate(id, requestOptions).body();
+  }
+
+  /**
+   * The API endpoint allows you to permanently delete a submission and all of its submitters and documents.
+   */
+  public SubmissionArchiveResult permanentlyDeleteSubmission(int id) {
+    return this.rawClient.permanentlyDeleteSubmission(id).body();
+  }
+
+  /**
+   * The API endpoint allows you to permanently delete a submission and all of its submitters and documents.
+   */
+  public SubmissionArchiveResult permanentlyDeleteSubmission(int id, RequestOptions requestOptions) {
+    return this.rawClient.permanentlyDeleteSubmission(id, requestOptions).body();
   }
 }

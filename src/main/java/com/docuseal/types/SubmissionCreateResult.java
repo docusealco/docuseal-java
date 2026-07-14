@@ -33,19 +33,7 @@ import org.jetbrains.annotations.NotNull;
 public final class SubmissionCreateResult {
   private final int id;
 
-  private final String name;
-
   private final List<SubmitterCreateResult> submitters;
-
-  private final SubmissionSource source;
-
-  private final SubmittersOrder submittersOrder;
-
-  private final SubmissionStatus status;
-
-  private final Optional<List<SchemaDocument>> schema;
-
-  private final Optional<List<Field>> fields;
 
   private final Optional<String> expireAt;
 
@@ -53,18 +41,10 @@ public final class SubmissionCreateResult {
 
   private final Map<String, Object> additionalProperties;
 
-  private SubmissionCreateResult(int id, String name, List<SubmitterCreateResult> submitters,
-      SubmissionSource source, SubmittersOrder submittersOrder, SubmissionStatus status,
-      Optional<List<SchemaDocument>> schema, Optional<List<Field>> fields,
+  private SubmissionCreateResult(int id, List<SubmitterCreateResult> submitters,
       Optional<String> expireAt, String createdAt, Map<String, Object> additionalProperties) {
     this.id = id;
-    this.name = name;
     this.submitters = submitters;
-    this.source = source;
-    this.submittersOrder = submittersOrder;
-    this.status = status;
-    this.schema = schema;
-    this.fields = fields;
     this.expireAt = expireAt;
     this.createdAt = createdAt;
     this.additionalProperties = additionalProperties;
@@ -79,15 +59,7 @@ public final class SubmissionCreateResult {
   }
 
   /**
-   * @return Submission name.
-   */
-  @JsonProperty("name")
-  public String getName() {
-    return name;
-  }
-
-  /**
-   * @return The list of submitters.
+   * @return The list of created submitters.
    */
   @JsonProperty("submitters")
   public List<SubmitterCreateResult> getSubmitters() {
@@ -95,47 +67,7 @@ public final class SubmissionCreateResult {
   }
 
   /**
-   * @return The source of the submission.
-   */
-  @JsonProperty("source")
-  public SubmissionSource getSource() {
-    return source;
-  }
-
-  /**
-   * @return The order of submitters.
-   */
-  @JsonProperty("submitters_order")
-  public SubmittersOrder getSubmittersOrder() {
-    return submittersOrder;
-  }
-
-  /**
-   * @return The status of the submission.
-   */
-  @JsonProperty("status")
-  public SubmissionStatus getStatus() {
-    return status;
-  }
-
-  /**
-   * @return The one-off submission document files.
-   */
-  @JsonProperty("schema")
-  public Optional<List<SchemaDocument>> getSchema() {
-    return schema;
-  }
-
-  /**
-   * @return List of fields to be filled in the one-off submission.
-   */
-  @JsonProperty("fields")
-  public Optional<List<Field>> getFields() {
-    return fields;
-  }
-
-  /**
-   * @return The date and time when the submission will expire and no longer be available for signing.
+   * @return The date and time when the submission expires.
    */
   @JsonIgnore
   public Optional<String> getExpireAt() {
@@ -174,12 +106,12 @@ public final class SubmissionCreateResult {
   }
 
   private boolean equalTo(SubmissionCreateResult other) {
-    return id == other.id && name.equals(other.name) && submitters.equals(other.submitters) && source.equals(other.source) && submittersOrder.equals(other.submittersOrder) && status.equals(other.status) && schema.equals(other.schema) && fields.equals(other.fields) && expireAt.equals(other.expireAt) && createdAt.equals(other.createdAt);
+    return id == other.id && submitters.equals(other.submitters) && expireAt.equals(other.expireAt) && createdAt.equals(other.createdAt);
   }
 
   @java.lang.Override
   public int hashCode() {
-    return Objects.hash(this.id, this.name, this.submitters, this.source, this.submittersOrder, this.status, this.schema, this.fields, this.expireAt, this.createdAt);
+    return Objects.hash(this.id, this.submitters, this.expireAt, this.createdAt);
   }
 
   @java.lang.Override
@@ -195,37 +127,9 @@ public final class SubmissionCreateResult {
     /**
      * <p>Submission unique ID number.</p>
      */
-    NameStage id(int id);
+    CreatedAtStage id(int id);
 
     Builder from(SubmissionCreateResult other);
-  }
-
-  public interface NameStage {
-    /**
-     * <p>Submission name.</p>
-     */
-    SourceStage name(@NotNull String name);
-  }
-
-  public interface SourceStage {
-    /**
-     * <p>The source of the submission.</p>
-     */
-    SubmittersOrderStage source(@NotNull SubmissionSource source);
-  }
-
-  public interface SubmittersOrderStage {
-    /**
-     * <p>The order of submitters.</p>
-     */
-    StatusStage submittersOrder(@NotNull SubmittersOrder submittersOrder);
-  }
-
-  public interface StatusStage {
-    /**
-     * <p>The status of the submission.</p>
-     */
-    CreatedAtStage status(@NotNull SubmissionStatus status);
   }
 
   public interface CreatedAtStage {
@@ -239,7 +143,7 @@ public final class SubmissionCreateResult {
     SubmissionCreateResult build();
 
     /**
-     * <p>The list of submitters.</p>
+     * <p>The list of created submitters.</p>
      */
     _FinalStage submitters(List<SubmitterCreateResult> submitters);
 
@@ -248,21 +152,7 @@ public final class SubmissionCreateResult {
     _FinalStage addAllSubmitters(List<SubmitterCreateResult> submitters);
 
     /**
-     * <p>The one-off submission document files.</p>
-     */
-    _FinalStage schema(Optional<List<SchemaDocument>> schema);
-
-    _FinalStage schema(List<SchemaDocument> schema);
-
-    /**
-     * <p>List of fields to be filled in the one-off submission.</p>
-     */
-    _FinalStage fields(Optional<List<Field>> fields);
-
-    _FinalStage fields(List<Field> fields);
-
-    /**
-     * <p>The date and time when the submission will expire and no longer be available for signing.</p>
+     * <p>The date and time when the submission expires.</p>
      */
     _FinalStage expireAt(Optional<String> expireAt);
 
@@ -274,24 +164,12 @@ public final class SubmissionCreateResult {
   @JsonIgnoreProperties(
       ignoreUnknown = true
   )
-  public static final class Builder implements IdStage, NameStage, SourceStage, SubmittersOrderStage, StatusStage, CreatedAtStage, _FinalStage {
+  public static final class Builder implements IdStage, CreatedAtStage, _FinalStage {
     private int id;
-
-    private String name;
-
-    private SubmissionSource source;
-
-    private SubmittersOrder submittersOrder;
-
-    private SubmissionStatus status;
 
     private String createdAt;
 
     private Optional<String> expireAt = Optional.empty();
-
-    private Optional<List<Field>> fields = Optional.empty();
-
-    private Optional<List<SchemaDocument>> schema = Optional.empty();
 
     private List<SubmitterCreateResult> submitters = new ArrayList<>();
 
@@ -304,13 +182,7 @@ public final class SubmissionCreateResult {
     @java.lang.Override
     public Builder from(SubmissionCreateResult other) {
       id(other.getId());
-      name(other.getName());
       submitters(other.getSubmitters());
-      source(other.getSource());
-      submittersOrder(other.getSubmittersOrder());
-      status(other.getStatus());
-      schema(other.getSchema());
-      fields(other.getFields());
       expireAt(other.getExpireAt());
       createdAt(other.getCreatedAt());
       return this;
@@ -323,56 +195,8 @@ public final class SubmissionCreateResult {
      */
     @java.lang.Override
     @JsonSetter("id")
-    public NameStage id(int id) {
+    public CreatedAtStage id(int id) {
       this.id = id;
-      return this;
-    }
-
-    /**
-     * <p>Submission name.</p>
-     * <p>Submission name.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    @JsonSetter("name")
-    public SourceStage name(@NotNull String name) {
-      this.name = Objects.requireNonNull(name, "name must not be null");
-      return this;
-    }
-
-    /**
-     * <p>The source of the submission.</p>
-     * <p>The source of the submission.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    @JsonSetter("source")
-    public SubmittersOrderStage source(@NotNull SubmissionSource source) {
-      this.source = Objects.requireNonNull(source, "source must not be null");
-      return this;
-    }
-
-    /**
-     * <p>The order of submitters.</p>
-     * <p>The order of submitters.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    @JsonSetter("submitters_order")
-    public StatusStage submittersOrder(@NotNull SubmittersOrder submittersOrder) {
-      this.submittersOrder = Objects.requireNonNull(submittersOrder, "submittersOrder must not be null");
-      return this;
-    }
-
-    /**
-     * <p>The status of the submission.</p>
-     * <p>The status of the submission.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    @JsonSetter("status")
-    public CreatedAtStage status(@NotNull SubmissionStatus status) {
-      this.status = Objects.requireNonNull(status, "status must not be null");
       return this;
     }
 
@@ -389,7 +213,7 @@ public final class SubmissionCreateResult {
     }
 
     /**
-     * <p>The date and time when the submission will expire and no longer be available for signing.</p>
+     * <p>The date and time when the submission expires.</p>
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
@@ -407,7 +231,7 @@ public final class SubmissionCreateResult {
     }
 
     /**
-     * <p>The date and time when the submission will expire and no longer be available for signing.</p>
+     * <p>The date and time when the submission expires.</p>
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
@@ -417,7 +241,7 @@ public final class SubmissionCreateResult {
     }
 
     /**
-     * <p>The date and time when the submission will expire and no longer be available for signing.</p>
+     * <p>The date and time when the submission expires.</p>
      */
     @java.lang.Override
     @JsonSetter(
@@ -430,53 +254,7 @@ public final class SubmissionCreateResult {
     }
 
     /**
-     * <p>List of fields to be filled in the one-off submission.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    public _FinalStage fields(List<Field> fields) {
-      this.fields = Optional.ofNullable(fields);
-      return this;
-    }
-
-    /**
-     * <p>List of fields to be filled in the one-off submission.</p>
-     */
-    @java.lang.Override
-    @JsonSetter(
-        value = "fields",
-        nulls = Nulls.SKIP
-    )
-    public _FinalStage fields(Optional<List<Field>> fields) {
-      this.fields = fields;
-      return this;
-    }
-
-    /**
-     * <p>The one-off submission document files.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    public _FinalStage schema(List<SchemaDocument> schema) {
-      this.schema = Optional.ofNullable(schema);
-      return this;
-    }
-
-    /**
-     * <p>The one-off submission document files.</p>
-     */
-    @java.lang.Override
-    @JsonSetter(
-        value = "schema",
-        nulls = Nulls.SKIP
-    )
-    public _FinalStage schema(Optional<List<SchemaDocument>> schema) {
-      this.schema = schema;
-      return this;
-    }
-
-    /**
-     * <p>The list of submitters.</p>
+     * <p>The list of created submitters.</p>
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
@@ -486,7 +264,7 @@ public final class SubmissionCreateResult {
     }
 
     /**
-     * <p>The list of submitters.</p>
+     * <p>The list of created submitters.</p>
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
@@ -496,7 +274,7 @@ public final class SubmissionCreateResult {
     }
 
     /**
-     * <p>The list of submitters.</p>
+     * <p>The list of created submitters.</p>
      */
     @java.lang.Override
     @JsonSetter(
@@ -511,7 +289,7 @@ public final class SubmissionCreateResult {
 
     @java.lang.Override
     public SubmissionCreateResult build() {
-      return new SubmissionCreateResult(id, name, submitters, source, submittersOrder, status, schema, fields, expireAt, createdAt, additionalProperties);
+      return new SubmissionCreateResult(id, submitters, expireAt, createdAt, additionalProperties);
     }
   }
 }
