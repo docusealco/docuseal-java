@@ -29,7 +29,7 @@ import java.util.Optional;
 public final class CreateSubmissionDocumentFieldParams {
   private final Optional<String> name;
 
-  private final Optional<CreateSubmissionDocumentFieldParamsType> type;
+  private final Optional<FieldType> type;
 
   private final Optional<String> role;
 
@@ -45,11 +45,10 @@ public final class CreateSubmissionDocumentFieldParams {
 
   private final Map<String, Object> additionalProperties;
 
-  private CreateSubmissionDocumentFieldParams(Optional<String> name,
-      Optional<CreateSubmissionDocumentFieldParamsType> type, Optional<String> role,
-      Optional<Boolean> required, Optional<String> title, Optional<String> description,
-      Optional<List<CreateSubmissionDocumentFieldAreaParams>> areas, Optional<List<String>> options,
-      Map<String, Object> additionalProperties) {
+  private CreateSubmissionDocumentFieldParams(Optional<String> name, Optional<FieldType> type,
+      Optional<String> role, Optional<Boolean> required, Optional<String> title,
+      Optional<String> description, Optional<List<CreateSubmissionDocumentFieldAreaParams>> areas,
+      Optional<List<String>> options, Map<String, Object> additionalProperties) {
     this.name = name;
     this.type = type;
     this.role = role;
@@ -73,7 +72,7 @@ public final class CreateSubmissionDocumentFieldParams {
    * @return Type of the field (e.g., text, signature, date, initials).
    */
   @JsonProperty("type")
-  public Optional<CreateSubmissionDocumentFieldParamsType> getType() {
+  public Optional<FieldType> getType() {
     return type;
   }
 
@@ -160,7 +159,7 @@ public final class CreateSubmissionDocumentFieldParams {
   public static final class Builder {
     private Optional<String> name = Optional.empty();
 
-    private Optional<CreateSubmissionDocumentFieldParamsType> type = Optional.empty();
+    private Optional<FieldType> type = Optional.empty();
 
     private Optional<String> role = Optional.empty();
 
@@ -216,12 +215,12 @@ public final class CreateSubmissionDocumentFieldParams {
         value = "type",
         nulls = Nulls.SKIP
     )
-    public Builder type(Optional<CreateSubmissionDocumentFieldParamsType> type) {
+    public Builder type(Optional<FieldType> type) {
       this.type = type;
       return this;
     }
 
-    public Builder type(CreateSubmissionDocumentFieldParamsType type) {
+    public Builder type(FieldType type) {
       this.type = Optional.ofNullable(type);
       return this;
     }

@@ -28,9 +28,9 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(
-    builder = CreateSubmissionResult.Builder.class
+    builder = SubmissionInitResult.Builder.class
 )
-public final class CreateSubmissionResult {
+public final class SubmissionInitResult {
   private final int id;
 
   private final List<SubmitterCreateResult> submitters;
@@ -41,7 +41,7 @@ public final class CreateSubmissionResult {
 
   private final Map<String, Object> additionalProperties;
 
-  private CreateSubmissionResult(int id, List<SubmitterCreateResult> submitters,
+  private SubmissionInitResult(int id, List<SubmitterCreateResult> submitters,
       Optional<String> expireAt, String createdAt, Map<String, Object> additionalProperties) {
     this.id = id;
     this.submitters = submitters;
@@ -97,7 +97,7 @@ public final class CreateSubmissionResult {
   @java.lang.Override
   public boolean equals(Object other) {
     if (this == other) return true;
-    return other instanceof CreateSubmissionResult && equalTo((CreateSubmissionResult) other);
+    return other instanceof SubmissionInitResult && equalTo((SubmissionInitResult) other);
   }
 
   @JsonAnyGetter
@@ -105,7 +105,7 @@ public final class CreateSubmissionResult {
     return this.additionalProperties;
   }
 
-  private boolean equalTo(CreateSubmissionResult other) {
+  private boolean equalTo(SubmissionInitResult other) {
     return id == other.id && submitters.equals(other.submitters) && expireAt.equals(other.expireAt) && createdAt.equals(other.createdAt);
   }
 
@@ -129,7 +129,7 @@ public final class CreateSubmissionResult {
      */
     CreatedAtStage id(int id);
 
-    Builder from(CreateSubmissionResult other);
+    Builder from(SubmissionInitResult other);
   }
 
   public interface CreatedAtStage {
@@ -140,7 +140,7 @@ public final class CreateSubmissionResult {
   }
 
   public interface _FinalStage {
-    CreateSubmissionResult build();
+    SubmissionInitResult build();
 
     /**
      * <p>The list of created submitters.</p>
@@ -180,7 +180,7 @@ public final class CreateSubmissionResult {
     }
 
     @java.lang.Override
-    public Builder from(CreateSubmissionResult other) {
+    public Builder from(SubmissionInitResult other) {
       id(other.getId());
       submitters(other.getSubmitters());
       expireAt(other.getExpireAt());
@@ -288,8 +288,8 @@ public final class CreateSubmissionResult {
     }
 
     @java.lang.Override
-    public CreateSubmissionResult build() {
-      return new CreateSubmissionResult(id, submitters, expireAt, createdAt, additionalProperties);
+    public SubmissionInitResult build() {
+      return new SubmissionInitResult(id, submitters, expireAt, createdAt, additionalProperties);
     }
   }
 }

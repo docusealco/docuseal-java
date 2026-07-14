@@ -45,6 +45,8 @@ public final class Template {
 
   private final List<Field> fields;
 
+  private final Map<String, Object> variablesSchema;
+
   private final List<TemplateSubmitter> submitters;
 
   private final int authorId;
@@ -72,17 +74,18 @@ public final class Template {
   private final Map<String, Object> additionalProperties;
 
   private Template(int id, String slug, String name, Map<String, Object> preferences,
-      List<SchemaDocument> schema, List<Field> fields, List<TemplateSubmitter> submitters,
-      int authorId, Optional<String> archivedAt, String createdAt, String updatedAt,
-      TemplateSource source, Optional<String> externalId, int folderId, String folderName,
-      Optional<Boolean> sharedLink, User author, List<TemplateDocument> documents,
-      Map<String, Object> additionalProperties) {
+      List<SchemaDocument> schema, List<Field> fields, Map<String, Object> variablesSchema,
+      List<TemplateSubmitter> submitters, int authorId, Optional<String> archivedAt,
+      String createdAt, String updatedAt, TemplateSource source, Optional<String> externalId,
+      int folderId, String folderName, Optional<Boolean> sharedLink, User author,
+      List<TemplateDocument> documents, Map<String, Object> additionalProperties) {
     this.id = id;
     this.slug = slug;
     this.name = name;
     this.preferences = preferences;
     this.schema = schema;
     this.fields = fields;
+    this.variablesSchema = variablesSchema;
     this.submitters = submitters;
     this.authorId = authorId;
     this.archivedAt = archivedAt;
@@ -144,6 +147,14 @@ public final class Template {
   @JsonProperty("fields")
   public List<Field> getFields() {
     return fields;
+  }
+
+  /**
+   * @return Schema of the dynamic document content variables used in the template.
+   */
+  @JsonProperty("variables_schema")
+  public Map<String, Object> getVariablesSchema() {
+    return variablesSchema;
   }
 
   /**
@@ -275,12 +286,12 @@ public final class Template {
   }
 
   private boolean equalTo(Template other) {
-    return id == other.id && slug.equals(other.slug) && name.equals(other.name) && preferences.equals(other.preferences) && schema.equals(other.schema) && fields.equals(other.fields) && submitters.equals(other.submitters) && authorId == other.authorId && archivedAt.equals(other.archivedAt) && createdAt.equals(other.createdAt) && updatedAt.equals(other.updatedAt) && source.equals(other.source) && externalId.equals(other.externalId) && folderId == other.folderId && folderName.equals(other.folderName) && sharedLink.equals(other.sharedLink) && author.equals(other.author) && documents.equals(other.documents);
+    return id == other.id && slug.equals(other.slug) && name.equals(other.name) && preferences.equals(other.preferences) && schema.equals(other.schema) && fields.equals(other.fields) && variablesSchema.equals(other.variablesSchema) && submitters.equals(other.submitters) && authorId == other.authorId && archivedAt.equals(other.archivedAt) && createdAt.equals(other.createdAt) && updatedAt.equals(other.updatedAt) && source.equals(other.source) && externalId.equals(other.externalId) && folderId == other.folderId && folderName.equals(other.folderName) && sharedLink.equals(other.sharedLink) && author.equals(other.author) && documents.equals(other.documents);
   }
 
   @java.lang.Override
   public int hashCode() {
-    return Objects.hash(this.id, this.slug, this.name, this.preferences, this.schema, this.fields, this.submitters, this.authorId, this.archivedAt, this.createdAt, this.updatedAt, this.source, this.externalId, this.folderId, this.folderName, this.sharedLink, this.author, this.documents);
+    return Objects.hash(this.id, this.slug, this.name, this.preferences, this.schema, this.fields, this.variablesSchema, this.submitters, this.authorId, this.archivedAt, this.createdAt, this.updatedAt, this.source, this.externalId, this.folderId, this.folderName, this.sharedLink, this.author, this.documents);
   }
 
   @java.lang.Override
@@ -392,6 +403,15 @@ public final class Template {
     _FinalStage addAllFields(List<Field> fields);
 
     /**
+     * <p>Schema of the dynamic document content variables used in the template.</p>
+     */
+    _FinalStage variablesSchema(Map<String, Object> variablesSchema);
+
+    _FinalStage putAllVariablesSchema(Map<String, Object> variablesSchema);
+
+    _FinalStage variablesSchema(String key, Object value);
+
+    /**
      * <p>The list of submitters for the template.</p>
      */
     _FinalStage submitters(List<TemplateSubmitter> submitters);
@@ -469,6 +489,8 @@ public final class Template {
 
     private List<TemplateSubmitter> submitters = new ArrayList<>();
 
+    private Map<String, Object> variablesSchema = new LinkedHashMap<>();
+
     private List<Field> fields = new ArrayList<>();
 
     private List<SchemaDocument> schema = new ArrayList<>();
@@ -489,6 +511,7 @@ public final class Template {
       preferences(other.getPreferences());
       schema(other.getSchema());
       fields(other.getFields());
+      variablesSchema(other.getVariablesSchema());
       submitters(other.getSubmitters());
       authorId(other.getAuthorId());
       archivedAt(other.getArchivedAt());
@@ -793,6 +816,40 @@ public final class Template {
     }
 
     /**
+     * <p>Schema of the dynamic document content variables used in the template.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    public _FinalStage variablesSchema(String key, Object value) {
+      this.variablesSchema.put(key, value);
+      return this;
+    }
+
+    /**
+     * <p>Schema of the dynamic document content variables used in the template.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    public _FinalStage putAllVariablesSchema(Map<String, Object> variablesSchema) {
+      this.variablesSchema.putAll(variablesSchema);
+      return this;
+    }
+
+    /**
+     * <p>Schema of the dynamic document content variables used in the template.</p>
+     */
+    @java.lang.Override
+    @JsonSetter(
+        value = "variables_schema",
+        nulls = Nulls.SKIP
+    )
+    public _FinalStage variablesSchema(Map<String, Object> variablesSchema) {
+      this.variablesSchema.clear();
+      this.variablesSchema.putAll(variablesSchema);
+      return this;
+    }
+
+    /**
      * <p>List of fields to be filled in the template.</p>
      * @return Reference to {@code this} so that method calls can be chained together.
      */
@@ -896,7 +953,7 @@ public final class Template {
 
     @java.lang.Override
     public Template build() {
-      return new Template(id, slug, name, preferences, schema, fields, submitters, authorId, archivedAt, createdAt, updatedAt, source, externalId, folderId, folderName, sharedLink, author, documents, additionalProperties);
+      return new Template(id, slug, name, preferences, schema, fields, variablesSchema, submitters, authorId, archivedAt, createdAt, updatedAt, source, externalId, folderId, folderName, sharedLink, author, documents, additionalProperties);
     }
   }
 }

@@ -38,9 +38,9 @@ public final class SubmissionUpdateResult {
 
   private final String slug;
 
-  private final SubmissionUpdateResultSource source;
+  private final SubmissionSource source;
 
-  private final SubmissionUpdateResultSubmittersOrder submittersOrder;
+  private final SubmittersOrder submittersOrder;
 
   private final Optional<String> auditLogUrl;
 
@@ -64,20 +64,19 @@ public final class SubmissionUpdateResult {
 
   private final List<Document> documents;
 
-  private final SubmissionUpdateResultStatus status;
+  private final SubmissionStatus status;
 
   private final Optional<String> completedAt;
 
   private final Map<String, Object> additionalProperties;
 
   private SubmissionUpdateResult(int id, Optional<String> name, String slug,
-      SubmissionUpdateResultSource source, SubmissionUpdateResultSubmittersOrder submittersOrder,
-      Optional<String> auditLogUrl, Optional<String> combinedDocumentUrl, String createdAt,
-      String updatedAt, Optional<String> archivedAt, Optional<String> expireAt,
-      Map<String, Object> variables, List<SubmissionSubmitter> submitters,
-      Optional<TemplateSummary> template, Optional<User> createdByUser, List<Document> documents,
-      SubmissionUpdateResultStatus status, Optional<String> completedAt,
-      Map<String, Object> additionalProperties) {
+      SubmissionSource source, SubmittersOrder submittersOrder, Optional<String> auditLogUrl,
+      Optional<String> combinedDocumentUrl, String createdAt, String updatedAt,
+      Optional<String> archivedAt, Optional<String> expireAt, Map<String, Object> variables,
+      List<SubmissionSubmitter> submitters, Optional<TemplateSummary> template,
+      Optional<User> createdByUser, List<Document> documents, SubmissionStatus status,
+      Optional<String> completedAt, Map<String, Object> additionalProperties) {
     this.id = id;
     this.name = name;
     this.slug = slug;
@@ -110,8 +109,11 @@ public final class SubmissionUpdateResult {
   /**
    * @return Name of the document submission.
    */
-  @JsonProperty("name")
+  @JsonIgnore
   public Optional<String> getName() {
+    if (name == null) {
+      return Optional.empty();
+    }
     return name;
   }
 
@@ -127,7 +129,7 @@ public final class SubmissionUpdateResult {
    * @return The source of the submission.
    */
   @JsonProperty("source")
-  public SubmissionUpdateResultSource getSource() {
+  public SubmissionSource getSource() {
     return source;
   }
 
@@ -135,7 +137,7 @@ public final class SubmissionUpdateResult {
    * @return The order of submitters.
    */
   @JsonProperty("submitters_order")
-  public SubmissionUpdateResultSubmittersOrder getSubmittersOrder() {
+  public SubmittersOrder getSubmittersOrder() {
     return submittersOrder;
   }
 
@@ -237,7 +239,7 @@ public final class SubmissionUpdateResult {
    * @return The status of the submission.
    */
   @JsonProperty("status")
-  public SubmissionUpdateResultStatus getStatus() {
+  public SubmissionStatus getStatus() {
     return status;
   }
 
@@ -250,6 +252,15 @@ public final class SubmissionUpdateResult {
       return Optional.empty();
     }
     return completedAt;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("name")
+  private Optional<String> _getName() {
+    return name;
   }
 
   @JsonInclude(
@@ -346,14 +357,14 @@ public final class SubmissionUpdateResult {
     /**
      * <p>The source of the submission.</p>
      */
-    SubmittersOrderStage source(@NotNull SubmissionUpdateResultSource source);
+    SubmittersOrderStage source(@NotNull SubmissionSource source);
   }
 
   public interface SubmittersOrderStage {
     /**
      * <p>The order of submitters.</p>
      */
-    CreatedAtStage submittersOrder(@NotNull SubmissionUpdateResultSubmittersOrder submittersOrder);
+    CreatedAtStage submittersOrder(@NotNull SubmittersOrder submittersOrder);
   }
 
   public interface CreatedAtStage {
@@ -374,7 +385,7 @@ public final class SubmissionUpdateResult {
     /**
      * <p>The status of the submission.</p>
      */
-    _FinalStage status(@NotNull SubmissionUpdateResultStatus status);
+    _FinalStage status(@NotNull SubmissionStatus status);
   }
 
   public interface _FinalStage {
@@ -386,6 +397,8 @@ public final class SubmissionUpdateResult {
     _FinalStage name(Optional<String> name);
 
     _FinalStage name(String name);
+
+    _FinalStage name(Nullable<String> name);
 
     /**
      * <p>Audit log file URL.</p>
@@ -476,15 +489,15 @@ public final class SubmissionUpdateResult {
 
     private String slug;
 
-    private SubmissionUpdateResultSource source;
+    private SubmissionSource source;
 
-    private SubmissionUpdateResultSubmittersOrder submittersOrder;
+    private SubmittersOrder submittersOrder;
 
     private String createdAt;
 
     private String updatedAt;
 
-    private SubmissionUpdateResultStatus status;
+    private SubmissionStatus status;
 
     private Optional<String> completedAt = Optional.empty();
 
@@ -568,7 +581,7 @@ public final class SubmissionUpdateResult {
      */
     @java.lang.Override
     @JsonSetter("source")
-    public SubmittersOrderStage source(@NotNull SubmissionUpdateResultSource source) {
+    public SubmittersOrderStage source(@NotNull SubmissionSource source) {
       this.source = Objects.requireNonNull(source, "source must not be null");
       return this;
     }
@@ -580,8 +593,7 @@ public final class SubmissionUpdateResult {
      */
     @java.lang.Override
     @JsonSetter("submitters_order")
-    public CreatedAtStage submittersOrder(
-        @NotNull SubmissionUpdateResultSubmittersOrder submittersOrder) {
+    public CreatedAtStage submittersOrder(@NotNull SubmittersOrder submittersOrder) {
       this.submittersOrder = Objects.requireNonNull(submittersOrder, "submittersOrder must not be null");
       return this;
     }
@@ -617,7 +629,7 @@ public final class SubmissionUpdateResult {
      */
     @java.lang.Override
     @JsonSetter("status")
-    public _FinalStage status(@NotNull SubmissionUpdateResultStatus status) {
+    public _FinalStage status(@NotNull SubmissionStatus status) {
       this.status = Objects.requireNonNull(status, "status must not be null");
       return this;
     }
@@ -958,6 +970,24 @@ public final class SubmissionUpdateResult {
     )
     public _FinalStage auditLogUrl(Optional<String> auditLogUrl) {
       this.auditLogUrl = auditLogUrl;
+      return this;
+    }
+
+    /**
+     * <p>Name of the document submission.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    public _FinalStage name(Nullable<String> name) {
+      if (name.isNull()) {
+        this.name = null;
+      }
+      else if (name.isEmpty()) {
+        this.name = Optional.empty();
+      }
+      else {
+        this.name = Optional.of(name.get());
+      }
       return this;
     }
 

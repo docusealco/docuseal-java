@@ -30,23 +30,23 @@ import java.util.Optional;
 public final class CreateTemplateDocumentFieldPreferencesParams {
   private final Optional<Integer> fontSize;
 
-  private final Optional<CreateTemplateDocumentFieldPreferencesParamsFontType> fontType;
+  private final Optional<FieldFontType> fontType;
 
-  private final Optional<CreateTemplateDocumentFieldPreferencesParamsFont> font;
+  private final Optional<FieldFont> font;
 
-  private final Optional<CreateTemplateDocumentFieldPreferencesParamsColor> color;
+  private final Optional<String> color;
 
-  private final Optional<CreateTemplateDocumentFieldPreferencesParamsBackground> background;
+  private final Optional<String> background;
 
-  private final Optional<CreateTemplateDocumentFieldPreferencesParamsAlign> align;
+  private final Optional<FieldAlign> align;
 
-  private final Optional<CreateTemplateDocumentFieldPreferencesParamsValign> valign;
+  private final Optional<FieldValign> valign;
 
   private final Optional<String> format;
 
   private final Optional<Double> price;
 
-  private final Optional<CreateTemplateDocumentFieldPreferencesParamsCurrency> currency;
+  private final Optional<Currency> currency;
 
   private final Optional<CreateTemplateDocumentFieldPreferencesParamsMask> mask;
 
@@ -55,14 +55,9 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
   private final Map<String, Object> additionalProperties;
 
   private CreateTemplateDocumentFieldPreferencesParams(Optional<Integer> fontSize,
-      Optional<CreateTemplateDocumentFieldPreferencesParamsFontType> fontType,
-      Optional<CreateTemplateDocumentFieldPreferencesParamsFont> font,
-      Optional<CreateTemplateDocumentFieldPreferencesParamsColor> color,
-      Optional<CreateTemplateDocumentFieldPreferencesParamsBackground> background,
-      Optional<CreateTemplateDocumentFieldPreferencesParamsAlign> align,
-      Optional<CreateTemplateDocumentFieldPreferencesParamsValign> valign, Optional<String> format,
-      Optional<Double> price,
-      Optional<CreateTemplateDocumentFieldPreferencesParamsCurrency> currency,
+      Optional<FieldFontType> fontType, Optional<FieldFont> font, Optional<String> color,
+      Optional<String> background, Optional<FieldAlign> align, Optional<FieldValign> valign,
+      Optional<String> format, Optional<Double> price, Optional<Currency> currency,
       Optional<CreateTemplateDocumentFieldPreferencesParamsMask> mask,
       Optional<List<String>> reasons, Map<String, Object> additionalProperties) {
     this.fontSize = fontSize;
@@ -92,7 +87,7 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
    * @return Font type of the field value.
    */
   @JsonProperty("font_type")
-  public Optional<CreateTemplateDocumentFieldPreferencesParamsFontType> getFontType() {
+  public Optional<FieldFontType> getFontType() {
     return fontType;
   }
 
@@ -100,7 +95,7 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
    * @return Font family of the field value.
    */
   @JsonProperty("font")
-  public Optional<CreateTemplateDocumentFieldPreferencesParamsFont> getFont() {
+  public Optional<FieldFont> getFont() {
     return font;
   }
 
@@ -108,7 +103,7 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
    * @return Font color of the field value.
    */
   @JsonProperty("color")
-  public Optional<CreateTemplateDocumentFieldPreferencesParamsColor> getColor() {
+  public Optional<String> getColor() {
     return color;
   }
 
@@ -116,7 +111,7 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
    * @return Field box background color.
    */
   @JsonProperty("background")
-  public Optional<CreateTemplateDocumentFieldPreferencesParamsBackground> getBackground() {
+  public Optional<String> getBackground() {
     return background;
   }
 
@@ -124,7 +119,7 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
    * @return Horizontal alignment of the field text value.
    */
   @JsonProperty("align")
-  public Optional<CreateTemplateDocumentFieldPreferencesParamsAlign> getAlign() {
+  public Optional<FieldAlign> getAlign() {
     return align;
   }
 
@@ -132,7 +127,7 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
    * @return Vertical alignment of the field text value.
    */
   @JsonProperty("valign")
-  public Optional<CreateTemplateDocumentFieldPreferencesParamsValign> getValign() {
+  public Optional<FieldValign> getValign() {
     return valign;
   }
 
@@ -156,7 +151,7 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
    * @return Currency value of the payment field. Only for payment fields.
    */
   @JsonProperty("currency")
-  public Optional<CreateTemplateDocumentFieldPreferencesParamsCurrency> getCurrency() {
+  public Optional<Currency> getCurrency() {
     return currency;
   }
 
@@ -211,23 +206,23 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
   public static final class Builder {
     private Optional<Integer> fontSize = Optional.empty();
 
-    private Optional<CreateTemplateDocumentFieldPreferencesParamsFontType> fontType = Optional.empty();
+    private Optional<FieldFontType> fontType = Optional.empty();
 
-    private Optional<CreateTemplateDocumentFieldPreferencesParamsFont> font = Optional.empty();
+    private Optional<FieldFont> font = Optional.empty();
 
-    private Optional<CreateTemplateDocumentFieldPreferencesParamsColor> color = Optional.empty();
+    private Optional<String> color = Optional.empty();
 
-    private Optional<CreateTemplateDocumentFieldPreferencesParamsBackground> background = Optional.empty();
+    private Optional<String> background = Optional.empty();
 
-    private Optional<CreateTemplateDocumentFieldPreferencesParamsAlign> align = Optional.empty();
+    private Optional<FieldAlign> align = Optional.empty();
 
-    private Optional<CreateTemplateDocumentFieldPreferencesParamsValign> valign = Optional.empty();
+    private Optional<FieldValign> valign = Optional.empty();
 
     private Optional<String> format = Optional.empty();
 
     private Optional<Double> price = Optional.empty();
 
-    private Optional<CreateTemplateDocumentFieldPreferencesParamsCurrency> currency = Optional.empty();
+    private Optional<Currency> currency = Optional.empty();
 
     private Optional<CreateTemplateDocumentFieldPreferencesParamsMask> mask = Optional.empty();
 
@@ -279,13 +274,12 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
         value = "font_type",
         nulls = Nulls.SKIP
     )
-    public Builder fontType(
-        Optional<CreateTemplateDocumentFieldPreferencesParamsFontType> fontType) {
+    public Builder fontType(Optional<FieldFontType> fontType) {
       this.fontType = fontType;
       return this;
     }
 
-    public Builder fontType(CreateTemplateDocumentFieldPreferencesParamsFontType fontType) {
+    public Builder fontType(FieldFontType fontType) {
       this.fontType = Optional.ofNullable(fontType);
       return this;
     }
@@ -297,12 +291,12 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
         value = "font",
         nulls = Nulls.SKIP
     )
-    public Builder font(Optional<CreateTemplateDocumentFieldPreferencesParamsFont> font) {
+    public Builder font(Optional<FieldFont> font) {
       this.font = font;
       return this;
     }
 
-    public Builder font(CreateTemplateDocumentFieldPreferencesParamsFont font) {
+    public Builder font(FieldFont font) {
       this.font = Optional.ofNullable(font);
       return this;
     }
@@ -314,12 +308,12 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
         value = "color",
         nulls = Nulls.SKIP
     )
-    public Builder color(Optional<CreateTemplateDocumentFieldPreferencesParamsColor> color) {
+    public Builder color(Optional<String> color) {
       this.color = color;
       return this;
     }
 
-    public Builder color(CreateTemplateDocumentFieldPreferencesParamsColor color) {
+    public Builder color(String color) {
       this.color = Optional.ofNullable(color);
       return this;
     }
@@ -331,13 +325,12 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
         value = "background",
         nulls = Nulls.SKIP
     )
-    public Builder background(
-        Optional<CreateTemplateDocumentFieldPreferencesParamsBackground> background) {
+    public Builder background(Optional<String> background) {
       this.background = background;
       return this;
     }
 
-    public Builder background(CreateTemplateDocumentFieldPreferencesParamsBackground background) {
+    public Builder background(String background) {
       this.background = Optional.ofNullable(background);
       return this;
     }
@@ -349,12 +342,12 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
         value = "align",
         nulls = Nulls.SKIP
     )
-    public Builder align(Optional<CreateTemplateDocumentFieldPreferencesParamsAlign> align) {
+    public Builder align(Optional<FieldAlign> align) {
       this.align = align;
       return this;
     }
 
-    public Builder align(CreateTemplateDocumentFieldPreferencesParamsAlign align) {
+    public Builder align(FieldAlign align) {
       this.align = Optional.ofNullable(align);
       return this;
     }
@@ -366,12 +359,12 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
         value = "valign",
         nulls = Nulls.SKIP
     )
-    public Builder valign(Optional<CreateTemplateDocumentFieldPreferencesParamsValign> valign) {
+    public Builder valign(Optional<FieldValign> valign) {
       this.valign = valign;
       return this;
     }
 
-    public Builder valign(CreateTemplateDocumentFieldPreferencesParamsValign valign) {
+    public Builder valign(FieldValign valign) {
       this.valign = Optional.ofNullable(valign);
       return this;
     }
@@ -417,13 +410,12 @@ public final class CreateTemplateDocumentFieldPreferencesParams {
         value = "currency",
         nulls = Nulls.SKIP
     )
-    public Builder currency(
-        Optional<CreateTemplateDocumentFieldPreferencesParamsCurrency> currency) {
+    public Builder currency(Optional<Currency> currency) {
       this.currency = currency;
       return this;
     }
 
-    public Builder currency(CreateTemplateDocumentFieldPreferencesParamsCurrency currency) {
+    public Builder currency(Currency currency) {
       this.currency = Optional.ofNullable(currency);
       return this;
     }

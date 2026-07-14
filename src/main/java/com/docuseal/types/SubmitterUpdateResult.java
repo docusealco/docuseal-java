@@ -58,7 +58,7 @@ public final class SubmitterUpdateResult {
 
   private final Optional<String> phone;
 
-  private final SubmitterUpdateResultStatus status;
+  private final SubmitterStatus status;
 
   private final Optional<String> externalId;
 
@@ -79,7 +79,7 @@ public final class SubmitterUpdateResult {
   private SubmitterUpdateResult(int id, int submissionId, String uuid, Optional<String> email,
       String slug, Optional<String> sentAt, Optional<String> openedAt, Optional<String> completedAt,
       Optional<String> declinedAt, String createdAt, String updatedAt, Optional<String> name,
-      Optional<String> phone, SubmitterUpdateResultStatus status, Optional<String> externalId,
+      Optional<String> phone, SubmitterStatus status, Optional<String> externalId,
       Map<String, Object> metadata, Map<String, Object> preferences, List<FieldValue> values,
       List<Document> documents, String role, String embedSrc,
       Map<String, Object> additionalProperties) {
@@ -236,7 +236,7 @@ public final class SubmitterUpdateResult {
    * @return The status of signing request for the submitter.
    */
   @JsonProperty("status")
-  public SubmitterUpdateResultStatus getStatus() {
+  public SubmitterStatus getStatus() {
     return status;
   }
 
@@ -448,7 +448,7 @@ public final class SubmitterUpdateResult {
     /**
      * <p>The status of signing request for the submitter.</p>
      */
-    RoleStage status(@NotNull SubmitterUpdateResultStatus status);
+    RoleStage status(@NotNull SubmitterStatus status);
   }
 
   public interface RoleStage {
@@ -593,7 +593,7 @@ public final class SubmitterUpdateResult {
 
     private String updatedAt;
 
-    private SubmitterUpdateResultStatus status;
+    private SubmitterStatus status;
 
     private String role;
 
@@ -734,7 +734,7 @@ public final class SubmitterUpdateResult {
      */
     @java.lang.Override
     @JsonSetter("status")
-    public RoleStage status(@NotNull SubmitterUpdateResultStatus status) {
+    public RoleStage status(@NotNull SubmitterStatus status) {
       this.status = Objects.requireNonNull(status, "status must not be null");
       return this;
     }

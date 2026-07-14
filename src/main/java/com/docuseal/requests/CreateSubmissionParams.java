@@ -6,8 +6,8 @@ package com.docuseal.requests;
 
 import com.docuseal.core.ObjectMappers;
 import com.docuseal.types.CreateSubmissionMessageParams;
-import com.docuseal.types.CreateSubmissionRequestOrder;
 import com.docuseal.types.CreateSubmissionSubmitterParams;
+import com.docuseal.types.SubmittersOrder;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -37,7 +37,7 @@ public final class CreateSubmissionParams {
 
   private final Optional<Boolean> sendSms;
 
-  private final Optional<CreateSubmissionRequestOrder> order;
+  private final Optional<SubmittersOrder> order;
 
   private final Optional<String> completedRedirectUrl;
 
@@ -56,7 +56,7 @@ public final class CreateSubmissionParams {
   private final Map<String, Object> additionalProperties;
 
   private CreateSubmissionParams(int templateId, Optional<Boolean> sendEmail,
-      Optional<Boolean> sendSms, Optional<CreateSubmissionRequestOrder> order,
+      Optional<Boolean> sendSms, Optional<SubmittersOrder> order,
       Optional<String> completedRedirectUrl, Optional<String> bccCompleted,
       Optional<String> replyTo, Optional<String> expireAt, Optional<Map<String, Object>> variables,
       Optional<CreateSubmissionMessageParams> message,
@@ -103,7 +103,7 @@ public final class CreateSubmissionParams {
    * @return Pass 'random' to send signature request emails to all parties right away. The order is 'preserved' by default so the second party will receive a signature request email only after the document is signed by the first party.
    */
   @JsonProperty("order")
-  public Optional<CreateSubmissionRequestOrder> getOrder() {
+  public Optional<SubmittersOrder> getOrder() {
     return order;
   }
 
@@ -218,9 +218,9 @@ public final class CreateSubmissionParams {
     /**
      * <p>Pass 'random' to send signature request emails to all parties right away. The order is 'preserved' by default so the second party will receive a signature request email only after the document is signed by the first party.</p>
      */
-    _FinalStage order(Optional<CreateSubmissionRequestOrder> order);
+    _FinalStage order(Optional<SubmittersOrder> order);
 
-    _FinalStage order(CreateSubmissionRequestOrder order);
+    _FinalStage order(SubmittersOrder order);
 
     /**
      * <p>Specify URL to redirect to after the submission completion.</p>
@@ -291,7 +291,7 @@ public final class CreateSubmissionParams {
 
     private Optional<String> completedRedirectUrl = Optional.empty();
 
-    private Optional<CreateSubmissionRequestOrder> order = Optional.empty();
+    private Optional<SubmittersOrder> order = Optional.empty();
 
     private Optional<Boolean> sendSms = Optional.empty();
 
@@ -501,7 +501,7 @@ public final class CreateSubmissionParams {
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage order(CreateSubmissionRequestOrder order) {
+    public _FinalStage order(SubmittersOrder order) {
       this.order = Optional.ofNullable(order);
       return this;
     }
@@ -514,7 +514,7 @@ public final class CreateSubmissionParams {
         value = "order",
         nulls = Nulls.SKIP
     )
-    public _FinalStage order(Optional<CreateSubmissionRequestOrder> order) {
+    public _FinalStage order(Optional<SubmittersOrder> order) {
       this.order = order;
       return this;
     }

@@ -7,7 +7,7 @@ package com.docuseal.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.lang.String;
 
-public enum SubmissionEventEventType {
+public enum SubmissionEventType {
   SEND_EMAIL("send_email"),
 
   BOUNCE_EMAIL("bounce_email"),
@@ -46,7 +46,7 @@ public enum SubmissionEventEventType {
 
   private final String value;
 
-  SubmissionEventEventType(String value) {
+  SubmissionEventType(String value) {
     this.value = value;
   }
 

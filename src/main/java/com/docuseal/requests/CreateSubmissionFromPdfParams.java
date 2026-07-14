@@ -6,9 +6,9 @@ package com.docuseal.requests;
 
 import com.docuseal.core.ObjectMappers;
 import com.docuseal.types.CreateSubmissionFromPdfDocumentParams;
-import com.docuseal.types.CreateSubmissionFromPdfRequestOrder;
 import com.docuseal.types.CreateSubmissionMessageParams;
 import com.docuseal.types.CreateSubmissionSubmitterParams;
+import com.docuseal.types.SubmittersOrder;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -39,7 +39,7 @@ public final class CreateSubmissionFromPdfParams {
 
   private final Optional<Boolean> sendSms;
 
-  private final Optional<CreateSubmissionFromPdfRequestOrder> order;
+  private final Optional<SubmittersOrder> order;
 
   private final Optional<String> completedRedirectUrl;
 
@@ -66,7 +66,7 @@ public final class CreateSubmissionFromPdfParams {
   private final Map<String, Object> additionalProperties;
 
   private CreateSubmissionFromPdfParams(Optional<String> name, Optional<Boolean> sendEmail,
-      Optional<Boolean> sendSms, Optional<CreateSubmissionFromPdfRequestOrder> order,
+      Optional<Boolean> sendSms, Optional<SubmittersOrder> order,
       Optional<String> completedRedirectUrl, Optional<String> bccCompleted,
       Optional<String> replyTo, Optional<String> expireAt, Optional<List<Integer>> templateIds,
       List<CreateSubmissionFromPdfDocumentParams> documents,
@@ -120,7 +120,7 @@ public final class CreateSubmissionFromPdfParams {
    * @return Pass 'random' to send signature request emails to all parties right away. The order is 'preserved' by default so the second party will receive a signature request email only after the document is signed by the first party.
    */
   @JsonProperty("order")
-  public Optional<CreateSubmissionFromPdfRequestOrder> getOrder() {
+  public Optional<SubmittersOrder> getOrder() {
     return order;
   }
 
@@ -248,7 +248,7 @@ public final class CreateSubmissionFromPdfParams {
 
     private Optional<Boolean> sendSms = Optional.empty();
 
-    private Optional<CreateSubmissionFromPdfRequestOrder> order = Optional.empty();
+    private Optional<SubmittersOrder> order = Optional.empty();
 
     private Optional<String> completedRedirectUrl = Optional.empty();
 
@@ -355,12 +355,12 @@ public final class CreateSubmissionFromPdfParams {
         value = "order",
         nulls = Nulls.SKIP
     )
-    public Builder order(Optional<CreateSubmissionFromPdfRequestOrder> order) {
+    public Builder order(Optional<SubmittersOrder> order) {
       this.order = order;
       return this;
     }
 
-    public Builder order(CreateSubmissionFromPdfRequestOrder order) {
+    public Builder order(SubmittersOrder order) {
       this.order = Optional.ofNullable(order);
       return this;
     }

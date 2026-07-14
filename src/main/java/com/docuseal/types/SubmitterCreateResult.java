@@ -42,7 +42,7 @@ public final class SubmitterCreateResult {
 
   private final String slug;
 
-  private final SubmitterCreateResultStatus status;
+  private final SubmitterStatus status;
 
   private final List<FieldValue> values;
 
@@ -75,12 +75,11 @@ public final class SubmitterCreateResult {
   private final Map<String, Object> additionalProperties;
 
   private SubmitterCreateResult(int id, int submissionId, String uuid, Optional<String> email,
-      String slug, SubmitterCreateResultStatus status, List<FieldValue> values,
-      Map<String, Object> metadata, Optional<String> sentAt, Optional<String> openedAt,
-      Optional<String> completedAt, Optional<String> declinedAt, String createdAt, String updatedAt,
-      Optional<String> name, Optional<String> phone, Optional<String> externalId,
-      Map<String, Object> preferences, String role, String embedSrc,
-      Map<String, Object> additionalProperties) {
+      String slug, SubmitterStatus status, List<FieldValue> values, Map<String, Object> metadata,
+      Optional<String> sentAt, Optional<String> openedAt, Optional<String> completedAt,
+      Optional<String> declinedAt, String createdAt, String updatedAt, Optional<String> name,
+      Optional<String> phone, Optional<String> externalId, Map<String, Object> preferences,
+      String role, String embedSrc, Map<String, Object> additionalProperties) {
     this.id = id;
     this.submissionId = submissionId;
     this.uuid = uuid;
@@ -151,7 +150,7 @@ public final class SubmitterCreateResult {
    * @return The status of signing request for the submitter.
    */
   @JsonProperty("status")
-  public SubmitterCreateResultStatus getStatus() {
+  public SubmitterStatus getStatus() {
     return status;
   }
 
@@ -423,7 +422,7 @@ public final class SubmitterCreateResult {
     /**
      * <p>The status of signing request for the submitter.</p>
      */
-    CreatedAtStage status(@NotNull SubmitterCreateResultStatus status);
+    CreatedAtStage status(@NotNull SubmitterStatus status);
   }
 
   public interface CreatedAtStage {
@@ -569,7 +568,7 @@ public final class SubmitterCreateResult {
 
     private String slug;
 
-    private SubmitterCreateResultStatus status;
+    private SubmitterStatus status;
 
     private String createdAt;
 
@@ -687,7 +686,7 @@ public final class SubmitterCreateResult {
      */
     @java.lang.Override
     @JsonSetter("status")
-    public CreatedAtStage status(@NotNull SubmitterCreateResultStatus status) {
+    public CreatedAtStage status(@NotNull SubmitterStatus status) {
       this.status = Objects.requireNonNull(status, "status must not be null");
       return this;
     }

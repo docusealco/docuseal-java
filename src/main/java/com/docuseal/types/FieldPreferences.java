@@ -4,9 +4,12 @@
 
 package com.docuseal.types;
 
+import com.docuseal.core.Nullable;
+import com.docuseal.core.NullableNonemptyFilter;
 import com.docuseal.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -78,96 +81,240 @@ public final class FieldPreferences {
   /**
    * @return Font size of the field value in pixels.
    */
-  @JsonProperty("font_size")
+  @JsonIgnore
   public Optional<Integer> getFontSize() {
+    if (fontSize == null) {
+      return Optional.empty();
+    }
     return fontSize;
   }
 
   /**
    * @return Font type of the field value.
    */
-  @JsonProperty("font_type")
+  @JsonIgnore
   public Optional<String> getFontType() {
+    if (fontType == null) {
+      return Optional.empty();
+    }
     return fontType;
   }
 
   /**
    * @return Font family of the field value.
    */
-  @JsonProperty("font")
+  @JsonIgnore
   public Optional<String> getFont() {
+    if (font == null) {
+      return Optional.empty();
+    }
     return font;
   }
 
   /**
    * @return Font color of the field value.
    */
-  @JsonProperty("color")
+  @JsonIgnore
   public Optional<String> getColor() {
+    if (color == null) {
+      return Optional.empty();
+    }
     return color;
   }
 
   /**
    * @return Field box background color.
    */
-  @JsonProperty("background")
+  @JsonIgnore
   public Optional<String> getBackground() {
+    if (background == null) {
+      return Optional.empty();
+    }
     return background;
   }
 
   /**
    * @return Horizontal alignment of the field text value.
    */
-  @JsonProperty("align")
+  @JsonIgnore
   public Optional<String> getAlign() {
+    if (align == null) {
+      return Optional.empty();
+    }
     return align;
   }
 
   /**
    * @return Vertical alignment of the field text value.
    */
-  @JsonProperty("valign")
+  @JsonIgnore
   public Optional<String> getValign() {
+    if (valign == null) {
+      return Optional.empty();
+    }
     return valign;
   }
 
   /**
    * @return The data format for different field types.
    */
-  @JsonProperty("format")
+  @JsonIgnore
   public Optional<String> getFormat() {
+    if (format == null) {
+      return Optional.empty();
+    }
     return format;
   }
 
   /**
    * @return Price value of the payment field. Only for payment fields.
    */
-  @JsonProperty("price")
+  @JsonIgnore
   public Optional<Double> getPrice() {
+    if (price == null) {
+      return Optional.empty();
+    }
     return price;
   }
 
   /**
    * @return Currency value of the payment field. Only for payment fields.
    */
-  @JsonProperty("currency")
+  @JsonIgnore
   public Optional<String> getCurrency() {
+    if (currency == null) {
+      return Optional.empty();
+    }
     return currency;
   }
 
   /**
    * @return Indicates if the field is masked on the document.
    */
-  @JsonProperty("mask")
+  @JsonIgnore
   public Optional<Boolean> getMask() {
+    if (mask == null) {
+      return Optional.empty();
+    }
     return mask;
   }
 
   /**
    * @return An array of signature reasons to choose from.
    */
-  @JsonProperty("reasons")
+  @JsonIgnore
   public Optional<List<String>> getReasons() {
+    if (reasons == null) {
+      return Optional.empty();
+    }
+    return reasons;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("font_size")
+  private Optional<Integer> _getFontSize() {
+    return fontSize;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("font_type")
+  private Optional<String> _getFontType() {
+    return fontType;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("font")
+  private Optional<String> _getFont() {
+    return font;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("color")
+  private Optional<String> _getColor() {
+    return color;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("background")
+  private Optional<String> _getBackground() {
+    return background;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("align")
+  private Optional<String> _getAlign() {
+    return align;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("valign")
+  private Optional<String> _getValign() {
+    return valign;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("format")
+  private Optional<String> _getFormat() {
+    return format;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("price")
+  private Optional<Double> _getPrice() {
+    return price;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("currency")
+  private Optional<String> _getCurrency() {
+    return currency;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("mask")
+  private Optional<Boolean> _getMask() {
+    return mask;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("reasons")
+  private Optional<List<String>> _getReasons() {
     return reasons;
   }
 
@@ -267,6 +414,19 @@ public final class FieldPreferences {
       return this;
     }
 
+    public Builder fontSize(Nullable<Integer> fontSize) {
+      if (fontSize.isNull()) {
+        this.fontSize = null;
+      }
+      else if (fontSize.isEmpty()) {
+        this.fontSize = Optional.empty();
+      }
+      else {
+        this.fontSize = Optional.of(fontSize.get());
+      }
+      return this;
+    }
+
     /**
      * <p>Font type of the field value.</p>
      */
@@ -281,6 +441,19 @@ public final class FieldPreferences {
 
     public Builder fontType(String fontType) {
       this.fontType = Optional.ofNullable(fontType);
+      return this;
+    }
+
+    public Builder fontType(Nullable<String> fontType) {
+      if (fontType.isNull()) {
+        this.fontType = null;
+      }
+      else if (fontType.isEmpty()) {
+        this.fontType = Optional.empty();
+      }
+      else {
+        this.fontType = Optional.of(fontType.get());
+      }
       return this;
     }
 
@@ -301,6 +474,19 @@ public final class FieldPreferences {
       return this;
     }
 
+    public Builder font(Nullable<String> font) {
+      if (font.isNull()) {
+        this.font = null;
+      }
+      else if (font.isEmpty()) {
+        this.font = Optional.empty();
+      }
+      else {
+        this.font = Optional.of(font.get());
+      }
+      return this;
+    }
+
     /**
      * <p>Font color of the field value.</p>
      */
@@ -315,6 +501,19 @@ public final class FieldPreferences {
 
     public Builder color(String color) {
       this.color = Optional.ofNullable(color);
+      return this;
+    }
+
+    public Builder color(Nullable<String> color) {
+      if (color.isNull()) {
+        this.color = null;
+      }
+      else if (color.isEmpty()) {
+        this.color = Optional.empty();
+      }
+      else {
+        this.color = Optional.of(color.get());
+      }
       return this;
     }
 
@@ -335,6 +534,19 @@ public final class FieldPreferences {
       return this;
     }
 
+    public Builder background(Nullable<String> background) {
+      if (background.isNull()) {
+        this.background = null;
+      }
+      else if (background.isEmpty()) {
+        this.background = Optional.empty();
+      }
+      else {
+        this.background = Optional.of(background.get());
+      }
+      return this;
+    }
+
     /**
      * <p>Horizontal alignment of the field text value.</p>
      */
@@ -349,6 +561,19 @@ public final class FieldPreferences {
 
     public Builder align(String align) {
       this.align = Optional.ofNullable(align);
+      return this;
+    }
+
+    public Builder align(Nullable<String> align) {
+      if (align.isNull()) {
+        this.align = null;
+      }
+      else if (align.isEmpty()) {
+        this.align = Optional.empty();
+      }
+      else {
+        this.align = Optional.of(align.get());
+      }
       return this;
     }
 
@@ -369,6 +594,19 @@ public final class FieldPreferences {
       return this;
     }
 
+    public Builder valign(Nullable<String> valign) {
+      if (valign.isNull()) {
+        this.valign = null;
+      }
+      else if (valign.isEmpty()) {
+        this.valign = Optional.empty();
+      }
+      else {
+        this.valign = Optional.of(valign.get());
+      }
+      return this;
+    }
+
     /**
      * <p>The data format for different field types.</p>
      */
@@ -383,6 +621,19 @@ public final class FieldPreferences {
 
     public Builder format(String format) {
       this.format = Optional.ofNullable(format);
+      return this;
+    }
+
+    public Builder format(Nullable<String> format) {
+      if (format.isNull()) {
+        this.format = null;
+      }
+      else if (format.isEmpty()) {
+        this.format = Optional.empty();
+      }
+      else {
+        this.format = Optional.of(format.get());
+      }
       return this;
     }
 
@@ -403,6 +654,19 @@ public final class FieldPreferences {
       return this;
     }
 
+    public Builder price(Nullable<Double> price) {
+      if (price.isNull()) {
+        this.price = null;
+      }
+      else if (price.isEmpty()) {
+        this.price = Optional.empty();
+      }
+      else {
+        this.price = Optional.of(price.get());
+      }
+      return this;
+    }
+
     /**
      * <p>Currency value of the payment field. Only for payment fields.</p>
      */
@@ -417,6 +681,19 @@ public final class FieldPreferences {
 
     public Builder currency(String currency) {
       this.currency = Optional.ofNullable(currency);
+      return this;
+    }
+
+    public Builder currency(Nullable<String> currency) {
+      if (currency.isNull()) {
+        this.currency = null;
+      }
+      else if (currency.isEmpty()) {
+        this.currency = Optional.empty();
+      }
+      else {
+        this.currency = Optional.of(currency.get());
+      }
       return this;
     }
 
@@ -437,6 +714,19 @@ public final class FieldPreferences {
       return this;
     }
 
+    public Builder mask(Nullable<Boolean> mask) {
+      if (mask.isNull()) {
+        this.mask = null;
+      }
+      else if (mask.isEmpty()) {
+        this.mask = Optional.empty();
+      }
+      else {
+        this.mask = Optional.of(mask.get());
+      }
+      return this;
+    }
+
     /**
      * <p>An array of signature reasons to choose from.</p>
      */
@@ -451,6 +741,19 @@ public final class FieldPreferences {
 
     public Builder reasons(List<String> reasons) {
       this.reasons = Optional.ofNullable(reasons);
+      return this;
+    }
+
+    public Builder reasons(Nullable<List<String>> reasons) {
+      if (reasons.isNull()) {
+        this.reasons = null;
+      }
+      else if (reasons.isEmpty()) {
+        this.reasons = Optional.empty();
+      }
+      else {
+        this.reasons = Optional.of(reasons.get());
+      }
       return this;
     }
 

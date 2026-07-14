@@ -6,9 +6,9 @@ package com.docuseal.requests;
 
 import com.docuseal.core.ObjectMappers;
 import com.docuseal.types.CreateSubmissionFromHtmlDocumentParams;
-import com.docuseal.types.CreateSubmissionFromHtmlRequestOrder;
 import com.docuseal.types.CreateSubmissionMessageParams;
 import com.docuseal.types.CreateSubmissionSubmitterParams;
+import com.docuseal.types.SubmittersOrder;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -39,7 +39,7 @@ public final class CreateSubmissionFromHtmlParams {
 
   private final Optional<Boolean> sendSms;
 
-  private final Optional<CreateSubmissionFromHtmlRequestOrder> order;
+  private final Optional<SubmittersOrder> order;
 
   private final Optional<String> completedRedirectUrl;
 
@@ -62,7 +62,7 @@ public final class CreateSubmissionFromHtmlParams {
   private final Map<String, Object> additionalProperties;
 
   private CreateSubmissionFromHtmlParams(Optional<String> name, Optional<Boolean> sendEmail,
-      Optional<Boolean> sendSms, Optional<CreateSubmissionFromHtmlRequestOrder> order,
+      Optional<Boolean> sendSms, Optional<SubmittersOrder> order,
       Optional<String> completedRedirectUrl, Optional<String> bccCompleted,
       Optional<String> replyTo, Optional<String> expireAt, Optional<List<Integer>> templateIds,
       List<CreateSubmissionFromHtmlDocumentParams> documents,
@@ -113,7 +113,7 @@ public final class CreateSubmissionFromHtmlParams {
    * @return Pass 'random' to send signature request emails to all parties right away. The order is 'preserved' by default so the second party will receive a signature request email only after the document is signed by the first party.
    */
   @JsonProperty("order")
-  public Optional<CreateSubmissionFromHtmlRequestOrder> getOrder() {
+  public Optional<SubmittersOrder> getOrder() {
     return order;
   }
 
@@ -225,7 +225,7 @@ public final class CreateSubmissionFromHtmlParams {
 
     private Optional<Boolean> sendSms = Optional.empty();
 
-    private Optional<CreateSubmissionFromHtmlRequestOrder> order = Optional.empty();
+    private Optional<SubmittersOrder> order = Optional.empty();
 
     private Optional<String> completedRedirectUrl = Optional.empty();
 
@@ -326,12 +326,12 @@ public final class CreateSubmissionFromHtmlParams {
         value = "order",
         nulls = Nulls.SKIP
     )
-    public Builder order(Optional<CreateSubmissionFromHtmlRequestOrder> order) {
+    public Builder order(Optional<SubmittersOrder> order) {
       this.order = order;
       return this;
     }
 
-    public Builder order(CreateSubmissionFromHtmlRequestOrder order) {
+    public Builder order(SubmittersOrder order) {
       this.order = Optional.ofNullable(order);
       return this;
     }

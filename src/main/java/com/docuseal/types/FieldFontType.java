@@ -7,16 +7,16 @@ package com.docuseal.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.lang.String;
 
-public enum CreateTemplateDocumentFieldPreferencesParamsAlign {
-  LEFT("left"),
+public enum FieldFontType {
+  BOLD("bold"),
 
-  CENTER("center"),
+  ITALIC("italic"),
 
-  RIGHT("right");
+  BOLD_ITALIC("bold_italic");
 
   private final String value;
 
-  CreateTemplateDocumentFieldPreferencesParamsAlign(String value) {
+  FieldFontType(String value) {
     this.value = value;
   }
 

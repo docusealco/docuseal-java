@@ -7,20 +7,14 @@ package com.docuseal.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.lang.String;
 
-public enum SubmissionUpdateResultSource {
-  INVITE("invite"),
+public enum SubmittersOrder {
+  RANDOM("random"),
 
-  BULK("bulk"),
-
-  API("api"),
-
-  EMBED("embed"),
-
-  LINK("link");
+  PRESERVED("preserved");
 
   private final String value;
 
-  SubmissionUpdateResultSource(String value) {
+  SubmittersOrder(String value) {
     this.value = value;
   }
 

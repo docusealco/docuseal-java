@@ -28,11 +28,11 @@ import com.docuseal.requests.UpdateSubmissionParams;
 import com.docuseal.requests.UpdateSubmitterParams;
 import com.docuseal.requests.UpdateTemplateDocumentsParams;
 import com.docuseal.requests.UpdateTemplateParams;
-import com.docuseal.types.CreateSubmissionResult;
 import com.docuseal.types.Submission;
 import com.docuseal.types.SubmissionArchiveResult;
 import com.docuseal.types.SubmissionCreateResult;
 import com.docuseal.types.SubmissionDocuments;
+import com.docuseal.types.SubmissionInitResult;
 import com.docuseal.types.SubmissionList;
 import com.docuseal.types.SubmissionUpdateResult;
 import com.docuseal.types.Submitter;
@@ -494,15 +494,14 @@ public class AsyncDocusealClient {
   /**
    * This API endpoint allows you to create signature requests (submissions) for a document template and send them to the specified submitters (signers).&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/send-documents-for-signature-via-api&quot; class=&quot;link&quot;&gt;Send documents for signature via API&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api&quot; class=&quot;link&quot;&gt;Pre-fill PDF document form fields with API&lt;/a&gt;
    */
-  public CompletableFuture<CreateSubmissionResult> createSubmission(
-      CreateSubmissionParams request) {
+  public CompletableFuture<SubmissionInitResult> createSubmission(CreateSubmissionParams request) {
     return this.rawClient.createSubmission(request).thenApply(response -> response.body());
   }
 
   /**
    * This API endpoint allows you to create signature requests (submissions) for a document template and send them to the specified submitters (signers).&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/send-documents-for-signature-via-api&quot; class=&quot;link&quot;&gt;Send documents for signature via API&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api&quot; class=&quot;link&quot;&gt;Pre-fill PDF document form fields with API&lt;/a&gt;
    */
-  public CompletableFuture<CreateSubmissionResult> createSubmission(CreateSubmissionParams request,
+  public CompletableFuture<SubmissionInitResult> createSubmission(CreateSubmissionParams request,
       RequestOptions requestOptions) {
     return this.rawClient.createSubmission(request, requestOptions).thenApply(response -> response.body());
   }

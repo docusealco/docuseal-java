@@ -29,7 +29,7 @@ import java.util.Optional;
 public final class CreateTemplateDocumentFieldParams {
   private final Optional<String> name;
 
-  private final Optional<CreateTemplateDocumentFieldParamsType> type;
+  private final Optional<FieldType> type;
 
   private final Optional<String> role;
 
@@ -49,10 +49,10 @@ public final class CreateTemplateDocumentFieldParams {
 
   private final Map<String, Object> additionalProperties;
 
-  private CreateTemplateDocumentFieldParams(Optional<String> name,
-      Optional<CreateTemplateDocumentFieldParamsType> type, Optional<String> role,
-      Optional<Boolean> required, Optional<String> title, Optional<String> description,
-      Optional<List<CreateTemplateDocumentFieldAreaParams>> areas, Optional<List<String>> options,
+  private CreateTemplateDocumentFieldParams(Optional<String> name, Optional<FieldType> type,
+      Optional<String> role, Optional<Boolean> required, Optional<String> title,
+      Optional<String> description, Optional<List<CreateTemplateDocumentFieldAreaParams>> areas,
+      Optional<List<String>> options,
       Optional<CreateTemplateDocumentFieldValidationParams> validation,
       Optional<CreateTemplateDocumentFieldPreferencesParams> preferences,
       Map<String, Object> additionalProperties) {
@@ -81,7 +81,7 @@ public final class CreateTemplateDocumentFieldParams {
    * @return Type of the field (e.g., text, signature, date, initials).
    */
   @JsonProperty("type")
-  public Optional<CreateTemplateDocumentFieldParamsType> getType() {
+  public Optional<FieldType> getType() {
     return type;
   }
 
@@ -178,7 +178,7 @@ public final class CreateTemplateDocumentFieldParams {
   public static final class Builder {
     private Optional<String> name = Optional.empty();
 
-    private Optional<CreateTemplateDocumentFieldParamsType> type = Optional.empty();
+    private Optional<FieldType> type = Optional.empty();
 
     private Optional<String> role = Optional.empty();
 
@@ -240,12 +240,12 @@ public final class CreateTemplateDocumentFieldParams {
         value = "type",
         nulls = Nulls.SKIP
     )
-    public Builder type(Optional<CreateTemplateDocumentFieldParamsType> type) {
+    public Builder type(Optional<FieldType> type) {
       this.type = type;
       return this;
     }
 
-    public Builder type(CreateTemplateDocumentFieldParamsType type) {
+    public Builder type(FieldType type) {
       this.type = Optional.ofNullable(type);
       return this;
     }

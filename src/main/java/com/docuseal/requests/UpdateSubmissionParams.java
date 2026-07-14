@@ -4,12 +4,9 @@
 
 package com.docuseal.requests;
 
-import com.docuseal.core.Nullable;
-import com.docuseal.core.NullableNonemptyFilter;
 import com.docuseal.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -56,11 +53,8 @@ public final class UpdateSubmissionParams {
   /**
    * @return The date and time when the submission will expire and no longer be available. Pass <code>null</code> to remove the expiration.
    */
-  @JsonIgnore
+  @JsonProperty("expire_at")
   public Optional<String> getExpireAt() {
-    if (expireAt == null) {
-      return Optional.empty();
-    }
     return expireAt;
   }
 
@@ -70,15 +64,6 @@ public final class UpdateSubmissionParams {
   @JsonProperty("archived")
   public Optional<Boolean> getArchived() {
     return archived;
-  }
-
-  @JsonInclude(
-      value = JsonInclude.Include.CUSTOM,
-      valueFilter = NullableNonemptyFilter.class
-  )
-  @JsonProperty("expire_at")
-  private Optional<String> _getExpireAt() {
-    return expireAt;
   }
 
   @java.lang.Override
@@ -164,19 +149,6 @@ public final class UpdateSubmissionParams {
 
     public Builder expireAt(String expireAt) {
       this.expireAt = Optional.ofNullable(expireAt);
-      return this;
-    }
-
-    public Builder expireAt(Nullable<String> expireAt) {
-      if (expireAt.isNull()) {
-        this.expireAt = null;
-      }
-      else if (expireAt.isEmpty()) {
-        this.expireAt = Optional.empty();
-      }
-      else {
-        this.expireAt = Optional.of(expireAt.get());
-      }
       return this;
     }
 

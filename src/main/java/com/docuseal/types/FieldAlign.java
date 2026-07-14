@@ -7,18 +7,16 @@ package com.docuseal.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.lang.String;
 
-public enum GetSubmissionsRequestStatus {
-  PENDING("pending"),
+public enum FieldAlign {
+  LEFT("left"),
 
-  COMPLETED("completed"),
+  CENTER("center"),
 
-  DECLINED("declined"),
-
-  EXPIRED("expired");
+  RIGHT("right");
 
   private final String value;
 
-  GetSubmissionsRequestStatus(String value) {
+  FieldAlign(String value) {
     this.value = value;
   }
 

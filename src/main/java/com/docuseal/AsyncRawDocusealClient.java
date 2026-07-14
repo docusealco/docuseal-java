@@ -34,11 +34,11 @@ import com.docuseal.requests.UpdateSubmissionParams;
 import com.docuseal.requests.UpdateSubmitterParams;
 import com.docuseal.requests.UpdateTemplateDocumentsParams;
 import com.docuseal.requests.UpdateTemplateParams;
-import com.docuseal.types.CreateSubmissionResult;
 import com.docuseal.types.Submission;
 import com.docuseal.types.SubmissionArchiveResult;
 import com.docuseal.types.SubmissionCreateResult;
 import com.docuseal.types.SubmissionDocuments;
+import com.docuseal.types.SubmissionInitResult;
 import com.docuseal.types.SubmissionList;
 import com.docuseal.types.SubmissionUpdateResult;
 import com.docuseal.types.Submitter;
@@ -1487,7 +1487,7 @@ public class AsyncRawDocusealClient {
           /**
            * This API endpoint allows you to create signature requests (submissions) for a document template and send them to the specified submitters (signers).&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/send-documents-for-signature-via-api&quot; class=&quot;link&quot;&gt;Send documents for signature via API&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api&quot; class=&quot;link&quot;&gt;Pre-fill PDF document form fields with API&lt;/a&gt;
            */
-          public CompletableFuture<DocusealClientHttpResponse<CreateSubmissionResult>> createSubmission(
+          public CompletableFuture<DocusealClientHttpResponse<SubmissionInitResult>> createSubmission(
               CreateSubmissionParams request) {
             return createSubmission(request,null);
           }
@@ -1495,7 +1495,7 @@ public class AsyncRawDocusealClient {
           /**
            * This API endpoint allows you to create signature requests (submissions) for a document template and send them to the specified submitters (signers).&lt;br&gt;&lt;b&gt;Related Guides&lt;/b&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/send-documents-for-signature-via-api&quot; class=&quot;link&quot;&gt;Send documents for signature via API&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://www.docuseal.com/guides/pre-fill-pdf-document-form-fields-with-api&quot; class=&quot;link&quot;&gt;Pre-fill PDF document form fields with API&lt;/a&gt;
            */
-          public CompletableFuture<DocusealClientHttpResponse<CreateSubmissionResult>> createSubmission(
+          public CompletableFuture<DocusealClientHttpResponse<SubmissionInitResult>> createSubmission(
               CreateSubmissionParams request, RequestOptions requestOptions) {
             HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
@@ -1519,13 +1519,13 @@ public class AsyncRawDocusealClient {
             if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
               client = clientOptions.httpClientWithTimeout(requestOptions);
             }
-            CompletableFuture<DocusealClientHttpResponse<CreateSubmissionResult>> future = new CompletableFuture<>();
+            CompletableFuture<DocusealClientHttpResponse<SubmissionInitResult>> future = new CompletableFuture<>();
             client.newCall(okhttpRequest).enqueue(new Callback() {
               @Override
               public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
                   if (response.isSuccessful()) {
-                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CreateSubmissionResult.class), response));
+                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionInitResult.class), response));
                     return;
                   }
                   String responseBodyString = responseBody != null ? responseBody.string() : "{}";

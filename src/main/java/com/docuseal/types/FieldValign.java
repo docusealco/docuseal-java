@@ -7,16 +7,16 @@ package com.docuseal.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.lang.String;
 
-public enum UpdateSubmitterFieldPreferencesParamsColor {
-  BLACK("black"),
+public enum FieldValign {
+  TOP("top"),
 
-  WHITE("white"),
+  CENTER("center"),
 
-  BLUE("blue");
+  BOTTOM("bottom");
 
   private final String value;
 
-  UpdateSubmitterFieldPreferencesParamsColor(String value) {
+  FieldValign(String value) {
     this.value = value;
   }
 

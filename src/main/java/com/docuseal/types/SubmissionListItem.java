@@ -36,13 +36,13 @@ public final class SubmissionListItem {
 
   private final Optional<String> name;
 
-  private final SubmissionListItemSource source;
+  private final SubmissionSource source;
 
   private final String slug;
 
-  private final SubmissionListItemStatus status;
+  private final SubmissionStatus status;
 
-  private final SubmissionListItemSubmittersOrder submittersOrder;
+  private final SubmittersOrder submittersOrder;
 
   private final Optional<String> auditLogUrl;
 
@@ -68,9 +68,8 @@ public final class SubmissionListItem {
 
   private final Map<String, Object> additionalProperties;
 
-  private SubmissionListItem(int id, Optional<String> name, SubmissionListItemSource source,
-      String slug, SubmissionListItemStatus status,
-      SubmissionListItemSubmittersOrder submittersOrder, Optional<String> auditLogUrl,
+  private SubmissionListItem(int id, Optional<String> name, SubmissionSource source, String slug,
+      SubmissionStatus status, SubmittersOrder submittersOrder, Optional<String> auditLogUrl,
       Optional<String> combinedDocumentUrl, Optional<String> completedAt, String createdAt,
       String updatedAt, Optional<String> archivedAt, Optional<String> expireAt,
       Map<String, Object> variables, List<SubmitterSummary> submitters,
@@ -107,8 +106,11 @@ public final class SubmissionListItem {
   /**
    * @return Name of the document submission.
    */
-  @JsonProperty("name")
+  @JsonIgnore
   public Optional<String> getName() {
+    if (name == null) {
+      return Optional.empty();
+    }
     return name;
   }
 
@@ -116,7 +118,7 @@ public final class SubmissionListItem {
    * @return The source of the submission.
    */
   @JsonProperty("source")
-  public SubmissionListItemSource getSource() {
+  public SubmissionSource getSource() {
     return source;
   }
 
@@ -132,7 +134,7 @@ public final class SubmissionListItem {
    * @return The status of the submission.
    */
   @JsonProperty("status")
-  public SubmissionListItemStatus getStatus() {
+  public SubmissionStatus getStatus() {
     return status;
   }
 
@@ -140,7 +142,7 @@ public final class SubmissionListItem {
    * @return The order of submitters.
    */
   @JsonProperty("submitters_order")
-  public SubmissionListItemSubmittersOrder getSubmittersOrder() {
+  public SubmittersOrder getSubmittersOrder() {
     return submittersOrder;
   }
 
@@ -245,6 +247,15 @@ public final class SubmissionListItem {
       value = JsonInclude.Include.CUSTOM,
       valueFilter = NullableNonemptyFilter.class
   )
+  @JsonProperty("name")
+  private Optional<String> _getName() {
+    return name;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
   @JsonProperty("audit_log_url")
   private Optional<String> _getAuditLogUrl() {
     return auditLogUrl;
@@ -328,7 +339,7 @@ public final class SubmissionListItem {
     /**
      * <p>The source of the submission.</p>
      */
-    SlugStage source(@NotNull SubmissionListItemSource source);
+    SlugStage source(@NotNull SubmissionSource source);
   }
 
   public interface SlugStage {
@@ -342,14 +353,14 @@ public final class SubmissionListItem {
     /**
      * <p>The status of the submission.</p>
      */
-    SubmittersOrderStage status(@NotNull SubmissionListItemStatus status);
+    SubmittersOrderStage status(@NotNull SubmissionStatus status);
   }
 
   public interface SubmittersOrderStage {
     /**
      * <p>The order of submitters.</p>
      */
-    CreatedAtStage submittersOrder(@NotNull SubmissionListItemSubmittersOrder submittersOrder);
+    CreatedAtStage submittersOrder(@NotNull SubmittersOrder submittersOrder);
   }
 
   public interface CreatedAtStage {
@@ -375,6 +386,8 @@ public final class SubmissionListItem {
     _FinalStage name(Optional<String> name);
 
     _FinalStage name(String name);
+
+    _FinalStage name(Nullable<String> name);
 
     /**
      * <p>Audit log file URL.</p>
@@ -454,13 +467,13 @@ public final class SubmissionListItem {
   public static final class Builder implements IdStage, SourceStage, SlugStage, StatusStage, SubmittersOrderStage, CreatedAtStage, UpdatedAtStage, _FinalStage {
     private int id;
 
-    private SubmissionListItemSource source;
+    private SubmissionSource source;
 
     private String slug;
 
-    private SubmissionListItemStatus status;
+    private SubmissionStatus status;
 
-    private SubmissionListItemSubmittersOrder submittersOrder;
+    private SubmittersOrder submittersOrder;
 
     private String createdAt;
 
@@ -533,7 +546,7 @@ public final class SubmissionListItem {
      */
     @java.lang.Override
     @JsonSetter("source")
-    public SlugStage source(@NotNull SubmissionListItemSource source) {
+    public SlugStage source(@NotNull SubmissionSource source) {
       this.source = Objects.requireNonNull(source, "source must not be null");
       return this;
     }
@@ -557,7 +570,7 @@ public final class SubmissionListItem {
      */
     @java.lang.Override
     @JsonSetter("status")
-    public SubmittersOrderStage status(@NotNull SubmissionListItemStatus status) {
+    public SubmittersOrderStage status(@NotNull SubmissionStatus status) {
       this.status = Objects.requireNonNull(status, "status must not be null");
       return this;
     }
@@ -569,8 +582,7 @@ public final class SubmissionListItem {
      */
     @java.lang.Override
     @JsonSetter("submitters_order")
-    public CreatedAtStage submittersOrder(
-        @NotNull SubmissionListItemSubmittersOrder submittersOrder) {
+    public CreatedAtStage submittersOrder(@NotNull SubmittersOrder submittersOrder) {
       this.submittersOrder = Objects.requireNonNull(submittersOrder, "submittersOrder must not be null");
       return this;
     }
@@ -901,6 +913,24 @@ public final class SubmissionListItem {
     )
     public _FinalStage auditLogUrl(Optional<String> auditLogUrl) {
       this.auditLogUrl = auditLogUrl;
+      return this;
+    }
+
+    /**
+     * <p>Name of the document submission.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    public _FinalStage name(Nullable<String> name) {
+      if (name.isNull()) {
+        this.name = null;
+      }
+      else if (name.isEmpty()) {
+        this.name = Optional.empty();
+      }
+      else {
+        this.name = Optional.of(name.get());
+      }
       return this;
     }
 

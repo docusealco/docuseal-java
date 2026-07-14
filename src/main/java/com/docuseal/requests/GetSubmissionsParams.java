@@ -5,7 +5,7 @@
 package com.docuseal.requests;
 
 import com.docuseal.core.ObjectMappers;
-import com.docuseal.types.GetSubmissionsRequestStatus;
+import com.docuseal.types.SubmissionStatus;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -30,7 +30,7 @@ import java.util.Optional;
 public final class GetSubmissionsParams {
   private final Optional<Integer> templateId;
 
-  private final Optional<GetSubmissionsRequestStatus> status;
+  private final Optional<SubmissionStatus> status;
 
   private final Optional<String> q;
 
@@ -48,10 +48,10 @@ public final class GetSubmissionsParams {
 
   private final Map<String, Object> additionalProperties;
 
-  private GetSubmissionsParams(Optional<Integer> templateId,
-      Optional<GetSubmissionsRequestStatus> status, Optional<String> q, Optional<String> slug,
-      Optional<String> templateFolder, Optional<Boolean> archived, Optional<Integer> limit,
-      Optional<Integer> after, Optional<Integer> before, Map<String, Object> additionalProperties) {
+  private GetSubmissionsParams(Optional<Integer> templateId, Optional<SubmissionStatus> status,
+      Optional<String> q, Optional<String> slug, Optional<String> templateFolder,
+      Optional<Boolean> archived, Optional<Integer> limit, Optional<Integer> after,
+      Optional<Integer> before, Map<String, Object> additionalProperties) {
     this.templateId = templateId;
     this.status = status;
     this.q = q;
@@ -76,7 +76,7 @@ public final class GetSubmissionsParams {
    * @return Filter submissions by status.
    */
   @JsonProperty("status")
-  public Optional<GetSubmissionsRequestStatus> getStatus() {
+  public Optional<SubmissionStatus> getStatus() {
     return status;
   }
 
@@ -171,7 +171,7 @@ public final class GetSubmissionsParams {
   public static final class Builder {
     private Optional<Integer> templateId = Optional.empty();
 
-    private Optional<GetSubmissionsRequestStatus> status = Optional.empty();
+    private Optional<SubmissionStatus> status = Optional.empty();
 
     private Optional<String> q = Optional.empty();
 
@@ -230,12 +230,12 @@ public final class GetSubmissionsParams {
         value = "status",
         nulls = Nulls.SKIP
     )
-    public Builder status(Optional<GetSubmissionsRequestStatus> status) {
+    public Builder status(Optional<SubmissionStatus> status) {
       this.status = status;
       return this;
     }
 
-    public Builder status(GetSubmissionsRequestStatus status) {
+    public Builder status(SubmissionStatus status) {
       this.status = Optional.ofNullable(status);
       return this;
     }

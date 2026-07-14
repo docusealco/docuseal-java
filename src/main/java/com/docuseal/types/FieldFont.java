@@ -7,16 +7,16 @@ package com.docuseal.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.lang.String;
 
-public enum UpdateSubmitterFieldPreferencesParamsFontType {
-  BOLD("bold"),
+public enum FieldFont {
+  TIMES("Times"),
 
-  ITALIC("italic"),
+  HELVETICA("Helvetica"),
 
-  BOLD_ITALIC("bold_italic");
+  COURIER("Courier");
 
   private final String value;
 
-  UpdateSubmitterFieldPreferencesParamsFontType(String value) {
+  FieldFont(String value) {
     this.value = value;
   }
 

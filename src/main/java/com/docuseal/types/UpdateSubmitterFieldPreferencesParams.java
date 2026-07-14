@@ -30,23 +30,23 @@ import java.util.Optional;
 public final class UpdateSubmitterFieldPreferencesParams {
   private final Optional<Integer> fontSize;
 
-  private final Optional<UpdateSubmitterFieldPreferencesParamsFontType> fontType;
+  private final Optional<FieldFontType> fontType;
 
-  private final Optional<UpdateSubmitterFieldPreferencesParamsFont> font;
+  private final Optional<FieldFont> font;
 
-  private final Optional<UpdateSubmitterFieldPreferencesParamsColor> color;
+  private final Optional<String> color;
 
-  private final Optional<UpdateSubmitterFieldPreferencesParamsBackground> background;
+  private final Optional<String> background;
 
-  private final Optional<UpdateSubmitterFieldPreferencesParamsAlign> align;
+  private final Optional<FieldAlign> align;
 
-  private final Optional<UpdateSubmitterFieldPreferencesParamsValign> valign;
+  private final Optional<FieldValign> valign;
 
   private final Optional<String> format;
 
   private final Optional<Double> price;
 
-  private final Optional<UpdateSubmitterFieldPreferencesParamsCurrency> currency;
+  private final Optional<Currency> currency;
 
   private final Optional<UpdateSubmitterFieldPreferencesParamsMask> mask;
 
@@ -55,13 +55,9 @@ public final class UpdateSubmitterFieldPreferencesParams {
   private final Map<String, Object> additionalProperties;
 
   private UpdateSubmitterFieldPreferencesParams(Optional<Integer> fontSize,
-      Optional<UpdateSubmitterFieldPreferencesParamsFontType> fontType,
-      Optional<UpdateSubmitterFieldPreferencesParamsFont> font,
-      Optional<UpdateSubmitterFieldPreferencesParamsColor> color,
-      Optional<UpdateSubmitterFieldPreferencesParamsBackground> background,
-      Optional<UpdateSubmitterFieldPreferencesParamsAlign> align,
-      Optional<UpdateSubmitterFieldPreferencesParamsValign> valign, Optional<String> format,
-      Optional<Double> price, Optional<UpdateSubmitterFieldPreferencesParamsCurrency> currency,
+      Optional<FieldFontType> fontType, Optional<FieldFont> font, Optional<String> color,
+      Optional<String> background, Optional<FieldAlign> align, Optional<FieldValign> valign,
+      Optional<String> format, Optional<Double> price, Optional<Currency> currency,
       Optional<UpdateSubmitterFieldPreferencesParamsMask> mask, Optional<List<String>> reasons,
       Map<String, Object> additionalProperties) {
     this.fontSize = fontSize;
@@ -91,7 +87,7 @@ public final class UpdateSubmitterFieldPreferencesParams {
    * @return Font type of the field value.
    */
   @JsonProperty("font_type")
-  public Optional<UpdateSubmitterFieldPreferencesParamsFontType> getFontType() {
+  public Optional<FieldFontType> getFontType() {
     return fontType;
   }
 
@@ -99,7 +95,7 @@ public final class UpdateSubmitterFieldPreferencesParams {
    * @return Font family of the field value.
    */
   @JsonProperty("font")
-  public Optional<UpdateSubmitterFieldPreferencesParamsFont> getFont() {
+  public Optional<FieldFont> getFont() {
     return font;
   }
 
@@ -107,7 +103,7 @@ public final class UpdateSubmitterFieldPreferencesParams {
    * @return Font color of the field value.
    */
   @JsonProperty("color")
-  public Optional<UpdateSubmitterFieldPreferencesParamsColor> getColor() {
+  public Optional<String> getColor() {
     return color;
   }
 
@@ -115,7 +111,7 @@ public final class UpdateSubmitterFieldPreferencesParams {
    * @return Field box background color.
    */
   @JsonProperty("background")
-  public Optional<UpdateSubmitterFieldPreferencesParamsBackground> getBackground() {
+  public Optional<String> getBackground() {
     return background;
   }
 
@@ -123,7 +119,7 @@ public final class UpdateSubmitterFieldPreferencesParams {
    * @return Horizontal alignment of the field text value.
    */
   @JsonProperty("align")
-  public Optional<UpdateSubmitterFieldPreferencesParamsAlign> getAlign() {
+  public Optional<FieldAlign> getAlign() {
     return align;
   }
 
@@ -131,7 +127,7 @@ public final class UpdateSubmitterFieldPreferencesParams {
    * @return Vertical alignment of the field text value.
    */
   @JsonProperty("valign")
-  public Optional<UpdateSubmitterFieldPreferencesParamsValign> getValign() {
+  public Optional<FieldValign> getValign() {
     return valign;
   }
 
@@ -155,7 +151,7 @@ public final class UpdateSubmitterFieldPreferencesParams {
    * @return Currency value of the payment field. Only for payment fields.
    */
   @JsonProperty("currency")
-  public Optional<UpdateSubmitterFieldPreferencesParamsCurrency> getCurrency() {
+  public Optional<Currency> getCurrency() {
     return currency;
   }
 
@@ -210,23 +206,23 @@ public final class UpdateSubmitterFieldPreferencesParams {
   public static final class Builder {
     private Optional<Integer> fontSize = Optional.empty();
 
-    private Optional<UpdateSubmitterFieldPreferencesParamsFontType> fontType = Optional.empty();
+    private Optional<FieldFontType> fontType = Optional.empty();
 
-    private Optional<UpdateSubmitterFieldPreferencesParamsFont> font = Optional.empty();
+    private Optional<FieldFont> font = Optional.empty();
 
-    private Optional<UpdateSubmitterFieldPreferencesParamsColor> color = Optional.empty();
+    private Optional<String> color = Optional.empty();
 
-    private Optional<UpdateSubmitterFieldPreferencesParamsBackground> background = Optional.empty();
+    private Optional<String> background = Optional.empty();
 
-    private Optional<UpdateSubmitterFieldPreferencesParamsAlign> align = Optional.empty();
+    private Optional<FieldAlign> align = Optional.empty();
 
-    private Optional<UpdateSubmitterFieldPreferencesParamsValign> valign = Optional.empty();
+    private Optional<FieldValign> valign = Optional.empty();
 
     private Optional<String> format = Optional.empty();
 
     private Optional<Double> price = Optional.empty();
 
-    private Optional<UpdateSubmitterFieldPreferencesParamsCurrency> currency = Optional.empty();
+    private Optional<Currency> currency = Optional.empty();
 
     private Optional<UpdateSubmitterFieldPreferencesParamsMask> mask = Optional.empty();
 
@@ -278,12 +274,12 @@ public final class UpdateSubmitterFieldPreferencesParams {
         value = "font_type",
         nulls = Nulls.SKIP
     )
-    public Builder fontType(Optional<UpdateSubmitterFieldPreferencesParamsFontType> fontType) {
+    public Builder fontType(Optional<FieldFontType> fontType) {
       this.fontType = fontType;
       return this;
     }
 
-    public Builder fontType(UpdateSubmitterFieldPreferencesParamsFontType fontType) {
+    public Builder fontType(FieldFontType fontType) {
       this.fontType = Optional.ofNullable(fontType);
       return this;
     }
@@ -295,12 +291,12 @@ public final class UpdateSubmitterFieldPreferencesParams {
         value = "font",
         nulls = Nulls.SKIP
     )
-    public Builder font(Optional<UpdateSubmitterFieldPreferencesParamsFont> font) {
+    public Builder font(Optional<FieldFont> font) {
       this.font = font;
       return this;
     }
 
-    public Builder font(UpdateSubmitterFieldPreferencesParamsFont font) {
+    public Builder font(FieldFont font) {
       this.font = Optional.ofNullable(font);
       return this;
     }
@@ -312,12 +308,12 @@ public final class UpdateSubmitterFieldPreferencesParams {
         value = "color",
         nulls = Nulls.SKIP
     )
-    public Builder color(Optional<UpdateSubmitterFieldPreferencesParamsColor> color) {
+    public Builder color(Optional<String> color) {
       this.color = color;
       return this;
     }
 
-    public Builder color(UpdateSubmitterFieldPreferencesParamsColor color) {
+    public Builder color(String color) {
       this.color = Optional.ofNullable(color);
       return this;
     }
@@ -329,13 +325,12 @@ public final class UpdateSubmitterFieldPreferencesParams {
         value = "background",
         nulls = Nulls.SKIP
     )
-    public Builder background(
-        Optional<UpdateSubmitterFieldPreferencesParamsBackground> background) {
+    public Builder background(Optional<String> background) {
       this.background = background;
       return this;
     }
 
-    public Builder background(UpdateSubmitterFieldPreferencesParamsBackground background) {
+    public Builder background(String background) {
       this.background = Optional.ofNullable(background);
       return this;
     }
@@ -347,12 +342,12 @@ public final class UpdateSubmitterFieldPreferencesParams {
         value = "align",
         nulls = Nulls.SKIP
     )
-    public Builder align(Optional<UpdateSubmitterFieldPreferencesParamsAlign> align) {
+    public Builder align(Optional<FieldAlign> align) {
       this.align = align;
       return this;
     }
 
-    public Builder align(UpdateSubmitterFieldPreferencesParamsAlign align) {
+    public Builder align(FieldAlign align) {
       this.align = Optional.ofNullable(align);
       return this;
     }
@@ -364,12 +359,12 @@ public final class UpdateSubmitterFieldPreferencesParams {
         value = "valign",
         nulls = Nulls.SKIP
     )
-    public Builder valign(Optional<UpdateSubmitterFieldPreferencesParamsValign> valign) {
+    public Builder valign(Optional<FieldValign> valign) {
       this.valign = valign;
       return this;
     }
 
-    public Builder valign(UpdateSubmitterFieldPreferencesParamsValign valign) {
+    public Builder valign(FieldValign valign) {
       this.valign = Optional.ofNullable(valign);
       return this;
     }
@@ -415,12 +410,12 @@ public final class UpdateSubmitterFieldPreferencesParams {
         value = "currency",
         nulls = Nulls.SKIP
     )
-    public Builder currency(Optional<UpdateSubmitterFieldPreferencesParamsCurrency> currency) {
+    public Builder currency(Optional<Currency> currency) {
       this.currency = currency;
       return this;
     }
 
-    public Builder currency(UpdateSubmitterFieldPreferencesParamsCurrency currency) {
+    public Builder currency(Currency currency) {
       this.currency = Optional.ofNullable(currency);
       return this;
     }

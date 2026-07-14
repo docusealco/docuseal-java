@@ -7,16 +7,20 @@ package com.docuseal.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.lang.String;
 
-public enum UpdateSubmitterFieldPreferencesParamsBackground {
-  BLACK("black"),
+public enum Currency {
+  USD("USD"),
 
-  WHITE("white"),
+  EUR("EUR"),
 
-  BLUE("blue");
+  GBP("GBP"),
+
+  CAD("CAD"),
+
+  AUD("AUD");
 
   private final String value;
 
-  UpdateSubmitterFieldPreferencesParamsBackground(String value) {
+  Currency(String value) {
     this.value = value;
   }
 

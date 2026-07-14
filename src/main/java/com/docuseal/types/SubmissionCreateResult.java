@@ -4,9 +4,12 @@
 
 package com.docuseal.types;
 
+import com.docuseal.core.Nullable;
+import com.docuseal.core.NullableNonemptyFilter;
 import com.docuseal.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,31 +33,30 @@ import org.jetbrains.annotations.NotNull;
 public final class SubmissionCreateResult {
   private final int id;
 
-  private final Optional<String> name;
+  private final String name;
 
   private final List<SubmitterCreateResult> submitters;
 
-  private final SubmissionCreateResultSource source;
+  private final SubmissionSource source;
 
-  private final SubmissionCreateResultSubmittersOrder submittersOrder;
+  private final SubmittersOrder submittersOrder;
 
-  private final SubmissionCreateResultStatus status;
+  private final SubmissionStatus status;
 
   private final Optional<List<SchemaDocument>> schema;
 
   private final Optional<List<Field>> fields;
 
-  private final String expireAt;
+  private final Optional<String> expireAt;
 
   private final String createdAt;
 
   private final Map<String, Object> additionalProperties;
 
-  private SubmissionCreateResult(int id, Optional<String> name,
-      List<SubmitterCreateResult> submitters, SubmissionCreateResultSource source,
-      SubmissionCreateResultSubmittersOrder submittersOrder, SubmissionCreateResultStatus status,
-      Optional<List<SchemaDocument>> schema, Optional<List<Field>> fields, String expireAt,
-      String createdAt, Map<String, Object> additionalProperties) {
+  private SubmissionCreateResult(int id, String name, List<SubmitterCreateResult> submitters,
+      SubmissionSource source, SubmittersOrder submittersOrder, SubmissionStatus status,
+      Optional<List<SchemaDocument>> schema, Optional<List<Field>> fields,
+      Optional<String> expireAt, String createdAt, Map<String, Object> additionalProperties) {
     this.id = id;
     this.name = name;
     this.submitters = submitters;
@@ -80,7 +82,7 @@ public final class SubmissionCreateResult {
    * @return Submission name.
    */
   @JsonProperty("name")
-  public Optional<String> getName() {
+  public String getName() {
     return name;
   }
 
@@ -96,7 +98,7 @@ public final class SubmissionCreateResult {
    * @return The source of the submission.
    */
   @JsonProperty("source")
-  public SubmissionCreateResultSource getSource() {
+  public SubmissionSource getSource() {
     return source;
   }
 
@@ -104,7 +106,7 @@ public final class SubmissionCreateResult {
    * @return The order of submitters.
    */
   @JsonProperty("submitters_order")
-  public SubmissionCreateResultSubmittersOrder getSubmittersOrder() {
+  public SubmittersOrder getSubmittersOrder() {
     return submittersOrder;
   }
 
@@ -112,7 +114,7 @@ public final class SubmissionCreateResult {
    * @return The status of the submission.
    */
   @JsonProperty("status")
-  public SubmissionCreateResultStatus getStatus() {
+  public SubmissionStatus getStatus() {
     return status;
   }
 
@@ -133,10 +135,13 @@ public final class SubmissionCreateResult {
   }
 
   /**
-   * @return Specify the expiration date and time after which the submission becomes unavailable for signature.
+   * @return The date and time when the submission will expire and no longer be available for signing.
    */
-  @JsonProperty("expire_at")
-  public String getExpireAt() {
+  @JsonIgnore
+  public Optional<String> getExpireAt() {
+    if (expireAt == null) {
+      return Optional.empty();
+    }
     return expireAt;
   }
 
@@ -146,6 +151,15 @@ public final class SubmissionCreateResult {
   @JsonProperty("created_at")
   public String getCreatedAt() {
     return createdAt;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("expire_at")
+  private Optional<String> _getExpireAt() {
+    return expireAt;
   }
 
   @java.lang.Override
@@ -181,37 +195,37 @@ public final class SubmissionCreateResult {
     /**
      * <p>Submission unique ID number.</p>
      */
-    SourceStage id(int id);
+    NameStage id(int id);
 
     Builder from(SubmissionCreateResult other);
+  }
+
+  public interface NameStage {
+    /**
+     * <p>Submission name.</p>
+     */
+    SourceStage name(@NotNull String name);
   }
 
   public interface SourceStage {
     /**
      * <p>The source of the submission.</p>
      */
-    SubmittersOrderStage source(@NotNull SubmissionCreateResultSource source);
+    SubmittersOrderStage source(@NotNull SubmissionSource source);
   }
 
   public interface SubmittersOrderStage {
     /**
      * <p>The order of submitters.</p>
      */
-    StatusStage submittersOrder(@NotNull SubmissionCreateResultSubmittersOrder submittersOrder);
+    StatusStage submittersOrder(@NotNull SubmittersOrder submittersOrder);
   }
 
   public interface StatusStage {
     /**
      * <p>The status of the submission.</p>
      */
-    ExpireAtStage status(@NotNull SubmissionCreateResultStatus status);
-  }
-
-  public interface ExpireAtStage {
-    /**
-     * <p>Specify the expiration date and time after which the submission becomes unavailable for signature.</p>
-     */
-    CreatedAtStage expireAt(@NotNull String expireAt);
+    CreatedAtStage status(@NotNull SubmissionStatus status);
   }
 
   public interface CreatedAtStage {
@@ -223,13 +237,6 @@ public final class SubmissionCreateResult {
 
   public interface _FinalStage {
     SubmissionCreateResult build();
-
-    /**
-     * <p>Submission name.</p>
-     */
-    _FinalStage name(Optional<String> name);
-
-    _FinalStage name(String name);
 
     /**
      * <p>The list of submitters.</p>
@@ -253,31 +260,40 @@ public final class SubmissionCreateResult {
     _FinalStage fields(Optional<List<Field>> fields);
 
     _FinalStage fields(List<Field> fields);
+
+    /**
+     * <p>The date and time when the submission will expire and no longer be available for signing.</p>
+     */
+    _FinalStage expireAt(Optional<String> expireAt);
+
+    _FinalStage expireAt(String expireAt);
+
+    _FinalStage expireAt(Nullable<String> expireAt);
   }
 
   @JsonIgnoreProperties(
       ignoreUnknown = true
   )
-  public static final class Builder implements IdStage, SourceStage, SubmittersOrderStage, StatusStage, ExpireAtStage, CreatedAtStage, _FinalStage {
+  public static final class Builder implements IdStage, NameStage, SourceStage, SubmittersOrderStage, StatusStage, CreatedAtStage, _FinalStage {
     private int id;
 
-    private SubmissionCreateResultSource source;
+    private String name;
 
-    private SubmissionCreateResultSubmittersOrder submittersOrder;
+    private SubmissionSource source;
 
-    private SubmissionCreateResultStatus status;
+    private SubmittersOrder submittersOrder;
 
-    private String expireAt;
+    private SubmissionStatus status;
 
     private String createdAt;
+
+    private Optional<String> expireAt = Optional.empty();
 
     private Optional<List<Field>> fields = Optional.empty();
 
     private Optional<List<SchemaDocument>> schema = Optional.empty();
 
     private List<SubmitterCreateResult> submitters = new ArrayList<>();
-
-    private Optional<String> name = Optional.empty();
 
     @JsonAnySetter
     private Map<String, Object> additionalProperties = new HashMap<>();
@@ -307,8 +323,20 @@ public final class SubmissionCreateResult {
      */
     @java.lang.Override
     @JsonSetter("id")
-    public SourceStage id(int id) {
+    public NameStage id(int id) {
       this.id = id;
+      return this;
+    }
+
+    /**
+     * <p>Submission name.</p>
+     * <p>Submission name.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    @JsonSetter("name")
+    public SourceStage name(@NotNull String name) {
+      this.name = Objects.requireNonNull(name, "name must not be null");
       return this;
     }
 
@@ -319,7 +347,7 @@ public final class SubmissionCreateResult {
      */
     @java.lang.Override
     @JsonSetter("source")
-    public SubmittersOrderStage source(@NotNull SubmissionCreateResultSource source) {
+    public SubmittersOrderStage source(@NotNull SubmissionSource source) {
       this.source = Objects.requireNonNull(source, "source must not be null");
       return this;
     }
@@ -331,8 +359,7 @@ public final class SubmissionCreateResult {
      */
     @java.lang.Override
     @JsonSetter("submitters_order")
-    public StatusStage submittersOrder(
-        @NotNull SubmissionCreateResultSubmittersOrder submittersOrder) {
+    public StatusStage submittersOrder(@NotNull SubmittersOrder submittersOrder) {
       this.submittersOrder = Objects.requireNonNull(submittersOrder, "submittersOrder must not be null");
       return this;
     }
@@ -344,20 +371,8 @@ public final class SubmissionCreateResult {
      */
     @java.lang.Override
     @JsonSetter("status")
-    public ExpireAtStage status(@NotNull SubmissionCreateResultStatus status) {
+    public CreatedAtStage status(@NotNull SubmissionStatus status) {
       this.status = Objects.requireNonNull(status, "status must not be null");
-      return this;
-    }
-
-    /**
-     * <p>Specify the expiration date and time after which the submission becomes unavailable for signature.</p>
-     * <p>Specify the expiration date and time after which the submission becomes unavailable for signature.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    @JsonSetter("expire_at")
-    public CreatedAtStage expireAt(@NotNull String expireAt) {
-      this.expireAt = Objects.requireNonNull(expireAt, "expireAt must not be null");
       return this;
     }
 
@@ -370,6 +385,47 @@ public final class SubmissionCreateResult {
     @JsonSetter("created_at")
     public _FinalStage createdAt(@NotNull String createdAt) {
       this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
+      return this;
+    }
+
+    /**
+     * <p>The date and time when the submission will expire and no longer be available for signing.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    public _FinalStage expireAt(Nullable<String> expireAt) {
+      if (expireAt.isNull()) {
+        this.expireAt = null;
+      }
+      else if (expireAt.isEmpty()) {
+        this.expireAt = Optional.empty();
+      }
+      else {
+        this.expireAt = Optional.of(expireAt.get());
+      }
+      return this;
+    }
+
+    /**
+     * <p>The date and time when the submission will expire and no longer be available for signing.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    public _FinalStage expireAt(String expireAt) {
+      this.expireAt = Optional.ofNullable(expireAt);
+      return this;
+    }
+
+    /**
+     * <p>The date and time when the submission will expire and no longer be available for signing.</p>
+     */
+    @java.lang.Override
+    @JsonSetter(
+        value = "expire_at",
+        nulls = Nulls.SKIP
+    )
+    public _FinalStage expireAt(Optional<String> expireAt) {
+      this.expireAt = expireAt;
       return this;
     }
 
@@ -450,29 +506,6 @@ public final class SubmissionCreateResult {
     public _FinalStage submitters(List<SubmitterCreateResult> submitters) {
       this.submitters.clear();
       this.submitters.addAll(submitters);
-      return this;
-    }
-
-    /**
-     * <p>Submission name.</p>
-     * @return Reference to {@code this} so that method calls can be chained together.
-     */
-    @java.lang.Override
-    public _FinalStage name(String name) {
-      this.name = Optional.ofNullable(name);
-      return this;
-    }
-
-    /**
-     * <p>Submission name.</p>
-     */
-    @java.lang.Override
-    @JsonSetter(
-        value = "name",
-        nulls = Nulls.SKIP
-    )
-    public _FinalStage name(Optional<String> name) {
-      this.name = name;
       return this;
     }
 

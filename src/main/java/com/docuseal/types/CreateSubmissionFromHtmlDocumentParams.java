@@ -35,16 +35,15 @@ public final class CreateSubmissionFromHtmlDocumentParams {
 
   private final Optional<String> htmlFooter;
 
-  private final Optional<CreateSubmissionFromHtmlDocumentParamsSize> size;
+  private final Optional<PageSize> size;
 
   private final Optional<Integer> position;
 
   private final Map<String, Object> additionalProperties;
 
   private CreateSubmissionFromHtmlDocumentParams(Optional<String> name, String html,
-      Optional<String> htmlHeader, Optional<String> htmlFooter,
-      Optional<CreateSubmissionFromHtmlDocumentParamsSize> size, Optional<Integer> position,
-      Map<String, Object> additionalProperties) {
+      Optional<String> htmlHeader, Optional<String> htmlFooter, Optional<PageSize> size,
+      Optional<Integer> position, Map<String, Object> additionalProperties) {
     this.name = name;
     this.html = html;
     this.htmlHeader = htmlHeader;
@@ -90,7 +89,7 @@ public final class CreateSubmissionFromHtmlDocumentParams {
    * @return Page size. Letter 8.5 x 11 will be assigned when not specified.
    */
   @JsonProperty("size")
-  public Optional<CreateSubmissionFromHtmlDocumentParamsSize> getSize() {
+  public Optional<PageSize> getSize() {
     return size;
   }
 
@@ -167,9 +166,9 @@ public final class CreateSubmissionFromHtmlDocumentParams {
     /**
      * <p>Page size. Letter 8.5 x 11 will be assigned when not specified.</p>
      */
-    _FinalStage size(Optional<CreateSubmissionFromHtmlDocumentParamsSize> size);
+    _FinalStage size(Optional<PageSize> size);
 
-    _FinalStage size(CreateSubmissionFromHtmlDocumentParamsSize size);
+    _FinalStage size(PageSize size);
 
     /**
      * <p>Document position in the submission. If not specified, the document will be added in the order it appears in the documents array.</p>
@@ -187,7 +186,7 @@ public final class CreateSubmissionFromHtmlDocumentParams {
 
     private Optional<Integer> position = Optional.empty();
 
-    private Optional<CreateSubmissionFromHtmlDocumentParamsSize> size = Optional.empty();
+    private Optional<PageSize> size = Optional.empty();
 
     private Optional<String> htmlFooter = Optional.empty();
 
@@ -252,7 +251,7 @@ public final class CreateSubmissionFromHtmlDocumentParams {
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage size(CreateSubmissionFromHtmlDocumentParamsSize size) {
+    public _FinalStage size(PageSize size) {
       this.size = Optional.ofNullable(size);
       return this;
     }
@@ -265,7 +264,7 @@ public final class CreateSubmissionFromHtmlDocumentParams {
         value = "size",
         nulls = Nulls.SKIP
     )
-    public _FinalStage size(Optional<CreateSubmissionFromHtmlDocumentParamsSize> size) {
+    public _FinalStage size(Optional<PageSize> size) {
       this.size = size;
       return this;
     }

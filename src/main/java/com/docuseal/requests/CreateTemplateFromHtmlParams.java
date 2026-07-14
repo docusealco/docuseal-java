@@ -6,7 +6,7 @@ package com.docuseal.requests;
 
 import com.docuseal.core.ObjectMappers;
 import com.docuseal.types.CreateTemplateFromHtmlDocumentParams;
-import com.docuseal.types.CreateTemplateFromHtmlRequestSize;
+import com.docuseal.types.PageSize;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -37,7 +37,7 @@ public final class CreateTemplateFromHtmlParams {
 
   private final Optional<String> name;
 
-  private final Optional<CreateTemplateFromHtmlRequestSize> size;
+  private final Optional<PageSize> size;
 
   private final Optional<String> externalId;
 
@@ -50,9 +50,8 @@ public final class CreateTemplateFromHtmlParams {
   private final Map<String, Object> additionalProperties;
 
   private CreateTemplateFromHtmlParams(Optional<String> html, Optional<String> htmlHeader,
-      Optional<String> htmlFooter, Optional<String> name,
-      Optional<CreateTemplateFromHtmlRequestSize> size, Optional<String> externalId,
-      Optional<String> folderName, Optional<Boolean> sharedLink,
+      Optional<String> htmlFooter, Optional<String> name, Optional<PageSize> size,
+      Optional<String> externalId, Optional<String> folderName, Optional<Boolean> sharedLink,
       Optional<List<CreateTemplateFromHtmlDocumentParams>> documents,
       Map<String, Object> additionalProperties) {
     this.html = html;
@@ -103,7 +102,7 @@ public final class CreateTemplateFromHtmlParams {
    * @return Page size. Letter 8.5 x 11 will be assigned when not specified.
    */
   @JsonProperty("size")
-  public Optional<CreateTemplateFromHtmlRequestSize> getSize() {
+  public Optional<PageSize> getSize() {
     return size;
   }
 
@@ -180,7 +179,7 @@ public final class CreateTemplateFromHtmlParams {
 
     private Optional<String> name = Optional.empty();
 
-    private Optional<CreateTemplateFromHtmlRequestSize> size = Optional.empty();
+    private Optional<PageSize> size = Optional.empty();
 
     private Optional<String> externalId = Optional.empty();
 
@@ -284,12 +283,12 @@ public final class CreateTemplateFromHtmlParams {
         value = "size",
         nulls = Nulls.SKIP
     )
-    public Builder size(Optional<CreateTemplateFromHtmlRequestSize> size) {
+    public Builder size(Optional<PageSize> size) {
       this.size = size;
       return this;
     }
 
-    public Builder size(CreateTemplateFromHtmlRequestSize size) {
+    public Builder size(PageSize size) {
       this.size = Optional.ofNullable(size);
       return this;
     }

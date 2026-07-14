@@ -30,7 +30,7 @@ public final class SubmissionEvent {
 
   private final int submitterId;
 
-  private final SubmissionEventEventType eventType;
+  private final SubmissionEventType eventType;
 
   private final String eventTimestamp;
 
@@ -38,7 +38,7 @@ public final class SubmissionEvent {
 
   private final Map<String, Object> additionalProperties;
 
-  private SubmissionEvent(int id, int submitterId, SubmissionEventEventType eventType,
+  private SubmissionEvent(int id, int submitterId, SubmissionEventType eventType,
       String eventTimestamp, Optional<Map<String, Object>> data,
       Map<String, Object> additionalProperties) {
     this.id = id;
@@ -69,7 +69,7 @@ public final class SubmissionEvent {
    * @return Event type.
    */
   @JsonProperty("event_type")
-  public SubmissionEventEventType getEventType() {
+  public SubmissionEventType getEventType() {
     return eventType;
   }
 
@@ -138,7 +138,7 @@ public final class SubmissionEvent {
     /**
      * <p>Event type.</p>
      */
-    EventTimestampStage eventType(@NotNull SubmissionEventEventType eventType);
+    EventTimestampStage eventType(@NotNull SubmissionEventType eventType);
   }
 
   public interface EventTimestampStage {
@@ -167,7 +167,7 @@ public final class SubmissionEvent {
 
     private int submitterId;
 
-    private SubmissionEventEventType eventType;
+    private SubmissionEventType eventType;
 
     private String eventTimestamp;
 
@@ -220,7 +220,7 @@ public final class SubmissionEvent {
      */
     @java.lang.Override
     @JsonSetter("event_type")
-    public EventTimestampStage eventType(@NotNull SubmissionEventEventType eventType) {
+    public EventTimestampStage eventType(@NotNull SubmissionEventType eventType) {
       this.eventType = Objects.requireNonNull(eventType, "eventType must not be null");
       return this;
     }

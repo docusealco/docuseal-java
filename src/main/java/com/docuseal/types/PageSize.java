@@ -7,20 +7,32 @@ package com.docuseal.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.lang.String;
 
-public enum SubmissionListItemSource {
-  INVITE("invite"),
+public enum PageSize {
+  LETTER("Letter"),
 
-  BULK("bulk"),
+  LEGAL("Legal"),
 
-  API("api"),
+  TABLOID("Tabloid"),
 
-  EMBED("embed"),
+  LEDGER("Ledger"),
 
-  LINK("link");
+  A0("A0"),
+
+  A1("A1"),
+
+  A2("A2"),
+
+  A3("A3"),
+
+  A4("A4"),
+
+  A5("A5"),
+
+  A6("A6");
 
   private final String value;
 
-  SubmissionListItemSource(String value) {
+  PageSize(String value) {
     this.value = value;
   }
 

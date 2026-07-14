@@ -40,7 +40,7 @@ public final class Submission {
 
   private final SubmissionSource source;
 
-  private final SubmissionSubmittersOrder submittersOrder;
+  private final SubmittersOrder submittersOrder;
 
   private final Optional<String> auditLogUrl;
 
@@ -73,7 +73,7 @@ public final class Submission {
   private final Map<String, Object> additionalProperties;
 
   private Submission(int id, Optional<String> name, String slug, SubmissionSource source,
-      SubmissionSubmittersOrder submittersOrder, Optional<String> auditLogUrl,
+      SubmittersOrder submittersOrder, Optional<String> auditLogUrl,
       Optional<String> combinedDocumentUrl, String createdAt, String updatedAt,
       Optional<String> archivedAt, Optional<String> expireAt, Map<String, Object> variables,
       List<SubmissionSubmitter> submitters, Optional<TemplateSummary> template,
@@ -113,8 +113,11 @@ public final class Submission {
   /**
    * @return Name of the document submission.
    */
-  @JsonProperty("name")
+  @JsonIgnore
   public Optional<String> getName() {
+    if (name == null) {
+      return Optional.empty();
+    }
     return name;
   }
 
@@ -138,7 +141,7 @@ public final class Submission {
    * @return The order of submitters.
    */
   @JsonProperty("submitters_order")
-  public SubmissionSubmittersOrder getSubmittersOrder() {
+  public SubmittersOrder getSubmittersOrder() {
     return submittersOrder;
   }
 
@@ -267,6 +270,15 @@ public final class Submission {
       value = JsonInclude.Include.CUSTOM,
       valueFilter = NullableNonemptyFilter.class
   )
+  @JsonProperty("name")
+  private Optional<String> _getName() {
+    return name;
+  }
+
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
   @JsonProperty("audit_log_url")
   private Optional<String> _getAuditLogUrl() {
     return auditLogUrl;
@@ -364,7 +376,7 @@ public final class Submission {
     /**
      * <p>The order of submitters.</p>
      */
-    CreatedAtStage submittersOrder(@NotNull SubmissionSubmittersOrder submittersOrder);
+    CreatedAtStage submittersOrder(@NotNull SubmittersOrder submittersOrder);
   }
 
   public interface CreatedAtStage {
@@ -397,6 +409,8 @@ public final class Submission {
     _FinalStage name(Optional<String> name);
 
     _FinalStage name(String name);
+
+    _FinalStage name(Nullable<String> name);
 
     /**
      * <p>Audit log file URL.</p>
@@ -498,7 +512,7 @@ public final class Submission {
 
     private SubmissionSource source;
 
-    private SubmissionSubmittersOrder submittersOrder;
+    private SubmittersOrder submittersOrder;
 
     private String createdAt;
 
@@ -603,7 +617,7 @@ public final class Submission {
      */
     @java.lang.Override
     @JsonSetter("submitters_order")
-    public CreatedAtStage submittersOrder(@NotNull SubmissionSubmittersOrder submittersOrder) {
+    public CreatedAtStage submittersOrder(@NotNull SubmittersOrder submittersOrder) {
       this.submittersOrder = Objects.requireNonNull(submittersOrder, "submittersOrder must not be null");
       return this;
     }
@@ -1014,6 +1028,24 @@ public final class Submission {
     )
     public _FinalStage auditLogUrl(Optional<String> auditLogUrl) {
       this.auditLogUrl = auditLogUrl;
+      return this;
+    }
+
+    /**
+     * <p>Name of the document submission.</p>
+     * @return Reference to {@code this} so that method calls can be chained together.
+     */
+    @java.lang.Override
+    public _FinalStage name(Nullable<String> name) {
+      if (name.isNull()) {
+        this.name = null;
+      }
+      else if (name.isEmpty()) {
+        this.name = Optional.empty();
+      }
+      else {
+        this.name = Optional.of(name.get());
+      }
       return this;
     }
 
