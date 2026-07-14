@@ -108,7 +108,7 @@ This API endpoint allows you to create signature requests (submissions) for a do
 var submission = client.createSubmission(CreateSubmissionParams.builder()
     .templateId(1000001)
     .submitters(List.of(
-      CreateSubmissionRequestSubmitter.builder()
+      CreateSubmissionSubmitterParams.builder()
         .role("First Party")
         .email("john.doe@example.com")
         .build()))
@@ -129,14 +129,14 @@ Provides the functionality to create one-off submission request from a PDF. Use 
 ```java
 var submission = client.createSubmissionFromPdf(CreateSubmissionFromPdfParams.builder()
     .documents(List.of(
-      CreateSubmissionFromPdfRequestDocument.builder()
+      CreateSubmissionFromPdfDocumentParams.builder()
         .name("string")
         .file("base64")
         .fields(List.of(
-          CreateSubmissionFromPdfRequestDocumentField.builder()
+          CreateSubmissionDocumentFieldParams.builder()
             .name("string")
             .areas(List.of(
-              CreateSubmissionFromPdfRequestDocumentFieldArea.builder()
+              CreateSubmissionDocumentFieldAreaParams.builder()
                 .x(0)
                 .y(0)
                 .w(0)
@@ -146,7 +146,7 @@ var submission = client.createSubmissionFromPdf(CreateSubmissionFromPdfParams.bu
             .build()))
         .build()))
     .submitters(List.of(
-      CreateSubmissionFromPdfRequestSubmitter.builder()
+      CreateSubmissionSubmitterParams.builder()
         .role("First Party")
         .email("john.doe@example.com")
         .build()))
@@ -167,12 +167,12 @@ Provides functionality to create a one-off submission request from a DOCX file w
 ```java
 var submission = client.createSubmissionFromDocx(CreateSubmissionFromDocxParams.builder()
     .documents(List.of(
-      CreateSubmissionFromDocxRequestDocument.builder()
+      CreateSubmissionFromDocxDocumentParams.builder()
         .name("string")
         .file("base64")
         .build()))
     .submitters(List.of(
-      CreateSubmissionFromPdfRequestSubmitter.builder()
+      CreateSubmissionSubmitterParams.builder()
         .role("First Party")
         .email("john.doe@example.com")
         .build()))
@@ -194,7 +194,7 @@ This API endpoint allows you to create a one-off submission request document usi
 ```java
 var submission = client.createSubmissionFromHtml(CreateSubmissionFromHtmlParams.builder()
     .documents(List.of(
-      CreateSubmissionFromHtmlRequestDocument.builder()
+      CreateSubmissionFromHtmlDocumentParams.builder()
         .html("""
 <p>Lorem Ipsum is simply dummy text of the
 <text-field
@@ -208,7 +208,7 @@ and typesetting industry</p>
         .name("Test Document")
         .build()))
     .submitters(List.of(
-      CreateSubmissionFromPdfRequestSubmitter.builder()
+      CreateSubmissionSubmitterParams.builder()
         .role("First Party")
         .email("john.doe@example.com")
         .build()))
@@ -278,9 +278,9 @@ Allows you to update submitter details, pre-fill or update field values and re-s
 var submitter = client.updateSubmitter(500001, UpdateSubmitterParams.builder()
     .email("john.doe@example.com")
     .fields(List.of(
-      UpdateSubmitterRequestField.builder()
+      UpdateSubmitterFieldParams.builder()
         .name("First Name")
-        .defaultValue(UpdateSubmitterRequestFieldDefaultValue.of("Acme"))
+        .defaultValue(UpdateSubmitterFieldParamsDefaultValue.of("Acme"))
         .build()))
     .build());
 ```
@@ -320,14 +320,14 @@ Provides the functionality to create a fillable document template for a PDF file
 ```java
 var template = client.createTemplateFromPdf(CreateTemplateFromPdfParams.builder()
     .documents(List.of(
-      CreateTemplateFromPdfRequestDocument.builder()
+      CreateTemplateFromPdfDocumentParams.builder()
         .name("string")
         .file("base64")
         .fields(List.of(
-          CreateTemplateFromPdfRequestDocumentField.builder()
+          CreateTemplateDocumentFieldParams.builder()
             .name("string")
             .areas(List.of(
-              CreateSubmissionFromPdfRequestDocumentFieldArea.builder()
+              CreateTemplateDocumentFieldAreaParams.builder()
                 .x(0)
                 .y(0)
                 .w(0)
@@ -353,7 +353,7 @@ Provides the functionality to create a fillable document template for an existin
 ```java
 var template = client.createTemplateFromDocx(CreateTemplateFromDocxParams.builder()
     .documents(List.of(
-      CreateTemplateFromDocxRequestDocument.builder()
+      CreateTemplateFromDocxDocumentParams.builder()
         .name("string")
         .file("base64")
         .build()))
@@ -428,7 +428,7 @@ var template = client.updateTemplate(1000001, UpdateTemplateParams.builder()
     .build());
 ```
 
-### addDocumentToTemplate(id, data)
+### updateTemplateDocuments(id, data)
 
 [Documentation](https://www.docuseal.com/docs/api?lang=java#update-template-documents)
 
@@ -436,9 +436,9 @@ Allows you to add, remove or replace documents in the template with provided PDF
 
 
 ```java
-var template = client.addDocumentToTemplate(1000001, AddDocumentToTemplateParams.builder()
+var template = client.updateTemplateDocuments(1000001, UpdateTemplateDocumentsParams.builder()
     .documents(List.of(
-      AddDocumentToTemplateRequestDocument.builder()
+      UpdateTemplateDocumentsDocumentParams.builder()
         .file("string")
         .build()))
     .build());
