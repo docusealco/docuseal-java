@@ -1,0 +1,10 @@
+--- a/src/main/java/com/docuseal/core/ClientOptions.java
++++ b/src/main/java/com/docuseal/core/ClientOptions.java
+@@ -28,6 +28,7 @@ public final class ClientOptions {
+       Map<String, Supplier<String>> headerSuppliers, OkHttpClient httpClient, int timeout) {
+     this.environment = environment;
+     this.headers = new HashMap<>();
++    this.headers.put("User-Agent", "DocuSeal Java v1.0.0");
+     this.headers.putAll(headers);
+     this.headers.putAll(new HashMap<String,String>() {{put("X-Fern-Language", "JAVA");}});
+     this.headerSuppliers = headerSuppliers;

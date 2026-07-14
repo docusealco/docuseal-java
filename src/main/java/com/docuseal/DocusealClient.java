@@ -24,6 +24,8 @@ import com.docuseal.requests.GetSubmittersParams;
 import com.docuseal.requests.GetTemplateParams;
 import com.docuseal.requests.GetTemplatesParams;
 import com.docuseal.requests.MergeTemplateParams;
+import com.docuseal.requests.PermanentlyDeleteSubmissionParams;
+import com.docuseal.requests.PermanentlyDeleteTemplateParams;
 import com.docuseal.requests.UpdateSubmissionParams;
 import com.docuseal.requests.UpdateSubmitterParams;
 import com.docuseal.requests.UpdateTemplateDocumentsParams;
@@ -34,6 +36,7 @@ import com.docuseal.types.SubmissionCreateOneoffResult;
 import com.docuseal.types.SubmissionCreateResult;
 import com.docuseal.types.SubmissionDocuments;
 import com.docuseal.types.SubmissionList;
+import com.docuseal.types.SubmissionPermanentlyDeleteResult;
 import com.docuseal.types.SubmissionUpdateResult;
 import com.docuseal.types.Submitter;
 import com.docuseal.types.SubmitterList;
@@ -41,6 +44,7 @@ import com.docuseal.types.SubmitterUpdateResult;
 import com.docuseal.types.Template;
 import com.docuseal.types.TemplateArchiveResult;
 import com.docuseal.types.TemplateList;
+import com.docuseal.types.TemplatePermanentlyDeleteResult;
 import com.docuseal.types.TemplateUpdateResult;
 
 public class DocusealClient {
@@ -493,34 +497,53 @@ public class DocusealClient {
     return this.rawClient.createSubmission(request, requestOptions).body();
   }
 
-  public static DocusealClientBuilder builder() {
-    return new DocusealClientBuilder();
-  }
   /**
    * The API endpoint allows you to permanently delete a document template and all of its submissions.
    */
-  public TemplateArchiveResult permanentlyDeleteTemplate(int id) {
+  public TemplatePermanentlyDeleteResult permanentlyDeleteTemplate(int id) {
     return this.rawClient.permanentlyDeleteTemplate(id).body();
   }
 
   /**
    * The API endpoint allows you to permanently delete a document template and all of its submissions.
    */
-  public TemplateArchiveResult permanentlyDeleteTemplate(int id, RequestOptions requestOptions) {
-    return this.rawClient.permanentlyDeleteTemplate(id, requestOptions).body();
+  public TemplatePermanentlyDeleteResult permanentlyDeleteTemplate(int id,
+      PermanentlyDeleteTemplateParams request) {
+    return this.rawClient.permanentlyDeleteTemplate(id, request).body();
+  }
+
+  /**
+   * The API endpoint allows you to permanently delete a document template and all of its submissions.
+   */
+  public TemplatePermanentlyDeleteResult permanentlyDeleteTemplate(int id,
+      PermanentlyDeleteTemplateParams request, RequestOptions requestOptions) {
+    return this.rawClient.permanentlyDeleteTemplate(id, request, requestOptions).body();
   }
 
   /**
    * The API endpoint allows you to permanently delete a submission and all of its submitters and documents.
    */
-  public SubmissionArchiveResult permanentlyDeleteSubmission(int id) {
+  public SubmissionPermanentlyDeleteResult permanentlyDeleteSubmission(int id) {
     return this.rawClient.permanentlyDeleteSubmission(id).body();
   }
 
   /**
    * The API endpoint allows you to permanently delete a submission and all of its submitters and documents.
    */
-  public SubmissionArchiveResult permanentlyDeleteSubmission(int id, RequestOptions requestOptions) {
-    return this.rawClient.permanentlyDeleteSubmission(id, requestOptions).body();
+  public SubmissionPermanentlyDeleteResult permanentlyDeleteSubmission(int id,
+      PermanentlyDeleteSubmissionParams request) {
+    return this.rawClient.permanentlyDeleteSubmission(id, request).body();
+  }
+
+  /**
+   * The API endpoint allows you to permanently delete a submission and all of its submitters and documents.
+   */
+  public SubmissionPermanentlyDeleteResult permanentlyDeleteSubmission(int id,
+      PermanentlyDeleteSubmissionParams request, RequestOptions requestOptions) {
+    return this.rawClient.permanentlyDeleteSubmission(id, request, requestOptions).body();
+  }
+
+  public static DocusealClientBuilder builder() {
+    return new DocusealClientBuilder();
   }
 }

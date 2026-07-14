@@ -29,7 +29,9 @@ import org.jetbrains.annotations.NotNull;
 public final class CreateSubmissionSubmitterFieldParams {
   private final String name;
 
-  private final Optional<CreateSubmissionSubmitterFieldParamsDefaultValue> defaultValue;
+  private final Optional<DefaultValue> defaultValue;
+
+  private final Optional<String> value;
 
   private final Optional<Boolean> readonly;
 
@@ -45,15 +47,15 @@ public final class CreateSubmissionSubmitterFieldParams {
 
   private final Map<String, Object> additionalProperties;
 
-  private CreateSubmissionSubmitterFieldParams(String name,
-      Optional<CreateSubmissionSubmitterFieldParamsDefaultValue> defaultValue,
-      Optional<Boolean> readonly, Optional<Boolean> required, Optional<String> title,
-      Optional<String> description,
+  private CreateSubmissionSubmitterFieldParams(String name, Optional<DefaultValue> defaultValue,
+      Optional<String> value, Optional<Boolean> readonly, Optional<Boolean> required,
+      Optional<String> title, Optional<String> description,
       Optional<CreateSubmissionSubmitterFieldValidationParams> validation,
       Optional<CreateSubmissionSubmitterFieldPreferencesParams> preferences,
       Map<String, Object> additionalProperties) {
     this.name = name;
     this.defaultValue = defaultValue;
+    this.value = value;
     this.readonly = readonly;
     this.required = required;
     this.title = title;
@@ -71,12 +73,17 @@ public final class CreateSubmissionSubmitterFieldParams {
     return name;
   }
 
-  /**
-   * @return Default value of the field. Use base64 encoded file or a public URL to the image file to set default signature or image fields.
-   */
   @JsonProperty("default_value")
-  public Optional<CreateSubmissionSubmitterFieldParamsDefaultValue> getDefaultValue() {
+  public Optional<DefaultValue> getDefaultValue() {
     return defaultValue;
+  }
+
+  /**
+   * @return Default value of the field as a plain string. Alias of <code>default_value</code> that takes precedence when both are provided.
+   */
+  @JsonProperty("value")
+  public Optional<String> getValue() {
+    return value;
   }
 
   /**
@@ -133,12 +140,12 @@ public final class CreateSubmissionSubmitterFieldParams {
   }
 
   private boolean equalTo(CreateSubmissionSubmitterFieldParams other) {
-    return name.equals(other.name) && defaultValue.equals(other.defaultValue) && readonly.equals(other.readonly) && required.equals(other.required) && title.equals(other.title) && description.equals(other.description) && validation.equals(other.validation) && preferences.equals(other.preferences);
+    return name.equals(other.name) && defaultValue.equals(other.defaultValue) && value.equals(other.value) && readonly.equals(other.readonly) && required.equals(other.required) && title.equals(other.title) && description.equals(other.description) && validation.equals(other.validation) && preferences.equals(other.preferences);
   }
 
   @java.lang.Override
   public int hashCode() {
-    return Objects.hash(this.name, this.defaultValue, this.readonly, this.required, this.title, this.description, this.validation, this.preferences);
+    return Objects.hash(this.name, this.defaultValue, this.value, this.readonly, this.required, this.title, this.description, this.validation, this.preferences);
   }
 
   @java.lang.Override
@@ -162,13 +169,16 @@ public final class CreateSubmissionSubmitterFieldParams {
   public interface _FinalStage {
     CreateSubmissionSubmitterFieldParams build();
 
-    /**
-     * <p>Default value of the field. Use base64 encoded file or a public URL to the image file to set default signature or image fields.</p>
-     */
-    _FinalStage defaultValue(
-        Optional<CreateSubmissionSubmitterFieldParamsDefaultValue> defaultValue);
+    _FinalStage defaultValue(Optional<DefaultValue> defaultValue);
 
-    _FinalStage defaultValue(CreateSubmissionSubmitterFieldParamsDefaultValue defaultValue);
+    _FinalStage defaultValue(DefaultValue defaultValue);
+
+    /**
+     * <p>Default value of the field as a plain string. Alias of <code>default_value</code> that takes precedence when both are provided.</p>
+     */
+    _FinalStage value(Optional<String> value);
+
+    _FinalStage value(String value);
 
     /**
      * <p>Set <code>true</code> to make it impossible for the submitter to edit predefined field value.</p>
@@ -225,7 +235,9 @@ public final class CreateSubmissionSubmitterFieldParams {
 
     private Optional<Boolean> readonly = Optional.empty();
 
-    private Optional<CreateSubmissionSubmitterFieldParamsDefaultValue> defaultValue = Optional.empty();
+    private Optional<String> value = Optional.empty();
+
+    private Optional<DefaultValue> defaultValue = Optional.empty();
 
     @JsonAnySetter
     private Map<String, Object> additionalProperties = new HashMap<>();
@@ -237,6 +249,7 @@ public final class CreateSubmissionSubmitterFieldParams {
     public Builder from(CreateSubmissionSubmitterFieldParams other) {
       name(other.getName());
       defaultValue(other.getDefaultValue());
+      value(other.getValue());
       readonly(other.getReadonly());
       required(other.getRequired());
       title(other.getTitle());
@@ -385,32 +398,47 @@ public final class CreateSubmissionSubmitterFieldParams {
     }
 
     /**
-     * <p>Default value of the field. Use base64 encoded file or a public URL to the image file to set default signature or image fields.</p>
+     * <p>Default value of the field as a plain string. Alias of <code>default_value</code> that takes precedence when both are provided.</p>
      * @return Reference to {@code this} so that method calls can be chained together.
      */
     @java.lang.Override
-    public _FinalStage defaultValue(CreateSubmissionSubmitterFieldParamsDefaultValue defaultValue) {
-      this.defaultValue = Optional.ofNullable(defaultValue);
+    public _FinalStage value(String value) {
+      this.value = Optional.ofNullable(value);
       return this;
     }
 
     /**
-     * <p>Default value of the field. Use base64 encoded file or a public URL to the image file to set default signature or image fields.</p>
+     * <p>Default value of the field as a plain string. Alias of <code>default_value</code> that takes precedence when both are provided.</p>
      */
+    @java.lang.Override
+    @JsonSetter(
+        value = "value",
+        nulls = Nulls.SKIP
+    )
+    public _FinalStage value(Optional<String> value) {
+      this.value = value;
+      return this;
+    }
+
+    @java.lang.Override
+    public _FinalStage defaultValue(DefaultValue defaultValue) {
+      this.defaultValue = Optional.ofNullable(defaultValue);
+      return this;
+    }
+
     @java.lang.Override
     @JsonSetter(
         value = "default_value",
         nulls = Nulls.SKIP
     )
-    public _FinalStage defaultValue(
-        Optional<CreateSubmissionSubmitterFieldParamsDefaultValue> defaultValue) {
+    public _FinalStage defaultValue(Optional<DefaultValue> defaultValue) {
       this.defaultValue = defaultValue;
       return this;
     }
 
     @java.lang.Override
     public CreateSubmissionSubmitterFieldParams build() {
-      return new CreateSubmissionSubmitterFieldParams(name, defaultValue, readonly, required, title, description, validation, preferences, additionalProperties);
+      return new CreateSubmissionSubmitterFieldParams(name, defaultValue, value, readonly, required, title, description, validation, preferences, additionalProperties);
     }
   }
 }

@@ -16,20 +16,21 @@ import java.lang.Boolean;
 import java.lang.Double;
 import java.lang.IllegalArgumentException;
 import java.lang.IllegalStateException;
+import java.lang.Integer;
 import java.lang.Object;
 import java.lang.String;
 import java.lang.SuppressWarnings;
 import java.util.Objects;
 
 @JsonDeserialize(
-    using = UpdateSubmitterFieldParamsDefaultValueThreeItem.Deserializer.class
+    using = DefaultValueItem.Deserializer.class
 )
-public final class UpdateSubmitterFieldParamsDefaultValueThreeItem {
+public final class DefaultValueItem {
   private final Object value;
 
   private final int type;
 
-  private UpdateSubmitterFieldParamsDefaultValueThreeItem(Object value, int type) {
+  private DefaultValueItem(Object value, int type) {
     this.value = value;
     this.type = type;
   }
@@ -44,8 +45,10 @@ public final class UpdateSubmitterFieldParamsDefaultValueThreeItem {
     if(this.type == 0) {
       return visitor.visit((String) this.value);
     } else if(this.type == 1) {
-      return visitor.visit((double) this.value);
+      return visitor.visit((int) this.value);
     } else if(this.type == 2) {
+      return visitor.visit((double) this.value);
+    } else if(this.type == 3) {
       return visitor.visit((boolean) this.value);
     }
     throw new IllegalStateException("Failed to visit value. This should never happen.");
@@ -54,10 +57,10 @@ public final class UpdateSubmitterFieldParamsDefaultValueThreeItem {
   @java.lang.Override
   public boolean equals(Object other) {
     if (this == other) return true;
-    return other instanceof UpdateSubmitterFieldParamsDefaultValueThreeItem && equalTo((UpdateSubmitterFieldParamsDefaultValueThreeItem) other);
+    return other instanceof DefaultValueItem && equalTo((DefaultValueItem) other);
   }
 
-  private boolean equalTo(UpdateSubmitterFieldParamsDefaultValueThreeItem other) {
+  private boolean equalTo(DefaultValueItem other) {
     return value.equals(other.value);
   }
 
@@ -71,38 +74,47 @@ public final class UpdateSubmitterFieldParamsDefaultValueThreeItem {
     return this.value.toString();
   }
 
-  public static UpdateSubmitterFieldParamsDefaultValueThreeItem of(String value) {
-    return new UpdateSubmitterFieldParamsDefaultValueThreeItem(value, 0);
+  public static DefaultValueItem of(String value) {
+    return new DefaultValueItem(value, 0);
   }
 
-  public static UpdateSubmitterFieldParamsDefaultValueThreeItem of(double value) {
-    return new UpdateSubmitterFieldParamsDefaultValueThreeItem(value, 1);
+  public static DefaultValueItem of(int value) {
+    return new DefaultValueItem(value, 1);
   }
 
-  public static UpdateSubmitterFieldParamsDefaultValueThreeItem of(boolean value) {
-    return new UpdateSubmitterFieldParamsDefaultValueThreeItem(value, 2);
+  public static DefaultValueItem of(double value) {
+    return new DefaultValueItem(value, 2);
+  }
+
+  public static DefaultValueItem of(boolean value) {
+    return new DefaultValueItem(value, 3);
   }
 
   public interface Visitor<T> {
     T visit(String value);
+
+    T visit(int value);
 
     T visit(double value);
 
     T visit(boolean value);
   }
 
-  static final class Deserializer extends StdDeserializer<UpdateSubmitterFieldParamsDefaultValueThreeItem> {
+  static final class Deserializer extends StdDeserializer<DefaultValueItem> {
     Deserializer() {
-      super(UpdateSubmitterFieldParamsDefaultValueThreeItem.class);
+      super(DefaultValueItem.class);
     }
 
     @java.lang.Override
-    public UpdateSubmitterFieldParamsDefaultValueThreeItem deserialize(JsonParser p,
-        DeserializationContext context) throws IOException {
+    public DefaultValueItem deserialize(JsonParser p, DeserializationContext context) throws
+        IOException {
       Object value = p.readValueAs(Object.class);
       try {
         return of(ObjectMappers.JSON_MAPPER.convertValue(value, String.class));
       } catch(IllegalArgumentException e) {
+      }
+      if (value instanceof Integer) {
+        return of((Integer) value);
       }
       if (value instanceof Double) {
         return of((Double) value);

@@ -9,6 +9,8 @@ import java.lang.String;
 public final class Environment {
   public static final Environment DEFAULT = new Environment("https://api.docuseal.com");
 
+  public static final Environment EU = new Environment("https://api.docuseal.eu");
+
   private final String url;
 
   private Environment(String url) {

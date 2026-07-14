@@ -8,13 +8,21 @@ Detailed documentation is available at [DocuSeal API Docs](https://www.docuseal.
 
 ## Installation
 
-To install the library, add the following dependency to your Maven `pom.xml` file:
+To install the Java SDK, add the following dependency to your project:
+
+Gradle
+
+```groovy
+implementation 'com.docuseal:docuseal-java:+'
+```
+
+Maven
 
 ```xml
 <dependency>
   <groupId>com.docuseal</groupId>
   <artifactId>docuseal-java</artifactId>
-  <version>1.0.0</version>
+  <version>LATEST</version>
 </dependency>
 ```
 
@@ -31,7 +39,7 @@ Set up the library with your DocuSeal API key based on your deployment. Retrieve
 API keys for the global cloud can be obtained from your [Global DocuSeal Console](https://console.docuseal.com/api).
 
 ```java
-DocusealClient client = DocusealClient.builder()
+var client = DocusealClient.builder()
     .apiKey(System.getenv("DOCUSEAL_API_KEY"))
     .build();
 ```
@@ -41,9 +49,11 @@ DocusealClient client = DocusealClient.builder()
 API keys for the EU cloud can be obtained from your [EU DocuSeal Console](https://console.docuseal.eu/api).
 
 ```java
-DocusealClient client = DocusealClient.builder()
+import com.docuseal.core.Environment;
+
+var client = DocusealClient.builder()
     .apiKey(System.getenv("DOCUSEAL_API_KEY"))
-    .url("https://api.docuseal.eu")
+    .environment(Environment.EU)
     .build();
 ```
 
@@ -52,9 +62,9 @@ DocusealClient client = DocusealClient.builder()
 For on-premises installations, API keys can be retrieved from the API settings page of your deployed application, e.g., https://yourdocusealapp.com/settings/api.
 
 ```java
-DocusealClient client = DocusealClient.builder()
+var client = DocusealClient.builder()
     .apiKey(System.getenv("DOCUSEAL_API_KEY"))
-    .url("https://yourdocuseal.com/api")
+    .url("https://yourdocusealapp.com/api")
     .build();
 ```
 
@@ -280,7 +290,7 @@ var submitter = client.updateSubmitter(500001, UpdateSubmitterParams.builder()
     .fields(List.of(
       UpdateSubmitterFieldParams.builder()
         .name("First Name")
-        .defaultValue(UpdateSubmitterFieldParamsDefaultValue.of("Acme"))
+        .value("Acme")
         .build()))
     .build());
 ```
@@ -369,7 +379,6 @@ Provides the functionality to seamlessly generate a PDF document template by uti
 
 **Related Guides:**<br>
 [Create PDF document fillable form with HTML](https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api)
-
 
 
 ```java
@@ -461,7 +470,7 @@ client.archiveTemplate(1000001);
 Set timeouts (in seconds) to avoid hanging requests:
 
 ```java
-DocusealClient client = DocusealClient.builder()
+var client = DocusealClient.builder()
     .apiKey(System.getenv("DOCUSEAL_API_KEY"))
     .timeout(30)
     .build();
@@ -474,4 +483,4 @@ For feature requests or bug reports, visit our [GitHub Issues page](https://gith
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The library is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).

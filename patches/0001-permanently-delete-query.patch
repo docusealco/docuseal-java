@@ -1,0 +1,40 @@
+--- a/src/main/java/com/docuseal/AsyncRawDocusealClient.java
++++ b/src/main/java/com/docuseal/AsyncRawDocusealClient.java
+@@ -1574,7 +1574,7 @@ public class AsyncRawDocusealClient {
+ 
+               .addPathSegments("templates")
+               .addPathSegment(Integer.toString(id))
+-              .addPathSegments("?permanently=true")
++              .addQueryParameter("permanently", "true")
+               .build();
+             Request.Builder _requestBuilder = new Request.Builder()
+               .url(httpUrl)
+@@ -1637,7 +1637,7 @@ public class AsyncRawDocusealClient {
+ 
+               .addPathSegments("submissions")
+               .addPathSegment(Integer.toString(id))
+-              .addPathSegments("?permanently=true")
++              .addQueryParameter("permanently", "true")
+               .build();
+             Request.Builder _requestBuilder = new Request.Builder()
+               .url(httpUrl)
+--- a/src/main/java/com/docuseal/RawDocusealClient.java
++++ b/src/main/java/com/docuseal/RawDocusealClient.java
+@@ -1272,7 +1272,7 @@ public class RawDocusealClient {
+ 
+               .addPathSegments("templates")
+               .addPathSegment(Integer.toString(id))
+-              .addPathSegments("?permanently=true")
++              .addQueryParameter("permanently", "true")
+               .build();
+             Request.Builder _requestBuilder = new Request.Builder()
+               .url(httpUrl)
+@@ -1322,7 +1322,7 @@ public class RawDocusealClient {
+ 
+               .addPathSegments("submissions")
+               .addPathSegment(Integer.toString(id))
+-              .addPathSegments("?permanently=true")
++              .addQueryParameter("permanently", "true")
+               .build();
+             Request.Builder _requestBuilder = new Request.Builder()
+               .url(httpUrl)

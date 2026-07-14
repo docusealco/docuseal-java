@@ -17,6 +17,7 @@ import java.lang.Boolean;
 import java.lang.Double;
 import java.lang.IllegalArgumentException;
 import java.lang.IllegalStateException;
+import java.lang.Integer;
 import java.lang.Object;
 import java.lang.String;
 import java.lang.SuppressWarnings;
@@ -46,11 +47,13 @@ public final class FieldValueValue {
     if(this.type == 0) {
       return visitor.visit((String) this.value);
     } else if(this.type == 1) {
-      return visitor.visit((double) this.value);
+      return visitor.visit((int) this.value);
     } else if(this.type == 2) {
-      return visitor.visit((boolean) this.value);
+      return visitor.visit((double) this.value);
     } else if(this.type == 3) {
-      return visitor.visit((List<FieldValueValueThreeItem>) this.value);
+      return visitor.visit((boolean) this.value);
+    } else if(this.type == 4) {
+      return visitor.visit((List<FieldValueValueFourItem>) this.value);
     }
     throw new IllegalStateException("Failed to visit value. This should never happen.");
   }
@@ -79,26 +82,32 @@ public final class FieldValueValue {
     return new FieldValueValue(value, 0);
   }
 
-  public static FieldValueValue of(double value) {
+  public static FieldValueValue of(int value) {
     return new FieldValueValue(value, 1);
   }
 
-  public static FieldValueValue of(boolean value) {
+  public static FieldValueValue of(double value) {
     return new FieldValueValue(value, 2);
   }
 
-  public static FieldValueValue of(List<FieldValueValueThreeItem> value) {
+  public static FieldValueValue of(boolean value) {
     return new FieldValueValue(value, 3);
+  }
+
+  public static FieldValueValue of(List<FieldValueValueFourItem> value) {
+    return new FieldValueValue(value, 4);
   }
 
   public interface Visitor<T> {
     T visit(String value);
 
+    T visit(int value);
+
     T visit(double value);
 
     T visit(boolean value);
 
-    T visit(List<FieldValueValueThreeItem> value);
+    T visit(List<FieldValueValueFourItem> value);
   }
 
   static final class Deserializer extends StdDeserializer<FieldValueValue> {
@@ -114,6 +123,9 @@ public final class FieldValueValue {
         return of(ObjectMappers.JSON_MAPPER.convertValue(value, String.class));
       } catch(IllegalArgumentException e) {
       }
+      if (value instanceof Integer) {
+        return of((Integer) value);
+      }
       if (value instanceof Double) {
         return of((Double) value);
       }
@@ -121,7 +133,7 @@ public final class FieldValueValue {
         return of((Boolean) value);
       }
       try {
-        return of(ObjectMappers.JSON_MAPPER.convertValue(value, new TypeReference<List<FieldValueValueThreeItem>>() {}));
+        return of(ObjectMappers.JSON_MAPPER.convertValue(value, new TypeReference<List<FieldValueValueFourItem>>() {}));
       } catch(IllegalArgumentException e) {
       }
       throw new JsonParseException(p, "Failed to deserialize");

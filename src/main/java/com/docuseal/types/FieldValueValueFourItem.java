@@ -8,7 +8,6 @@ import com.docuseal.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -17,21 +16,21 @@ import java.lang.Boolean;
 import java.lang.Double;
 import java.lang.IllegalArgumentException;
 import java.lang.IllegalStateException;
+import java.lang.Integer;
 import java.lang.Object;
 import java.lang.String;
 import java.lang.SuppressWarnings;
-import java.util.List;
 import java.util.Objects;
 
 @JsonDeserialize(
-    using = CreateSubmissionSubmitterFieldParamsDefaultValue.Deserializer.class
+    using = FieldValueValueFourItem.Deserializer.class
 )
-public final class CreateSubmissionSubmitterFieldParamsDefaultValue {
+public final class FieldValueValueFourItem {
   private final Object value;
 
   private final int type;
 
-  private CreateSubmissionSubmitterFieldParamsDefaultValue(Object value, int type) {
+  private FieldValueValueFourItem(Object value, int type) {
     this.value = value;
     this.type = type;
   }
@@ -46,11 +45,11 @@ public final class CreateSubmissionSubmitterFieldParamsDefaultValue {
     if(this.type == 0) {
       return visitor.visit((String) this.value);
     } else if(this.type == 1) {
-      return visitor.visit((double) this.value);
+      return visitor.visit((int) this.value);
     } else if(this.type == 2) {
-      return visitor.visit((boolean) this.value);
+      return visitor.visit((double) this.value);
     } else if(this.type == 3) {
-      return visitor.visit((List<CreateSubmissionSubmitterFieldParamsDefaultValueThreeItem>) this.value);
+      return visitor.visit((boolean) this.value);
     }
     throw new IllegalStateException("Failed to visit value. This should never happen.");
   }
@@ -58,10 +57,10 @@ public final class CreateSubmissionSubmitterFieldParamsDefaultValue {
   @java.lang.Override
   public boolean equals(Object other) {
     if (this == other) return true;
-    return other instanceof CreateSubmissionSubmitterFieldParamsDefaultValue && equalTo((CreateSubmissionSubmitterFieldParamsDefaultValue) other);
+    return other instanceof FieldValueValueFourItem && equalTo((FieldValueValueFourItem) other);
   }
 
-  private boolean equalTo(CreateSubmissionSubmitterFieldParamsDefaultValue other) {
+  private boolean equalTo(FieldValueValueFourItem other) {
     return value.equals(other.value);
   }
 
@@ -75,55 +74,53 @@ public final class CreateSubmissionSubmitterFieldParamsDefaultValue {
     return this.value.toString();
   }
 
-  public static CreateSubmissionSubmitterFieldParamsDefaultValue of(String value) {
-    return new CreateSubmissionSubmitterFieldParamsDefaultValue(value, 0);
+  public static FieldValueValueFourItem of(String value) {
+    return new FieldValueValueFourItem(value, 0);
   }
 
-  public static CreateSubmissionSubmitterFieldParamsDefaultValue of(double value) {
-    return new CreateSubmissionSubmitterFieldParamsDefaultValue(value, 1);
+  public static FieldValueValueFourItem of(int value) {
+    return new FieldValueValueFourItem(value, 1);
   }
 
-  public static CreateSubmissionSubmitterFieldParamsDefaultValue of(boolean value) {
-    return new CreateSubmissionSubmitterFieldParamsDefaultValue(value, 2);
+  public static FieldValueValueFourItem of(double value) {
+    return new FieldValueValueFourItem(value, 2);
   }
 
-  public static CreateSubmissionSubmitterFieldParamsDefaultValue of(
-      List<CreateSubmissionSubmitterFieldParamsDefaultValueThreeItem> value) {
-    return new CreateSubmissionSubmitterFieldParamsDefaultValue(value, 3);
+  public static FieldValueValueFourItem of(boolean value) {
+    return new FieldValueValueFourItem(value, 3);
   }
 
   public interface Visitor<T> {
     T visit(String value);
 
+    T visit(int value);
+
     T visit(double value);
 
     T visit(boolean value);
-
-    T visit(List<CreateSubmissionSubmitterFieldParamsDefaultValueThreeItem> value);
   }
 
-  static final class Deserializer extends StdDeserializer<CreateSubmissionSubmitterFieldParamsDefaultValue> {
+  static final class Deserializer extends StdDeserializer<FieldValueValueFourItem> {
     Deserializer() {
-      super(CreateSubmissionSubmitterFieldParamsDefaultValue.class);
+      super(FieldValueValueFourItem.class);
     }
 
     @java.lang.Override
-    public CreateSubmissionSubmitterFieldParamsDefaultValue deserialize(JsonParser p,
-        DeserializationContext context) throws IOException {
+    public FieldValueValueFourItem deserialize(JsonParser p, DeserializationContext context) throws
+        IOException {
       Object value = p.readValueAs(Object.class);
       try {
         return of(ObjectMappers.JSON_MAPPER.convertValue(value, String.class));
       } catch(IllegalArgumentException e) {
+      }
+      if (value instanceof Integer) {
+        return of((Integer) value);
       }
       if (value instanceof Double) {
         return of((Double) value);
       }
       if (value instanceof Boolean) {
         return of((Boolean) value);
-      }
-      try {
-        return of(ObjectMappers.JSON_MAPPER.convertValue(value, new TypeReference<List<CreateSubmissionSubmitterFieldParamsDefaultValueThreeItem>>() {}));
-      } catch(IllegalArgumentException e) {
       }
       throw new JsonParseException(p, "Failed to deserialize");
     }

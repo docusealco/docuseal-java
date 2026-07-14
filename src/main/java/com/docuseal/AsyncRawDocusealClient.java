@@ -30,6 +30,8 @@ import com.docuseal.requests.GetSubmittersParams;
 import com.docuseal.requests.GetTemplateParams;
 import com.docuseal.requests.GetTemplatesParams;
 import com.docuseal.requests.MergeTemplateParams;
+import com.docuseal.requests.PermanentlyDeleteSubmissionParams;
+import com.docuseal.requests.PermanentlyDeleteTemplateParams;
 import com.docuseal.requests.UpdateSubmissionParams;
 import com.docuseal.requests.UpdateSubmitterParams;
 import com.docuseal.requests.UpdateTemplateDocumentsParams;
@@ -40,6 +42,7 @@ import com.docuseal.types.SubmissionCreateOneoffResult;
 import com.docuseal.types.SubmissionCreateResult;
 import com.docuseal.types.SubmissionDocuments;
 import com.docuseal.types.SubmissionList;
+import com.docuseal.types.SubmissionPermanentlyDeleteResult;
 import com.docuseal.types.SubmissionUpdateResult;
 import com.docuseal.types.Submitter;
 import com.docuseal.types.SubmitterList;
@@ -47,6 +50,7 @@ import com.docuseal.types.SubmitterUpdateResult;
 import com.docuseal.types.Template;
 import com.docuseal.types.TemplateArchiveResult;
 import com.docuseal.types.TemplateList;
+import com.docuseal.types.TemplatePermanentlyDeleteResult;
 import com.docuseal.types.TemplateUpdateResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
@@ -1544,111 +1548,130 @@ public class AsyncRawDocusealClient {
             });
             return future;
           }
-            /**
-     * The API endpoint allows you to permanently delete a document template and all of its submissions.
-     */
-    public CompletableFuture<DocusealClientHttpResponse<TemplateArchiveResult>> permanentlyDeleteTemplate(
-        int id) {
-      return permanentlyDeleteTemplate(id, null);
-    }
 
-    /**
-     * The API endpoint allows you to permanently delete a document template and all of its submissions.
-     */
-    public CompletableFuture<DocusealClientHttpResponse<TemplateArchiveResult>> permanentlyDeleteTemplate(
-        int id, RequestOptions requestOptions) {
-      HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
-        .addPathSegments("templates")
-        .addPathSegment(Integer.toString(id))
-        .addQueryParameter("permanently", "true")
-        .build();
-      Request.Builder _requestBuilder = new Request.Builder()
-        .url(httpUrl)
-        .method("DELETE", null)
-        .headers(Headers.of(clientOptions.headers(requestOptions)))
-        .addHeader("Accept", "application/json");
-      Request okhttpRequest = _requestBuilder.build();
-      OkHttpClient client = clientOptions.httpClient();
-      if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-        client = clientOptions.httpClientWithTimeout(requestOptions);
-      }
-      CompletableFuture<DocusealClientHttpResponse<TemplateArchiveResult>> future = new CompletableFuture<>();
-      client.newCall(okhttpRequest).enqueue(new Callback() {
-        @Override
-        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-          try (ResponseBody responseBody = response.body()) {
-            if (response.isSuccessful()) {
-              future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TemplateArchiveResult.class), response));
-              return;
+          /**
+           * The API endpoint allows you to permanently delete a document template and all of its submissions.
+           */
+          public CompletableFuture<DocusealClientHttpResponse<TemplatePermanentlyDeleteResult>> permanentlyDeleteTemplate(
+              int id) {
+            return permanentlyDeleteTemplate(id,PermanentlyDeleteTemplateParams.builder().build());
+          }
+
+          /**
+           * The API endpoint allows you to permanently delete a document template and all of its submissions.
+           */
+          public CompletableFuture<DocusealClientHttpResponse<TemplatePermanentlyDeleteResult>> permanentlyDeleteTemplate(
+              int id, PermanentlyDeleteTemplateParams request) {
+            return permanentlyDeleteTemplate(id,request,null);
+          }
+
+          /**
+           * The API endpoint allows you to permanently delete a document template and all of its submissions.
+           */
+          public CompletableFuture<DocusealClientHttpResponse<TemplatePermanentlyDeleteResult>> permanentlyDeleteTemplate(
+              int id, PermanentlyDeleteTemplateParams request, RequestOptions requestOptions) {
+            HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
+
+              .addPathSegments("templates")
+              .addPathSegment(Integer.toString(id))
+              .addQueryParameter("permanently", "true")
+              .build();
+            Request.Builder _requestBuilder = new Request.Builder()
+              .url(httpUrl)
+              .method("DELETE", null)
+              .headers(Headers.of(clientOptions.headers(requestOptions)))
+              .addHeader("Accept", "application/json");
+            Request okhttpRequest = _requestBuilder.build();
+            OkHttpClient client = clientOptions.httpClient();
+            if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+              client = clientOptions.httpClientWithTimeout(requestOptions);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            future.completeExceptionally(new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
-            return;
+            CompletableFuture<DocusealClientHttpResponse<TemplatePermanentlyDeleteResult>> future = new CompletableFuture<>();
+            client.newCall(okhttpRequest).enqueue(new Callback() {
+              @Override
+              public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                  if (response.isSuccessful()) {
+                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TemplatePermanentlyDeleteResult.class), response));
+                    return;
+                  }
+                  String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                  future.completeExceptionally(new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                  return;
+                }
+                catch (IOException e) {
+                  future.completeExceptionally(new DocusealClientException("Network error executing HTTP request", e));
+                }
+              }
+
+              @Override
+              public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new DocusealClientException("Network error executing HTTP request", e));
+              }
+            });
+            return future;
           }
-          catch (IOException e) {
-            future.completeExceptionally(new DocusealClientException("Network error executing HTTP request", e));
+
+          /**
+           * The API endpoint allows you to permanently delete a submission and all of its submitters and documents.
+           */
+          public CompletableFuture<DocusealClientHttpResponse<SubmissionPermanentlyDeleteResult>> permanentlyDeleteSubmission(
+              int id) {
+            return permanentlyDeleteSubmission(id,PermanentlyDeleteSubmissionParams.builder().build());
           }
-        }
 
-        @Override
-        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-          future.completeExceptionally(new DocusealClientException("Network error executing HTTP request", e));
-        }
-      });
-      return future;
-    }
+          /**
+           * The API endpoint allows you to permanently delete a submission and all of its submitters and documents.
+           */
+          public CompletableFuture<DocusealClientHttpResponse<SubmissionPermanentlyDeleteResult>> permanentlyDeleteSubmission(
+              int id, PermanentlyDeleteSubmissionParams request) {
+            return permanentlyDeleteSubmission(id,request,null);
+          }
 
-    /**
-     * The API endpoint allows you to permanently delete a submission and all of its submitters and documents.
-     */
-    public CompletableFuture<DocusealClientHttpResponse<SubmissionArchiveResult>> permanentlyDeleteSubmission(
-        int id) {
-      return permanentlyDeleteSubmission(id, null);
-    }
+          /**
+           * The API endpoint allows you to permanently delete a submission and all of its submitters and documents.
+           */
+          public CompletableFuture<DocusealClientHttpResponse<SubmissionPermanentlyDeleteResult>> permanentlyDeleteSubmission(
+              int id, PermanentlyDeleteSubmissionParams request, RequestOptions requestOptions) {
+            HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
 
-    /**
-     * The API endpoint allows you to permanently delete a submission and all of its submitters and documents.
-     */
-    public CompletableFuture<DocusealClientHttpResponse<SubmissionArchiveResult>> permanentlyDeleteSubmission(
-        int id, RequestOptions requestOptions) {
-      HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl()).newBuilder()
-        .addPathSegments("submissions")
-        .addPathSegment(Integer.toString(id))
-        .addQueryParameter("permanently", "true")
-        .build();
-      Request.Builder _requestBuilder = new Request.Builder()
-        .url(httpUrl)
-        .method("DELETE", null)
-        .headers(Headers.of(clientOptions.headers(requestOptions)))
-        .addHeader("Accept", "application/json");
-      Request okhttpRequest = _requestBuilder.build();
-      OkHttpClient client = clientOptions.httpClient();
-      if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-        client = clientOptions.httpClientWithTimeout(requestOptions);
-      }
-      CompletableFuture<DocusealClientHttpResponse<SubmissionArchiveResult>> future = new CompletableFuture<>();
-      client.newCall(okhttpRequest).enqueue(new Callback() {
-        @Override
-        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-          try (ResponseBody responseBody = response.body()) {
-            if (response.isSuccessful()) {
-              future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionArchiveResult.class), response));
-              return;
+              .addPathSegments("submissions")
+              .addPathSegment(Integer.toString(id))
+              .addQueryParameter("permanently", "true")
+              .build();
+            Request.Builder _requestBuilder = new Request.Builder()
+              .url(httpUrl)
+              .method("DELETE", null)
+              .headers(Headers.of(clientOptions.headers(requestOptions)))
+              .addHeader("Accept", "application/json");
+            Request okhttpRequest = _requestBuilder.build();
+            OkHttpClient client = clientOptions.httpClient();
+            if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+              client = clientOptions.httpClientWithTimeout(requestOptions);
             }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            future.completeExceptionally(new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
-            return;
-          }
-          catch (IOException e) {
-            future.completeExceptionally(new DocusealClientException("Network error executing HTTP request", e));
-          }
-        }
+            CompletableFuture<DocusealClientHttpResponse<SubmissionPermanentlyDeleteResult>> future = new CompletableFuture<>();
+            client.newCall(okhttpRequest).enqueue(new Callback() {
+              @Override
+              public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                  if (response.isSuccessful()) {
+                    future.complete(new DocusealClientHttpResponse<>(ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionPermanentlyDeleteResult.class), response));
+                    return;
+                  }
+                  String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                  future.completeExceptionally(new DocusealClientApiException("Error with status code " + response.code(), response.code(), ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                  return;
+                }
+                catch (IOException e) {
+                  future.completeExceptionally(new DocusealClientException("Network error executing HTTP request", e));
+                }
+              }
 
-        @Override
-        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-          future.completeExceptionally(new DocusealClientException("Network error executing HTTP request", e));
+              @Override
+              public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new DocusealClientException("Network error executing HTTP request", e));
+              }
+            });
+            return future;
+          }
         }
-      });
-      return future;
-    }
-}
