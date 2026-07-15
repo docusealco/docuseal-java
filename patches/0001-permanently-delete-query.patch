@@ -1,40 +1,44 @@
 --- a/src/main/java/com/docuseal/AsyncRawDocusealClient.java
 +++ b/src/main/java/com/docuseal/AsyncRawDocusealClient.java
-@@ -1574,7 +1574,7 @@ public class AsyncRawDocusealClient {
- 
-               .addPathSegments("templates")
-               .addPathSegment(Integer.toString(id))
--              .addPathSegments("?permanently=true")
-+              .addQueryParameter("permanently", "true")
-               .build();
-             Request.Builder _requestBuilder = new Request.Builder()
-               .url(httpUrl)
-@@ -1637,7 +1637,7 @@ public class AsyncRawDocusealClient {
- 
-               .addPathSegments("submissions")
-               .addPathSegment(Integer.toString(id))
--              .addPathSegments("?permanently=true")
-+              .addQueryParameter("permanently", "true")
-               .build();
-             Request.Builder _requestBuilder = new Request.Builder()
-               .url(httpUrl)
+@@ -2149,7 +2149,8 @@ public class AsyncRawDocusealClient {
+         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                 .newBuilder()
+                 .addPathSegments("templates")
+-                .addPathSegment(Integer.toString(id) + "?permanently=true");
++                .addPathSegment(Integer.toString(id))
++                .addQueryParameter("permanently", "true");
+         if (requestOptions != null) {
+             requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                 httpUrl.addQueryParameter(_key, _value);
+@@ -2243,7 +2244,8 @@ public class AsyncRawDocusealClient {
+         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                 .newBuilder()
+                 .addPathSegments("submissions")
+-                .addPathSegment(Integer.toString(id) + "?permanently=true");
++                .addPathSegment(Integer.toString(id))
++                .addQueryParameter("permanently", "true");
+         if (requestOptions != null) {
+             requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                 httpUrl.addQueryParameter(_key, _value);
 --- a/src/main/java/com/docuseal/RawDocusealClient.java
 +++ b/src/main/java/com/docuseal/RawDocusealClient.java
-@@ -1272,7 +1272,7 @@ public class RawDocusealClient {
- 
-               .addPathSegments("templates")
-               .addPathSegment(Integer.toString(id))
--              .addPathSegments("?permanently=true")
-+              .addQueryParameter("permanently", "true")
-               .build();
-             Request.Builder _requestBuilder = new Request.Builder()
-               .url(httpUrl)
-@@ -1322,7 +1322,7 @@ public class RawDocusealClient {
- 
-               .addPathSegments("submissions")
-               .addPathSegment(Integer.toString(id))
--              .addPathSegments("?permanently=true")
-+              .addQueryParameter("permanently", "true")
-               .build();
-             Request.Builder _requestBuilder = new Request.Builder()
-               .url(httpUrl)
+@@ -1786,7 +1786,8 @@ public class RawDocusealClient {
+         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                 .newBuilder()
+                 .addPathSegments("templates")
+-                .addPathSegment(Integer.toString(id) + "?permanently=true");
++                .addPathSegment(Integer.toString(id))
++                .addQueryParameter("permanently", "true");
+         if (requestOptions != null) {
+             requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                 httpUrl.addQueryParameter(_key, _value);
+@@ -1862,7 +1863,8 @@ public class RawDocusealClient {
+         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                 .newBuilder()
+                 .addPathSegments("submissions")
+-                .addPathSegment(Integer.toString(id) + "?permanently=true");
++                .addPathSegment(Integer.toString(id))
++                .addQueryParameter("permanently", "true");
+         if (requestOptions != null) {
+             requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                 httpUrl.addQueryParameter(_key, _value);

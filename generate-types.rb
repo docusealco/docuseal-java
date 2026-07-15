@@ -19,13 +19,17 @@ else
 end
 
 FileUtils.rm_rf('.fern-out')
-system({ 'CI' => 'true' }, 'npx', '-y', 'fern-api@5.67.1', 'generate', '--local', exception: true)
+system({ 'CI' => 'true' }, 'npx', '-y', 'fern-api@5.74.2', 'generate', '--local', exception: true)
 
 FileUtils.rm_rf('src/main/java/com/docuseal')
 FileUtils.mkdir_p('src/main/java/com/docuseal')
-FileUtils.cp_r('.fern-out/.', 'src/main/java/com/docuseal')
+FileUtils.cp_r('.fern-out/src/main/java/.', 'src/main/java/com/docuseal')
 FileUtils.rm_f(Dir.glob('src/main/java/com/docuseal/core/*Test.java'))
-FileUtils.rm_f('src/main/java/com/docuseal/README.md')
+
+# The generator's raw-client writer emits unformatted code (glued statements,
+# leaking indentation) - normalize with the same formatter Fern's own
+# generated gradle projects use, then patch on top of the stable formatting.
+system('mvn', '-q', 'spotless:apply', exception: true)
 
 Dir.glob('patches/*.patch').sort.each do |patch|
   system('git', 'apply', patch, exception: true)

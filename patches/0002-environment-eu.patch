@@ -1,11 +1,11 @@
 --- a/src/main/java/com/docuseal/core/Environment.java
 +++ b/src/main/java/com/docuseal/core/Environment.java
-@@ -9,6 +9,8 @@ import java.lang.String;
+@@ -6,6 +6,8 @@ package com.docuseal.core;
  public final class Environment {
-   public static final Environment DEFAULT = new Environment("https://api.docuseal.com");
+     public static final Environment DEFAULT = new Environment("https://api.docuseal.com");
  
-+  public static final Environment EU = new Environment("https://api.docuseal.eu");
++    public static final Environment EU = new Environment("https://api.docuseal.eu");
 +
-   private final String url;
+     private final String url;
  
-   private Environment(String url) {
+     private Environment(String url) {
