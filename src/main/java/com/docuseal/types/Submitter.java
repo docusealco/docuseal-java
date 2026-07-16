@@ -61,7 +61,7 @@ public final class Submitter {
 
     private final Map<String, Object> preferences;
 
-    private final SubmitterTemplate template;
+    private final Optional<SubmitterTemplate> template;
 
     private final List<SubmissionEvent> submissionEvents;
 
@@ -91,7 +91,7 @@ public final class Submitter {
             Optional<String> externalId,
             Map<String, Object> metadata,
             Map<String, Object> preferences,
-            SubmitterTemplate template,
+            Optional<SubmitterTemplate> template,
             List<SubmissionEvent> submissionEvents,
             List<FieldValue> values,
             List<Document> documents,
@@ -282,8 +282,11 @@ public final class Submitter {
         return preferences;
     }
 
-    @JsonProperty("template")
-    public SubmitterTemplate getTemplate() {
+    @JsonIgnore
+    public Optional<SubmitterTemplate> getTemplate() {
+        if (template == null) {
+            return Optional.empty();
+        }
         return template;
     }
 
@@ -365,6 +368,12 @@ public final class Submitter {
     @JsonProperty("external_id")
     private Optional<String> _getExternalId() {
         return externalId;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("template")
+    private Optional<SubmitterTemplate> _getTemplate() {
+        return template;
     }
 
     @java.lang.Override
@@ -487,11 +496,7 @@ public final class Submitter {
         /**
          * <p>The status of signing request for the submitter.</p>
          */
-        TemplateStage status(@NotNull SubmitterStatus status);
-    }
-
-    public interface TemplateStage {
-        RoleStage template(@NotNull SubmitterTemplate template);
+        RoleStage status(@NotNull SubmitterStatus status);
     }
 
     public interface RoleStage {
@@ -598,6 +603,12 @@ public final class Submitter {
 
         _FinalStage preferences(String key, Object value);
 
+        _FinalStage template(Optional<SubmitterTemplate> template);
+
+        _FinalStage template(SubmitterTemplate template);
+
+        _FinalStage template(Nullable<SubmitterTemplate> template);
+
         /**
          * <p>An array of events related to the submission.</p>
          */
@@ -635,7 +646,6 @@ public final class Submitter {
                     CreatedAtStage,
                     UpdatedAtStage,
                     StatusStage,
-                    TemplateStage,
                     RoleStage,
                     _FinalStage {
         private int id;
@@ -652,8 +662,6 @@ public final class Submitter {
 
         private SubmitterStatus status;
 
-        private SubmitterTemplate template;
-
         private String role;
 
         private List<Document> documents = new ArrayList<>();
@@ -661,6 +669,8 @@ public final class Submitter {
         private List<FieldValue> values = new ArrayList<>();
 
         private List<SubmissionEvent> submissionEvents = new ArrayList<>();
+
+        private Optional<SubmitterTemplate> template = Optional.empty();
 
         private Map<String, Object> preferences = new LinkedHashMap<>();
 
@@ -786,15 +796,8 @@ public final class Submitter {
          */
         @java.lang.Override
         @JsonSetter("status")
-        public TemplateStage status(@NotNull SubmitterStatus status) {
+        public RoleStage status(@NotNull SubmitterStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("template")
-        public RoleStage template(@NotNull SubmitterTemplate template) {
-            this.template = Objects.requireNonNull(template, "template must not be null");
             return this;
         }
 
@@ -911,6 +914,31 @@ public final class Submitter {
             if (submissionEvents != null) {
                 this.submissionEvents.addAll(submissionEvents);
             }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage template(Nullable<SubmitterTemplate> template) {
+            if (template.isNull()) {
+                this.template = null;
+            } else if (template.isEmpty()) {
+                this.template = Optional.empty();
+            } else {
+                this.template = Optional.of(template.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage template(SubmitterTemplate template) {
+            this.template = Optional.ofNullable(template);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "template", nulls = Nulls.SKIP)
+        public _FinalStage template(Optional<SubmitterTemplate> template) {
+            this.template = template;
             return this;
         }
 

@@ -3,17 +3,22 @@
  */
 package com.docuseal.types;
 
+import com.docuseal.core.Nullable;
+import com.docuseal.core.NullableNonemptyFilter;
 import com.docuseal.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -21,11 +26,11 @@ import org.jetbrains.annotations.NotNull;
 public final class FieldValue {
     private final String field;
 
-    private final FieldValueValue value;
+    private final Optional<FieldValueValue> value;
 
     private final Map<String, Object> additionalProperties;
 
-    private FieldValue(String field, FieldValueValue value, Map<String, Object> additionalProperties) {
+    private FieldValue(String field, Optional<FieldValueValue> value, Map<String, Object> additionalProperties) {
         this.field = field;
         this.value = value;
         this.additionalProperties = additionalProperties;
@@ -42,8 +47,17 @@ public final class FieldValue {
     /**
      * @return Pre-filled value of the field.
      */
+    @JsonIgnore
+    public Optional<FieldValueValue> getValue() {
+        if (value == null) {
+            return Optional.empty();
+        }
+        return value;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("value")
-    public FieldValueValue getValue() {
+    private Optional<FieldValueValue> _getValue() {
         return value;
     }
 
@@ -80,16 +94,9 @@ public final class FieldValue {
         /**
          * <p>Document template field name.</p>
          */
-        ValueStage field(@NotNull String field);
+        _FinalStage field(@NotNull String field);
 
         Builder from(FieldValue other);
-    }
-
-    public interface ValueStage {
-        /**
-         * <p>Pre-filled value of the field.</p>
-         */
-        _FinalStage value(@NotNull FieldValueValue value);
     }
 
     public interface _FinalStage {
@@ -98,13 +105,22 @@ public final class FieldValue {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        /**
+         * <p>Pre-filled value of the field.</p>
+         */
+        _FinalStage value(Optional<FieldValueValue> value);
+
+        _FinalStage value(FieldValueValue value);
+
+        _FinalStage value(Nullable<FieldValueValue> value);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements FieldStage, ValueStage, _FinalStage {
+    public static final class Builder implements FieldStage, _FinalStage {
         private String field;
 
-        private FieldValueValue value;
+        private Optional<FieldValueValue> value = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -124,7 +140,7 @@ public final class FieldValue {
          */
         @java.lang.Override
         @JsonSetter("field")
-        public ValueStage field(@NotNull String field) {
+        public _FinalStage field(@NotNull String field) {
             this.field = Objects.requireNonNull(field, "field must not be null");
             return this;
         }
@@ -134,9 +150,34 @@ public final class FieldValue {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        @JsonSetter("value")
-        public _FinalStage value(@NotNull FieldValueValue value) {
-            this.value = Objects.requireNonNull(value, "value must not be null");
+        public _FinalStage value(Nullable<FieldValueValue> value) {
+            if (value.isNull()) {
+                this.value = null;
+            } else if (value.isEmpty()) {
+                this.value = Optional.empty();
+            } else {
+                this.value = Optional.of(value.get());
+            }
+            return this;
+        }
+
+        /**
+         * <p>Pre-filled value of the field.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage value(FieldValueValue value) {
+            this.value = Optional.ofNullable(value);
+            return this;
+        }
+
+        /**
+         * <p>Pre-filled value of the field.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "value", nulls = Nulls.SKIP)
+        public _FinalStage value(Optional<FieldValueValue> value) {
+            this.value = value;
             return this;
         }
 

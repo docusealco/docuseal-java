@@ -1,0 +1,11 @@
+--- a/src/main/java/com/docuseal/core/RetryInterceptor.java
++++ b/src/main/java/com/docuseal/core/RetryInterceptor.java
+@@ -199,7 +199,7 @@ public class RetryInterceptor implements Interceptor {
+     }
+ 
+     private static boolean shouldRetry(int statusCode) {
+-        return statusCode == 408 || statusCode == 429 || statusCode >= 500;
++        return statusCode == 408 || statusCode == 429 || statusCode > 500;
+     }
+ 
+     /**

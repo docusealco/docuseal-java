@@ -3,17 +3,22 @@
  */
 package com.docuseal.types;
 
+import com.docuseal.core.Nullable;
+import com.docuseal.core.NullableNonemptyFilter;
 import com.docuseal.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -21,15 +26,20 @@ import org.jetbrains.annotations.NotNull;
 public final class User {
     private final int id;
 
-    private final String firstName;
+    private final Optional<String> firstName;
 
-    private final String lastName;
+    private final Optional<String> lastName;
 
     private final String email;
 
     private final Map<String, Object> additionalProperties;
 
-    private User(int id, String firstName, String lastName, String email, Map<String, Object> additionalProperties) {
+    private User(
+            int id,
+            Optional<String> firstName,
+            Optional<String> lastName,
+            String email,
+            Map<String, Object> additionalProperties) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -48,16 +58,22 @@ public final class User {
     /**
      * @return The first name of the user.
      */
-    @JsonProperty("first_name")
-    public String getFirstName() {
+    @JsonIgnore
+    public Optional<String> getFirstName() {
+        if (firstName == null) {
+            return Optional.empty();
+        }
         return firstName;
     }
 
     /**
      * @return The last name of the user.
      */
-    @JsonProperty("last_name")
-    public String getLastName() {
+    @JsonIgnore
+    public Optional<String> getLastName() {
+        if (lastName == null) {
+            return Optional.empty();
+        }
         return lastName;
     }
 
@@ -67,6 +83,18 @@ public final class User {
     @JsonProperty("email")
     public String getEmail() {
         return email;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("first_name")
+    private Optional<String> _getFirstName() {
+        return firstName;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("last_name")
+    private Optional<String> _getLastName() {
+        return lastName;
     }
 
     @java.lang.Override
@@ -105,23 +133,9 @@ public final class User {
         /**
          * <p>Unique identifier of the user.</p>
          */
-        FirstNameStage id(int id);
+        EmailStage id(int id);
 
         Builder from(User other);
-    }
-
-    public interface FirstNameStage {
-        /**
-         * <p>The first name of the user.</p>
-         */
-        LastNameStage firstName(@NotNull String firstName);
-    }
-
-    public interface LastNameStage {
-        /**
-         * <p>The last name of the user.</p>
-         */
-        EmailStage lastName(@NotNull String lastName);
     }
 
     public interface EmailStage {
@@ -137,17 +151,35 @@ public final class User {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        /**
+         * <p>The first name of the user.</p>
+         */
+        _FinalStage firstName(Optional<String> firstName);
+
+        _FinalStage firstName(String firstName);
+
+        _FinalStage firstName(Nullable<String> firstName);
+
+        /**
+         * <p>The last name of the user.</p>
+         */
+        _FinalStage lastName(Optional<String> lastName);
+
+        _FinalStage lastName(String lastName);
+
+        _FinalStage lastName(Nullable<String> lastName);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements IdStage, FirstNameStage, LastNameStage, EmailStage, _FinalStage {
+    public static final class Builder implements IdStage, EmailStage, _FinalStage {
         private int id;
 
-        private String firstName;
-
-        private String lastName;
-
         private String email;
+
+        private Optional<String> lastName = Optional.empty();
+
+        private Optional<String> firstName = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -169,30 +201,8 @@ public final class User {
          */
         @java.lang.Override
         @JsonSetter("id")
-        public FirstNameStage id(int id) {
+        public EmailStage id(int id) {
             this.id = id;
-            return this;
-        }
-
-        /**
-         * <p>The first name of the user.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("first_name")
-        public LastNameStage firstName(@NotNull String firstName) {
-            this.firstName = Objects.requireNonNull(firstName, "firstName must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The last name of the user.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("last_name")
-        public EmailStage lastName(@NotNull String lastName) {
-            this.lastName = Objects.requireNonNull(lastName, "lastName must not be null");
             return this;
         }
 
@@ -204,6 +214,78 @@ public final class User {
         @JsonSetter("email")
         public _FinalStage email(@NotNull String email) {
             this.email = Objects.requireNonNull(email, "email must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The last name of the user.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage lastName(Nullable<String> lastName) {
+            if (lastName.isNull()) {
+                this.lastName = null;
+            } else if (lastName.isEmpty()) {
+                this.lastName = Optional.empty();
+            } else {
+                this.lastName = Optional.of(lastName.get());
+            }
+            return this;
+        }
+
+        /**
+         * <p>The last name of the user.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage lastName(String lastName) {
+            this.lastName = Optional.ofNullable(lastName);
+            return this;
+        }
+
+        /**
+         * <p>The last name of the user.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "last_name", nulls = Nulls.SKIP)
+        public _FinalStage lastName(Optional<String> lastName) {
+            this.lastName = lastName;
+            return this;
+        }
+
+        /**
+         * <p>The first name of the user.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage firstName(Nullable<String> firstName) {
+            if (firstName.isNull()) {
+                this.firstName = null;
+            } else if (firstName.isEmpty()) {
+                this.firstName = Optional.empty();
+            } else {
+                this.firstName = Optional.of(firstName.get());
+            }
+            return this;
+        }
+
+        /**
+         * <p>The first name of the user.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage firstName(String firstName) {
+            this.firstName = Optional.ofNullable(firstName);
+            return this;
+        }
+
+        /**
+         * <p>The first name of the user.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "first_name", nulls = Nulls.SKIP)
+        public _FinalStage firstName(Optional<String> firstName) {
+            this.firstName = firstName;
             return this;
         }
 

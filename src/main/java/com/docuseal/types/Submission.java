@@ -234,8 +234,11 @@ public final class Submission {
         return template;
     }
 
-    @JsonProperty("created_by_user")
+    @JsonIgnore
     public Optional<User> getCreatedByUser() {
+        if (createdByUser == null) {
+            return Optional.empty();
+        }
         return createdByUser;
     }
 
@@ -302,6 +305,12 @@ public final class Submission {
     @JsonProperty("expire_at")
     private Optional<String> _getExpireAt() {
         return expireAt;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("created_by_user")
+    private Optional<User> _getCreatedByUser() {
+        return createdByUser;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -504,6 +513,8 @@ public final class Submission {
         _FinalStage createdByUser(Optional<User> createdByUser);
 
         _FinalStage createdByUser(User createdByUser);
+
+        _FinalStage createdByUser(Nullable<User> createdByUser);
 
         /**
          * <p>An array of events related to the submission.</p>
@@ -789,6 +800,18 @@ public final class Submission {
             this.submissionEvents.clear();
             if (submissionEvents != null) {
                 this.submissionEvents.addAll(submissionEvents);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage createdByUser(Nullable<User> createdByUser) {
+            if (createdByUser.isNull()) {
+                this.createdByUser = null;
+            } else if (createdByUser.isEmpty()) {
+                this.createdByUser = Optional.empty();
+            } else {
+                this.createdByUser = Optional.of(createdByUser.get());
             }
             return this;
         }

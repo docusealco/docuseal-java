@@ -3,16 +3,18 @@
  */
 package com.docuseal.types;
 
+import com.docuseal.core.Nullable;
+import com.docuseal.core.NullableNonemptyFilter;
 import com.docuseal.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,26 +29,26 @@ public final class Field {
 
     private final String submitterUuid;
 
-    private final String name;
+    private final Optional<String> name;
 
     private final FieldType type;
 
-    private final boolean required;
+    private final Optional<Boolean> required;
 
     private final Optional<FieldPreferences> preferences;
 
-    private final List<FieldArea> areas;
+    private final Optional<List<FieldArea>> areas;
 
     private final Map<String, Object> additionalProperties;
 
     private Field(
             String uuid,
             String submitterUuid,
-            String name,
+            Optional<String> name,
             FieldType type,
-            boolean required,
+            Optional<Boolean> required,
             Optional<FieldPreferences> preferences,
-            List<FieldArea> areas,
+            Optional<List<FieldArea>> areas,
             Map<String, Object> additionalProperties) {
         this.uuid = uuid;
         this.submitterUuid = submitterUuid;
@@ -77,8 +79,11 @@ public final class Field {
     /**
      * @return Field name.
      */
-    @JsonProperty("name")
-    public String getName() {
+    @JsonIgnore
+    public Optional<String> getName() {
+        if (name == null) {
+            return Optional.empty();
+        }
         return name;
     }
 
@@ -94,7 +99,7 @@ public final class Field {
      * @return Indicates if the field is required.
      */
     @JsonProperty("required")
-    public boolean getRequired() {
+    public Optional<Boolean> getRequired() {
         return required;
     }
 
@@ -107,8 +112,14 @@ public final class Field {
      * @return List of areas where the field is located in the document.
      */
     @JsonProperty("areas")
-    public List<FieldArea> getAreas() {
+    public Optional<List<FieldArea>> getAreas() {
         return areas;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("name")
+    private Optional<String> _getName() {
+        return name;
     }
 
     @java.lang.Override
@@ -127,7 +138,7 @@ public final class Field {
                 && submitterUuid.equals(other.submitterUuid)
                 && name.equals(other.name)
                 && type.equals(other.type)
-                && required == other.required
+                && required.equals(other.required)
                 && preferences.equals(other.preferences)
                 && areas.equals(other.areas);
     }
@@ -160,28 +171,14 @@ public final class Field {
         /**
          * <p>Unique identifier of the submitter that filled the field.</p>
          */
-        NameStage submitterUuid(@NotNull String submitterUuid);
-    }
-
-    public interface NameStage {
-        /**
-         * <p>Field name.</p>
-         */
-        TypeStage name(@NotNull String name);
+        TypeStage submitterUuid(@NotNull String submitterUuid);
     }
 
     public interface TypeStage {
         /**
          * <p>Type of the field (e.g., text, signature, date, initials).</p>
          */
-        RequiredStage type(@NotNull FieldType type);
-    }
-
-    public interface RequiredStage {
-        /**
-         * <p>Indicates if the field is required.</p>
-         */
-        _FinalStage required(boolean required);
+        _FinalStage type(@NotNull FieldType type);
     }
 
     public interface _FinalStage {
@@ -191,6 +188,22 @@ public final class Field {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>Field name.</p>
+         */
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
+
+        _FinalStage name(Nullable<String> name);
+
+        /**
+         * <p>Indicates if the field is required.</p>
+         */
+        _FinalStage required(Optional<Boolean> required);
+
+        _FinalStage required(Boolean required);
+
         _FinalStage preferences(Optional<FieldPreferences> preferences);
 
         _FinalStage preferences(FieldPreferences preferences);
@@ -198,29 +211,26 @@ public final class Field {
         /**
          * <p>List of areas where the field is located in the document.</p>
          */
+        _FinalStage areas(Optional<List<FieldArea>> areas);
+
         _FinalStage areas(List<FieldArea> areas);
-
-        _FinalStage addAreas(FieldArea areas);
-
-        _FinalStage addAllAreas(List<FieldArea> areas);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements UuidStage, SubmitterUuidStage, NameStage, TypeStage, RequiredStage, _FinalStage {
+    public static final class Builder implements UuidStage, SubmitterUuidStage, TypeStage, _FinalStage {
         private String uuid;
 
         private String submitterUuid;
 
-        private String name;
-
         private FieldType type;
 
-        private boolean required;
-
-        private List<FieldArea> areas = new ArrayList<>();
+        private Optional<List<FieldArea>> areas = Optional.empty();
 
         private Optional<FieldPreferences> preferences = Optional.empty();
+
+        private Optional<Boolean> required = Optional.empty();
+
+        private Optional<String> name = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -256,19 +266,8 @@ public final class Field {
          */
         @java.lang.Override
         @JsonSetter("submitter_uuid")
-        public NameStage submitterUuid(@NotNull String submitterUuid) {
+        public TypeStage submitterUuid(@NotNull String submitterUuid) {
             this.submitterUuid = Objects.requireNonNull(submitterUuid, "submitterUuid must not be null");
-            return this;
-        }
-
-        /**
-         * <p>Field name.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("name")
-        public TypeStage name(@NotNull String name) {
-            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
@@ -278,41 +277,18 @@ public final class Field {
          */
         @java.lang.Override
         @JsonSetter("type")
-        public RequiredStage type(@NotNull FieldType type) {
+        public _FinalStage type(@NotNull FieldType type) {
             this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
         /**
-         * <p>Indicates if the field is required.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("required")
-        public _FinalStage required(boolean required) {
-            this.required = required;
-            return this;
-        }
-
-        /**
          * <p>List of areas where the field is located in the document.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage addAllAreas(List<FieldArea> areas) {
-            if (areas != null) {
-                this.areas.addAll(areas);
-            }
-            return this;
-        }
-
-        /**
-         * <p>List of areas where the field is located in the document.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage addAreas(FieldArea areas) {
-            this.areas.add(areas);
+        public _FinalStage areas(List<FieldArea> areas) {
+            this.areas = Optional.ofNullable(areas);
             return this;
         }
 
@@ -321,11 +297,8 @@ public final class Field {
          */
         @java.lang.Override
         @JsonSetter(value = "areas", nulls = Nulls.SKIP)
-        public _FinalStage areas(List<FieldArea> areas) {
-            this.areas.clear();
-            if (areas != null) {
-                this.areas.addAll(areas);
-            }
+        public _FinalStage areas(Optional<List<FieldArea>> areas) {
+            this.areas = areas;
             return this;
         }
 
@@ -339,6 +312,62 @@ public final class Field {
         @JsonSetter(value = "preferences", nulls = Nulls.SKIP)
         public _FinalStage preferences(Optional<FieldPreferences> preferences) {
             this.preferences = preferences;
+            return this;
+        }
+
+        /**
+         * <p>Indicates if the field is required.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage required(Boolean required) {
+            this.required = Optional.ofNullable(required);
+            return this;
+        }
+
+        /**
+         * <p>Indicates if the field is required.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "required", nulls = Nulls.SKIP)
+        public _FinalStage required(Optional<Boolean> required) {
+            this.required = required;
+            return this;
+        }
+
+        /**
+         * <p>Field name.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(Nullable<String> name) {
+            if (name.isNull()) {
+                this.name = null;
+            } else if (name.isEmpty()) {
+                this.name = Optional.empty();
+            } else {
+                this.name = Optional.of(name.get());
+            }
+            return this;
+        }
+
+        /**
+         * <p>Field name.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        /**
+         * <p>Field name.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
             return this;
         }
 
