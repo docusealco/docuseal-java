@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SubmissionExpiredEvent.Builder.class)
 public final class SubmissionExpiredEvent {
-    private final String eventType;
+    private final EventType eventType;
 
     private final OffsetDateTime timestamp;
 
@@ -29,7 +29,7 @@ public final class SubmissionExpiredEvent {
     private final Map<String, Object> additionalProperties;
 
     private SubmissionExpiredEvent(
-            String eventType, OffsetDateTime timestamp, Submission data, Map<String, Object> additionalProperties) {
+            EventType eventType, OffsetDateTime timestamp, Submission data, Map<String, Object> additionalProperties) {
         this.eventType = eventType;
         this.timestamp = timestamp;
         this.data = data;
@@ -40,7 +40,7 @@ public final class SubmissionExpiredEvent {
      * @return The event type.
      */
     @JsonProperty("event_type")
-    public String getEventType() {
+    public EventType getEventType() {
         return eventType;
     }
 
@@ -90,7 +90,7 @@ public final class SubmissionExpiredEvent {
         /**
          * <p>The event type.</p>
          */
-        TimestampStage eventType(@NotNull String eventType);
+        TimestampStage eventType(@NotNull EventType eventType);
 
         Builder from(SubmissionExpiredEvent other);
     }
@@ -116,7 +116,7 @@ public final class SubmissionExpiredEvent {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements EventTypeStage, TimestampStage, DataStage, _FinalStage {
-        private String eventType;
+        private EventType eventType;
 
         private OffsetDateTime timestamp;
 
@@ -141,7 +141,7 @@ public final class SubmissionExpiredEvent {
          */
         @java.lang.Override
         @JsonSetter("event_type")
-        public TimestampStage eventType(@NotNull String eventType) {
+        public TimestampStage eventType(@NotNull EventType eventType) {
             this.eventType = Objects.requireNonNull(eventType, "eventType must not be null");
             return this;
         }

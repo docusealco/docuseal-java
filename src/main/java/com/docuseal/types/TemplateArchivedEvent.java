@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TemplateArchivedEvent.Builder.class)
 public final class TemplateArchivedEvent {
-    private final String eventType;
+    private final EventType eventType;
 
     private final OffsetDateTime timestamp;
 
@@ -29,7 +29,7 @@ public final class TemplateArchivedEvent {
     private final Map<String, Object> additionalProperties;
 
     private TemplateArchivedEvent(
-            String eventType,
+            EventType eventType,
             OffsetDateTime timestamp,
             TemplateArchiveResult data,
             Map<String, Object> additionalProperties) {
@@ -43,7 +43,7 @@ public final class TemplateArchivedEvent {
      * @return The event type.
      */
     @JsonProperty("event_type")
-    public String getEventType() {
+    public EventType getEventType() {
         return eventType;
     }
 
@@ -93,7 +93,7 @@ public final class TemplateArchivedEvent {
         /**
          * <p>The event type.</p>
          */
-        TimestampStage eventType(@NotNull String eventType);
+        TimestampStage eventType(@NotNull EventType eventType);
 
         Builder from(TemplateArchivedEvent other);
     }
@@ -119,7 +119,7 @@ public final class TemplateArchivedEvent {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements EventTypeStage, TimestampStage, DataStage, _FinalStage {
-        private String eventType;
+        private EventType eventType;
 
         private OffsetDateTime timestamp;
 
@@ -144,7 +144,7 @@ public final class TemplateArchivedEvent {
          */
         @java.lang.Override
         @JsonSetter("event_type")
-        public TimestampStage eventType(@NotNull String eventType) {
+        public TimestampStage eventType(@NotNull EventType eventType) {
             this.eventType = Objects.requireNonNull(eventType, "eventType must not be null");
             return this;
         }
