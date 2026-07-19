@@ -1,8 +1,8 @@
 --- a/src/main/java/com/docuseal/core/ClientOptions.java
 +++ b/src/main/java/com/docuseal/core/ClientOptions.java
-@@ -46,11 +46,6 @@ public final class ClientOptions {
+@@ -45,11 +45,6 @@ public final class ClientOptions {
+         this.environment = environment;
          this.headers = new HashMap<>();
-         this.headers.put("User-Agent", "DocuSeal Java v1.0.0");
          this.headers.putAll(headers);
 -        this.headers.putAll(new HashMap<String, String>() {
 -            {

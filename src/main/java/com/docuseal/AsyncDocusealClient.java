@@ -4,6 +4,7 @@
 package com.docuseal;
 
 import com.docuseal.core.ClientOptions;
+import com.docuseal.core.Environment;
 import com.docuseal.core.RequestOptions;
 import com.docuseal.requests.ArchiveSubmissionParams;
 import com.docuseal.requests.ArchiveTemplateParams;
@@ -55,6 +56,38 @@ public class AsyncDocusealClient {
     public AsyncDocusealClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.rawClient = new AsyncRawDocusealClient(clientOptions);
+    }
+
+    /**
+     * Instantiates a client with the given API key and the default https://api.docuseal.com endpoint.
+     */
+    public AsyncDocusealClient(String apiKey) {
+        this(apiKey, (Environment) null);
+    }
+
+    /**
+     * Instantiates a client with the given API key and a custom API endpoint URL, e.g. https://yourdocusealapp.com/api.
+     */
+    public AsyncDocusealClient(String apiKey, String url) {
+        this(apiKey, url == null ? null : Environment.custom(url));
+    }
+
+    /**
+     * Instantiates a client with the given API key and environment, e.g. Environment.EU.
+     */
+    public AsyncDocusealClient(String apiKey, Environment environment) {
+        this(clientOptionsFrom(apiKey, environment));
+    }
+
+    private static ClientOptions clientOptionsFrom(String apiKey, Environment environment) {
+        if (apiKey == null) {
+            throw new RuntimeException("Please provide apiKey");
+        }
+        AsyncDocusealClientBuilder builder = new AsyncDocusealClientBuilder().apiKey(apiKey);
+        if (environment != null) {
+            builder.environment(environment);
+        }
+        return builder.buildClientOptions();
     }
 
     /**

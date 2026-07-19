@@ -44,7 +44,7 @@ public final class ClientOptions {
             Optional<LogConfig> logging) {
         this.environment = environment;
         this.headers = new HashMap<>();
-        this.headers.put("User-Agent", "DocuSeal Java v1.0.0");
+        this.headers.put("User-Agent", "DocuSeal Java v1.0.1");
         this.headers.putAll(headers);
         this.headerSuppliers = headerSuppliers;
         this.httpClient = httpClient;
